@@ -42,8 +42,11 @@ class MyApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: const [
-            Locale('en', ''), // English, no country code
+            Locale('en', ''),
+            Locale('my', '') // English, no country code
           ],
+
+          locale: const Locale('my', ''),
 
           // Use AppLocalizations to configure the correct application title
           // depending on the user's locale.

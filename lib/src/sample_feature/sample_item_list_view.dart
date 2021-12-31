@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../settings/settings_view.dart';
 import 'sample_item.dart';
 import 'sample_item_details_view.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 /// Displays a list of SampleItems.
 class SampleItemListView extends StatelessWidget {
@@ -19,7 +21,7 @@ class SampleItemListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sample Items'),
+        title:  Text(AppLocalizations.of(context)!.greeting),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
