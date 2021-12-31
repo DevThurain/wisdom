@@ -40,3 +40,16 @@ flutter:
     # Add assets from the images directory to the application.
     - assets/images/
     - assets/jsons/
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins/Poppins-Regular.ttf
+          #- asset: assets/fonts/Poppins/Poppins-Medium.ttf
+          #weight: 600
+          #- asset: assets/fonts/Poppins-Bold.ttf
+          #weight: 700
+
+    - family: MyanUni
+      fonts:
+        - asset: assets/fonts/MyanUni/pds_regular.ttf
