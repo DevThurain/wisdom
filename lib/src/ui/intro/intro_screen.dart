@@ -20,73 +20,91 @@ class _IntroScreenState extends State<IntroScreen> {
       body: Stack(
         children: [
           const GradientBackground(),
-          SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    AppLocalizations.of(context)!.appTitle.toUpperCase(),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        color: AppTheme.white,
-                        fontSize: AppDimen.TEXT_REGULAR_2X,
-                        fontFamily: 'Poppins',
-                        letterSpacing: 5,
-                        fontWeight: FontWeight.bold),
+          CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  padding: EdgeInsets.only(top: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          AppLocalizations.of(context)!.appTitle.toUpperCase(),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              color: AppTheme.white,
+                              fontSize: AppDimen.TEXT_REGULAR_3X,
+                              fontFamily: 'Poppins',
+                              letterSpacing: 5,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const PersonCardSection(),
+                      const ButtonSectionView()
+                    ],
                   ),
                 ),
-                const PersonCardSection(),
-                Column(
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      height: 55,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: TextField(
-                        decoration: InputDecoration(
-                            fillColor: AppTheme.white,
-                            filled: true,
-                            hintText: 'Nick Name ...',
-                            hintStyle: TextStyle(
-                              fontFamily: 'Poppins',
-                              color: AppTheme.black.withOpacity(0.5),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(20)),
-                              borderSide: BorderSide.none,
-                            )),
-                      ),
-                    ),
-                    SizedBox(height: AppDimen.MARGIN_CARD_MEDIUM),
-                    Container(
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        height: 55,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(Radius.circular(20)),
-                          color: Colors.blue,
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Register',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              color: AppTheme.white,
-                            ),
-                          ),
-                        ))
-                  ],
-                )
-              ],
-            ),
+              )
+            ],
           )
         ],
       ),
+    );
+  }
+}
+
+class ButtonSectionView extends StatelessWidget {
+  const ButtonSectionView({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width * 0.7,
+          height: 55,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
+          ),
+          child: TextField(
+            decoration: InputDecoration(
+                fillColor: AppTheme.white,
+                filled: true,
+                hintText: 'Nick Name ...',
+                hintStyle: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: AppTheme.black.withOpacity(0.5),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  borderSide: BorderSide.none,
+                )),
+          ),
+        ),
+        SizedBox(height: AppDimen.MARGIN_CARD_MEDIUM),
+        Container(
+            width: MediaQuery.of(context).size.width * 0.7,
+            height: 55,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(20)),
+              color: Colors.blue,
+            ),
+            child: Center(
+              child: Text(
+                'Register',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: AppTheme.white,
+                ),
+              ),
+            ))
+      ],
     );
   }
 }
