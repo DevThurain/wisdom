@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wisdom/src/ui/fun/fun_detail_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_screen.dart';
 import 'package:wisdom/src/ui/home/home_screen.dart';
+import 'package:wisdom/src/ui/intro/intro_screen.dart';
 import 'package:wisdom/src/ui/knowledge/knowledge_detail_screen.dart';
 import 'package:wisdom/src/ui/knowledge/knowledge_screen.dart';
 import 'package:wisdom/src/ui/profile/profile_screen.dart';
@@ -30,8 +31,11 @@ class AppRoute {
           case ProfileScreen.routeName:
             return const ProfileScreen();
 
+          case IntroScreen.routeName:
+            return const IntroScreen();
+
           default:
-            return const HomeScreen();
+            return const IntroScreen();
         }
       },
     );
