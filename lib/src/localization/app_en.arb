@@ -1,0 +1,6 @@
+{
+  "appTitle": "wisdom",
+  "@appTitle": {
+    "description": "The title of the application"
+  }
+}
