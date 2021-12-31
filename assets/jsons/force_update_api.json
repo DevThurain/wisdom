@@ -2,7 +2,7 @@
     "update" : [
         {
             "id" : 1,
-            "version" : "1.0.0",
+            "version" : "1.0.1",
             "force_update" : true,
             "os_type" : 1,
             "store_url" : "",
