@@ -5,6 +5,7 @@ import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/ui/knowledge/knowledge_screen.dart';
+import 'package:wisdom/src/ui/profile/profile_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/view_models/home_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -96,9 +97,12 @@ class ProfileSectionView extends StatelessWidget {
                   fontWeight: FontWeight.normal),
             ),
             SizedBox(width: AppDimen.MARGIN_MEDIUM_3),
-            CircularPersonFace(
-              width: 20,
-              imgPath: 'assets/images/girl_light.png',
+            InkWell(
+              onTap: ()=> Navigator.pushNamed(context, ProfileScreen.routeName),
+              child: CircularPersonFace(
+                width: 20,
+                imgPath: 'assets/images/girl_light.png',
+              ),
             )
           ],
         ),

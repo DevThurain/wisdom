@@ -5,7 +5,7 @@ class SquarePersonFace extends StatelessWidget {
   final double width;
   final String imgPath;
 
-  SquarePersonFace({required this.width, required this.imgPath});
+  SquarePersonFace({this.width = 40, required this.imgPath});
 
   @override
   Widget build(BuildContext context) {
