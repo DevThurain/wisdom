@@ -52,7 +52,7 @@ class _KnowledgeScreenState extends State<KnowledgeScreen> {
           SliverList(
               delegate: SliverChildListDelegate([
             DesignedPostCard(
-                title: "You have to be\nhuman to be played\nwith you",
+                title: "Jelly Eye Mask ပြန်ရပြီ\nPrice-3500 \nအရောင်ပုံ ရွေးမရပါ",
                 profileUrl: 'assets/images/girl_light.png',
                 name: 'Chrono',
                 duration: '2 hours ago',
@@ -62,16 +62,16 @@ class _KnowledgeScreenState extends State<KnowledgeScreen> {
             DesignedPostCard(
                 title:
                     "ကျနော်လက်ရှိသုံးနေတဲ့ Budget Gaming PC လေးရောင်းချင်ပါတယ် AAA title game  တွေ အေးဆေးဆော့လို့ရပါတယ်",
-                profileUrl: 'assets/images/girl_light.png',
-                name: 'Chrono',
+                profileUrl: 'assets/images/boy_light.png',
+                name: 'Dota God',
                 duration: '2 minutes ago',
                 commentCount: '4',
                 color: AppTheme.dark_purple,
                 onTap: () {}),
             DesignedPostCard(
                 title: "You have to be\nhuman to be played\nwith you",
-                profileUrl: 'assets/images/girl_light.png',
-                name: 'Chrono',
+                profileUrl: 'assets/images/girl_light_2.png',
+                name: 'Ella',
                 duration: '2 hours ago',
                 commentCount: '12',
                 color: AppTheme.dark_purple,

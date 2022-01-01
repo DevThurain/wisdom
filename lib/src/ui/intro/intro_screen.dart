@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wisdom/src/ui/home/home_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 
 class IntroScreen extends StatefulWidget {
@@ -90,22 +91,27 @@ class ButtonSectionView extends StatelessWidget {
           ),
         ),
         SizedBox(height: AppDimen.MARGIN_CARD_MEDIUM),
-        Container(
-            width: MediaQuery.of(context).size.width * 0.7,
-            height: 55,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(20)),
-              color: Colors.blue,
-            ),
-            child: Center(
-              child: Text(
-                'Register',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: AppTheme.white,
-                ),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, HomeScreen.routeName);
+          },
+          child: Container(
+              width: MediaQuery.of(context).size.width * 0.7,
+              height: 55,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                color: Colors.blue,
               ),
-            ))
+              child: Center(
+                child: Text(
+                  'Register',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: AppTheme.white,
+                  ),
+                ),
+              )),
+        )
       ],
     );
   }
@@ -141,7 +147,7 @@ class PersonCardSection extends StatelessWidget {
             top: -90,
             child: CircularPersonFace(
               width: 28,
-              imgPath: 'assets/images/girl_light.png',
+              imgPath: 'assets/images/girl_light_2.png',
             ),
           ),
           Positioned(
@@ -149,7 +155,7 @@ class PersonCardSection extends StatelessWidget {
             bottom: -10,
             child: CircularPersonFace(
               width: 32,
-              imgPath: 'assets/images/girl_light.png',
+              imgPath: 'assets/images/girl_light_3.png',
             ),
           ),
           Positioned(
@@ -157,7 +163,7 @@ class PersonCardSection extends StatelessWidget {
             bottom: 0,
             child: CircularPersonFace(
               width: 25,
-              imgPath: 'assets/images/girl_light.png',
+              imgPath: 'assets/images/boy_light.png',
             ),
           ),
           Positioned(
@@ -165,7 +171,7 @@ class PersonCardSection extends StatelessWidget {
             top: 50,
             child: CircularPersonFace(
               width: 27,
-              imgPath: 'assets/images/girl_light.png',
+              imgPath: 'assets/images/boy_light_2.png',
             ),
           ),
           const Align(
