@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 
 class IntroScreen extends StatefulWidget {
   static const routeName = '/intro_screen';
@@ -21,6 +22,7 @@ class _IntroScreenState extends State<IntroScreen> {
         children: [
           const GradientBackground(),
           CustomScrollView(
+            physics: BouncingScrollPhysics(),
             slivers: [
               SliverToBoxAdapter(
                 child: Container(
@@ -129,7 +131,7 @@ class PersonCardSection extends StatelessWidget {
           Positioned(
             left: -15,
             top: -15,
-            child: PersonFace(
+            child: CircularPersonFace(
               width: 35,
               imgPath: 'assets/images/girl_light.png',
             ),
@@ -137,7 +139,7 @@ class PersonCardSection extends StatelessWidget {
           Positioned(
             right: -15,
             top: -90,
-            child: PersonFace(
+            child: CircularPersonFace(
               width: 28,
               imgPath: 'assets/images/girl_light.png',
             ),
@@ -145,7 +147,7 @@ class PersonCardSection extends StatelessWidget {
           Positioned(
             right: -2,
             bottom: -10,
-            child: PersonFace(
+            child: CircularPersonFace(
               width: 32,
               imgPath: 'assets/images/girl_light.png',
             ),
@@ -153,7 +155,7 @@ class PersonCardSection extends StatelessWidget {
           Positioned(
             left: -2,
             bottom: 0,
-            child: PersonFace(
+            child: CircularPersonFace(
               width: 25,
               imgPath: 'assets/images/girl_light.png',
             ),
@@ -161,7 +163,7 @@ class PersonCardSection extends StatelessWidget {
           Positioned(
             right: 50,
             top: 50,
-            child: PersonFace(
+            child: CircularPersonFace(
               width: 27,
               imgPath: 'assets/images/girl_light.png',
             ),
@@ -183,25 +185,6 @@ class PersonCardSection extends StatelessWidget {
             ),
           )
         ],
-      ),
-    );
-  }
-}
-
-class PersonFace extends StatelessWidget {
-  final double width;
-  final String imgPath;
-
-  PersonFace({required this.width, required this.imgPath});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          shape: BoxShape.circle, border: Border.all(color: AppTheme.white)),
-      child: CircleAvatar(
-        backgroundImage: AssetImage(imgPath),
-        radius: width,
       ),
     );
   }

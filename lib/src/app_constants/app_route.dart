@@ -35,7 +35,7 @@ class AppRoute {
             return const IntroScreen();
 
           default:
-            return const IntroScreen();
+            return const HomeScreen();
         }
       },
     );

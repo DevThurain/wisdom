@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:wisdom/src/app_constants/app_dimen.dart';
+import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
+import 'package:wisdom/src/ui/widgets/square_person_face.dart';
 import 'package:wisdom/src/view_models/home_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home_screen';
@@ -20,13 +25,150 @@ class _HomeScreenState extends State<HomeScreen> {
     return ChangeNotifierProvider<HomeProvider>(
       create: (context) => homeProvider,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Home'),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: AppTheme.dark_purple,
+          onPressed: (){},
+          child: SvgPicture.asset('assets/images/svgs/quil.svg',width: 28,color: AppTheme.white,),
         ),
-        body: Center(
-          child: SvgPicture.asset(''),
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: AppDimen.MARGIN_MEDIUM_2),
+                child: ProfileSectionView(),
+              ),
+              SizedBox(height: 20),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: AppDimen.MARGIN_MEDIUM_2,
+                    vertical: AppDimen.MARGIN_MEDIUM_2),
+                child: TitleText(),
+              ),
+              SizedBox(height: 20),
+              DesignedCard(
+                title: 'Knowledge',
+                color: AppTheme.dark_purple,
+              ),
+              SizedBox(height: 20),
+              DesignedCard(
+                title: 'Fun',
+                color: AppTheme.fresh_red,
+              )
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class ProfileSectionView extends StatelessWidget {
+  const ProfileSectionView({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder(
+      duration: Duration(seconds: 2),
+      tween: Tween<double>(begin: 0.0, end: 16.0),
+      builder: (_, double value, __) => Padding(
+        padding: EdgeInsets.only(top: value),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              AppLocalizations.of(context)!.home_logout,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                  color: AppTheme.dark_purple,
+                  fontSize: AppDimen.TEXT_REGULAR,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.normal),
+            ),
+            SizedBox(width: AppDimen.MARGIN_MEDIUM_3),
+            CircularPersonFace(
+              width: 20,
+              imgPath: 'assets/images/girl_light.png',
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DesignedCard extends StatelessWidget {
+  final String title;
+  final Color color;
+  const DesignedCard({
+    Key? key,
+    required this.title,
+    required this.color,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(horizontal: AppDimen.MARGIN_MEDIUM_2),
+      height: 150,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          color: color.withOpacity(0.1)),
+      child: Stack(
+        children: [
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: Opacity(
+              opacity: 0.4,
+              child: RotatedBox(
+                //4,1
+                quarterTurns: 4,
+                child: Image.asset(
+                  'assets/images/curve_1.png',
+                  color: AppTheme.white,
+                ),
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: color,
+                  fontSize: AppDimen.TEXT_REGULAR_3X,
+                  fontFamily: 'Poppins',
+                  letterSpacing: 3,
+                  fontWeight: FontWeight.bold),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class TitleText extends StatelessWidget {
+  const TitleText({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      AppLocalizations.of(context)!.appTitle.toUpperCase(),
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+          color: AppTheme.dark_purple,
+          fontSize: AppDimen.TEXT_REGULAR_3X,
+          fontFamily: 'Poppins',
+          letterSpacing: 3,
+          fontWeight: FontWeight.bold),
     );
   }
 }
