@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/ui/knowledge/knowledge_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/view_models/home_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -26,13 +27,17 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           backgroundColor: AppTheme.dark_purple,
-          onPressed: (){},
-          child: SvgPicture.asset('assets/images/svgs/quil.svg',width: 28,color: AppTheme.white,),
+          onPressed: () {},
+          child: SvgPicture.asset(
+            'assets/svgs/quil.svg',
+            width: 28,
+            color: AppTheme.white,
+          ),
         ),
         body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppDimen.MARGIN_MEDIUM_2),
                 child: ProfileSectionView(),
@@ -48,11 +53,15 @@ class _HomeScreenState extends State<HomeScreen> {
               DesignedCard(
                 title: 'Knowledge',
                 color: AppTheme.dark_purple,
+                onTap: () {
+                  Navigator.pushNamed(context, KnowledgeScreen.routeName);
+                },
               ),
               SizedBox(height: 20),
               DesignedCard(
                 title: 'Fun',
                 color: AppTheme.fresh_red,
+                onTap: () {},
               )
             ],
           ),
@@ -101,10 +110,12 @@ class ProfileSectionView extends StatelessWidget {
 class DesignedCard extends StatelessWidget {
   final String title;
   final Color color;
+  final Function onTap;
   const DesignedCard({
     Key? key,
     required this.title,
     required this.color,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -116,37 +127,44 @@ class DesignedCard extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(20)),
           color: color.withOpacity(0.1)),
-      child: Stack(
-        children: [
-          Positioned(
-            right: 0,
-            bottom: 0,
-            child: Opacity(
-              opacity: 0.4,
-              child: RotatedBox(
-                //4,1
-                quarterTurns: 4,
-                child: Image.asset(
-                  'assets/images/curve_1.png',
-                  color: AppTheme.white,
+      child: InkWell(
+        splashColor: color.withOpacity(0.2),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        onTap: () {
+          onTap();
+        },
+        child: Stack(
+          children: [
+            Positioned(
+              right: 0,
+              bottom: 0,
+              child: Opacity(
+                opacity: 0.4,
+                child: RotatedBox(
+                  //4,1
+                  quarterTurns: 4,
+                  child: Image.asset(
+                    'assets/images/curve_1.png',
+                    color: AppTheme.white,
+                  ),
                 ),
               ),
             ),
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Text(
-              title,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: color,
-                  fontSize: AppDimen.TEXT_REGULAR_3X,
-                  fontFamily: 'Poppins',
-                  letterSpacing: 3,
-                  fontWeight: FontWeight.bold),
-            ),
-          )
-        ],
+            Align(
+              alignment: Alignment.center,
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: color,
+                    fontSize: AppDimen.TEXT_REGULAR_3X,
+                    fontFamily: 'Poppins',
+                    letterSpacing: 3,
+                    fontWeight: FontWeight.bold),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
