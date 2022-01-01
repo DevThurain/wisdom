@@ -1,5 +1,7 @@
 {
       "appTitle": "wisdom",
-      "greeting" : "မင်္ဂလာပါ"
+      "greeting" : "မင်္ဂလာပါ",
+      "home_logout" : "Log out"
+
 
 }
