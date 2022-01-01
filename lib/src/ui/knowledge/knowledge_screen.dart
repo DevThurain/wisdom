@@ -3,6 +3,8 @@ import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
+import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
+import 'package:wisdom/src/ui/widgets/square_person_face.dart';
 
 class KnowledgeScreen extends StatefulWidget {
   static const routeName = '/knowledge_screen';
@@ -49,9 +51,31 @@ class _KnowledgeScreenState extends State<KnowledgeScreen> {
           _buildSliverAppBar(),
           SliverList(
               delegate: SliverChildListDelegate([
-            Container(
-              height: 1000,
-            )
+            DesignedPostCard(
+                title: "You have to be\nhuman to be played\nwith you",
+                profileUrl: 'assets/images/girl_light.png',
+                name: 'Chrono',
+                duration: '2 hours ago',
+                commentCount: '12',
+                color: AppTheme.dark_purple,
+                onTap: () {}),
+            DesignedPostCard(
+                title:
+                    "ကျနော်လက်ရှိသုံးနေတဲ့ Budget Gaming PC လေးရောင်းချင်ပါတယ် AAA title game  တွေ အေးဆေးဆော့လို့ရပါတယ်",
+                profileUrl: 'assets/images/girl_light.png',
+                name: 'Chrono',
+                duration: '2 minutes ago',
+                commentCount: '4',
+                color: AppTheme.dark_purple,
+                onTap: () {}),
+            DesignedPostCard(
+                title: "You have to be\nhuman to be played\nwith you",
+                profileUrl: 'assets/images/girl_light.png',
+                name: 'Chrono',
+                duration: '2 hours ago',
+                commentCount: '12',
+                color: AppTheme.dark_purple,
+                onTap: () {}),
           ]))
         ],
       ),
@@ -60,54 +84,54 @@ class _KnowledgeScreenState extends State<KnowledgeScreen> {
 
   SliverAppBar _buildSliverAppBar() {
     return SliverAppBar(
-          expandedHeight: 160,
-          collapsedHeight: 65,
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          pinned: true,
-          flexibleSpace: SafeArea(
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: AppDimen.MARGIN_CARD_MEDIUM_2),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      expandedHeight: 160,
+      collapsedHeight: 65,
+      automaticallyImplyLeading: false,
+      elevation: 0,
+      pinned: true,
+      flexibleSpace: SafeArea(
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          padding: EdgeInsets.symmetric(horizontal: AppDimen.MARGIN_CARD_MEDIUM_2),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Visibility(
-                        visible: !expanded,
-                        child: Text(
-                          'Friday, January 16th',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Color(0xffAFAFBD),
-                              fontSize: AppDimen.TEXT_REGULAR,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.normal),
-                        ),
-                      ),
-                      Text(
-                        'Wisdom',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: AppTheme.dark_purple,
-                            fontSize: AppDimen.TEXT_REGULAR_3X,
-                            fontFamily: 'Poppins',
-                            letterSpacing: 1,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
+                  Visibility(
+                    visible: !expanded,
+                    child: Text(
+                      'Friday, January 16th',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Color(0xffAFAFBD),
+                          fontSize: AppDimen.TEXT_REGULAR,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.normal),
+                    ),
                   ),
-                  ProfileSectionView(),
+                  Text(
+                    'Daily feed',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: AppTheme.dark_purple,
+                        fontSize: AppDimen.TEXT_REGULAR_3X,
+                        fontFamily: 'Poppins',
+                        letterSpacing: 1,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
-            ),
+              ProfileSectionView(),
+            ],
           ),
-          backgroundColor: AppTheme.white,
-        );
+        ),
+      ),
+      backgroundColor: AppTheme.white,
+    );
   }
 }
 
