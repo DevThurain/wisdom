@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 class AppDimen {
   static const MARGIN_SMALL = 4.0;
