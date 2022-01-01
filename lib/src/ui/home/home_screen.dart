@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/view_models/home_provider.dart';
@@ -23,13 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
           title: Text('Home'),
         ),
         body: Center(
-          child: Consumer<HomeProvider>(
-            builder: (ctx, homeProvider, child) {
-              return homeProvider.versionStatus.isEmpty
-                  ? Text('version loading')
-                  : Text(homeProvider.versionStatus);
-            },
-          ),
+          child: SvgPicture.asset(''),
         ),
       ),
     );
