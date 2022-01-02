@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
@@ -17,7 +18,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late ScrollController _scrollController;
   bool expanded = false;
-
+  StickyHeaderController? _stickyHeaderController;
   @override
   void initState() {
     _scrollController = ScrollController()
@@ -63,6 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           SliverStickyHeader(
+            controller: _stickyHeaderController,
               header: Container(
                 height: 60,
                 margin: EdgeInsets.only(top: _statusBarHeight),
@@ -112,7 +114,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           )
         ],
       ),
-    );
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppTheme.dark_purple,
+        onPressed: () {},
+        child: SvgPicture.asset(
+          'assets/svgs/quil.svg',
+          width: 28,
+          color: AppTheme.white,
+        ),
+      ),    );
   }
 }
 
