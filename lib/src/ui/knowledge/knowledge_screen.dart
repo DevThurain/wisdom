@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
 import 'package:wisdom/src/ui/widgets/square_person_face.dart';
+import 'package:wisdom/src/view_models/knowledge_provider.dart';
 
 class KnowledgeScreen extends StatefulWidget {
   static const routeName = '/knowledge_screen';
@@ -17,6 +20,7 @@ class KnowledgeScreen extends StatefulWidget {
 class _KnowledgeScreenState extends State<KnowledgeScreen> {
   late ScrollController _scrollController;
   bool expanded = false;
+  KnowlegeProvider knowlegeProvider = locator<KnowlegeProvider>();
 
   @override
   void initState() {
@@ -44,40 +48,41 @@ class _KnowledgeScreenState extends State<KnowledgeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          _buildSliverAppBar(),
-          SliverList(
-              delegate: SliverChildListDelegate([
-            DesignedPostCard(
-                title: "Jelly Eye Mask ပြန်ရပြီ\nPrice-3500 \nအရောင်ပုံ ရွေးမရပါ",
-                profileUrl: 'assets/images/girl_light.png',
-                name: 'Chrono',
-                duration: '2 hours ago',
-                commentCount: '12',
-                color: AppTheme.dark_purple,
-                onTap: () {}),
-            DesignedPostCard(
-                title:
-                    "ကျနော်လက်ရှိသုံးနေတဲ့ Budget Gaming PC လေးရောင်းချင်ပါတယ် AAA title game  တွေ အေးဆေးဆော့လို့ရပါတယ်",
-                profileUrl: 'assets/images/boy_light.png',
-                name: 'Dota God',
-                duration: '2 minutes ago',
-                commentCount: '4',
-                color: AppTheme.dark_purple,
-                onTap: () {}),
-            DesignedPostCard(
-                title: "You have to be\nhuman to be played\nwith you",
-                profileUrl: 'assets/images/girl_light_2.png',
-                name: 'Ella',
-                duration: '2 hours ago',
-                commentCount: '12',
-                color: AppTheme.dark_purple,
-                onTap: () {}),
-          ]))
-        ],
+    return ChangeNotifierProvider<KnowlegeProvider>(
+      create: (context) => knowlegeProvider,
+      child: Scaffold(
+        body: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            _buildSliverAppBar(),
+            Consumer<KnowlegeProvider>(
+              builder: (context, provider, child) {
+                _scrollController.addListener(() {
+                  if (_scrollController.offset ==
+                          _scrollController.position.maxScrollExtent &&
+                      !provider.paginateLock) {
+                    provider.paginateLock = true;
+                    provider.fetchPaginatedList();
+                  }
+                });
+
+                return SliverList(
+                    delegate: SliverChildListDelegate(
+                  provider.facts
+                      .map((post) => DesignedPostCard(
+                          title: post.fact.toString(),
+                          profileUrl: 'assets/images/girl_light.png',
+                          name: 'Chrono',
+                          duration: '2 hours ago',
+                          commentCount: '12',
+                          color: AppTheme.dark_purple,
+                          onTap: () {}))
+                      .toList(),
+                ));
+              },
+            )
+          ],
+        ),
       ),
     );
   }
