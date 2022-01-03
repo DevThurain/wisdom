@@ -181,7 +181,33 @@ class ProfileHeaderSectionView extends StatelessWidget {
                   padding: EdgeInsets.all(0.0),
                   color: color,
                   icon: Icon(Icons.edit_rounded, size: 18.0),
-                  onPressed: ()=>{},
+                  onPressed: ()=> showGeneralDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    barrierColor: Colors.black54, // space around dialog
+                    transitionDuration: Duration(milliseconds: 600),
+                    transitionBuilder: (context, a1, a2, child) {
+                      return ScaleTransition(
+                        scale: CurvedAnimation(
+                            parent: a1,
+                            curve: Curves.elasticOut,
+                            reverseCurve: Curves.linearToEaseOut,
+                        ),
+                        child: CustomDialog( // our custom dialog
+                          title: "Chrono",
+                          positiveBtnText: "Save",
+                          negativeBtnText: "Close",
+                          positiveBtnPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      );
+                    },
+                    pageBuilder: (BuildContext context, Animation animation,
+                        Animation secondaryAnimation) {
+                      return SizedBox();
+                    },
+                  ),
                 )
             ),
           ),
@@ -230,3 +256,113 @@ class ProfileHeaderSectionView extends StatelessWidget {
     );
   }
 }
+
+class CustomDialog extends StatelessWidget {
+  final String title, positiveBtnText, negativeBtnText;
+  final GestureTapCallback positiveBtnPressed;
+
+  CustomDialog({Key? key,
+    required this.title,
+    required this.positiveBtnText,
+    required this.negativeBtnText,
+    required this.positiveBtnPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: _buildDialogContent(context),
+    );
+  }
+
+  Widget _buildDialogContent(BuildContext context) {
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: <Widget>[
+        Container(  // Bottom rectangular box
+          margin: EdgeInsets.only(top: 40), // to push the box half way below circle
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: EdgeInsets.only(top: 60, left: 20, right: 20), // spacing inside the box
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+            Text(
+            title,
+            textAlign: TextAlign.start,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                color: AppTheme.dark_purple,
+                fontSize: AppDimen.TEXT_HEADING_1X,
+                fontFamily: 'MyanUni',
+                height: 1,
+                fontWeight: FontWeight.normal),
+          ),
+              SizedBox(
+                height: 16,
+              ),
+              TextField(
+                autofocus: false,
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(
+                       Radius.circular(AppDimen.MARGIN_MEDIUM),
+                    ),
+                    borderSide: BorderSide(color: AppTheme.fresh_purple.withOpacity(0.2)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(
+                       Radius.circular(AppDimen.MARGIN_MEDIUM),
+                    ),
+                    borderSide: BorderSide(color: AppTheme.dark_purple.withOpacity(0.3)),
+                  ),
+                  filled: true,
+                  hintStyle: TextStyle(
+                    color:  Color(0xffAFAFBD).withOpacity(
+                      0.5,
+                    ),
+                    height: 1,
+                  ),
+                  hintText: "Enter Nick Name Here",
+                  contentPadding: EdgeInsets.all(
+                    AppDimen.MARGIN_CARD_MEDIUM_2,
+                  ),
+                  fillColor: AppTheme.white.withOpacity(0.2),
+                ),
+              ),
+              ButtonBar(
+                buttonMinWidth: 100,
+                alignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  FlatButton(
+                    child: Text(negativeBtnText),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                  FlatButton(
+                    child: Text(positiveBtnText),
+                    onPressed: positiveBtnPressed,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        CircleAvatar( // Top Circle with icon
+          maxRadius: 40.0,
+          child: Icon(Icons.message),
+        ),
+        SquarePersonFace(
+          width: 80,
+          imgPath: 'assets/images/girl_light.png',
+        ),
+      ],
+    );
+  }
+
+}
+
