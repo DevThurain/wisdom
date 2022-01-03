@@ -10,9 +10,5 @@ void main() async {
   await setupLocator();
   final settingsController = SettingsController(SettingsService());
   await settingsController.loadSettings();
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.white, // transparent status bar
-      statusBarIconBrightness: Brightness.dark // dark text for status bar
-  ));
   runApp(MyApp(settingsController: settingsController));
 }

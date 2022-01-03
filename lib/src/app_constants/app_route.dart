@@ -5,6 +5,7 @@ import 'package:wisdom/src/ui/home/home_screen.dart';
 import 'package:wisdom/src/ui/intro/intro_screen.dart';
 import 'package:wisdom/src/ui/knowledge/knowledge_detail_screen.dart';
 import 'package:wisdom/src/ui/knowledge/knowledge_screen.dart';
+import 'package:wisdom/src/ui/post_detail/post_detail_screen.dart';
 import 'package:wisdom/src/ui/profile/profile_screen.dart';
 
 class AppRoute {
@@ -33,6 +34,9 @@ class AppRoute {
 
           case IntroScreen.routeName:
             return const IntroScreen();
+
+          case PostDetailScreen.routeName:
+            return const PostDetailScreen();
 
           default:
             return const IntroScreen();

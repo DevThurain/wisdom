@@ -4,6 +4,7 @@ import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/ui/post_detail/post_detail_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
 import 'package:wisdom/src/ui/widgets/square_person_face.dart';
@@ -76,7 +77,7 @@ class _KnowledgeScreenState extends State<KnowledgeScreen> {
                           duration: '2 hours ago',
                           commentCount: '12',
                           color: AppTheme.dark_purple,
-                          onTap: () {}))
+                          onTap: () => Navigator.pushNamed(context, PostDetailScreen.routeName)))
                       .toList(),
                 ));
               },

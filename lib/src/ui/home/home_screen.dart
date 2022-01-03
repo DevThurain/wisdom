@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 title: 'Knowledge',
                 color: AppTheme.dark_purple,
                 onTap: () {
-                  Navigator.pushNamed(context, KnowledgeScreen.routeName);
+                  Navigator.pushNamed(context, "/knowledge_screen");
                 },
               ),
               SizedBox(height: 20),

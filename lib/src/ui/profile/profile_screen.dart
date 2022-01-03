@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
@@ -21,6 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   StickyHeaderController? _stickyHeaderController;
   @override
   void initState() {
+
     _scrollController = ScrollController()
       ..addListener(() {
         if (_isAppBarExpanded) {
@@ -47,72 +49,76 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return MediaQuery.of(context).padding.top;
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.only(top: _statusBarHeight),
-              child: ProfileHeaderSectionView(
-                  profileUrl: 'assets/images/girl_light.png',
-                  name: 'Chrono',
-                  color: AppTheme.dark_purple,
-                  onTap: () {}),
-            ),
-          ),
-          SliverStickyHeader(
-            controller: _stickyHeaderController,
-              header: Container(
-                height: 60,
-                margin: EdgeInsets.only(top: _statusBarHeight),
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                alignment: Alignment.centerLeft,
-                color: !_isAppBarExpanded?Colors.transparent: Colors.white,
-                child: Text(
-                  'Your Posts',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: AppTheme.fresh_red,
-                      fontSize: AppDimen.TEXT_REGULAR_3X,
-                      fontFamily: 'Poppins',
-                      letterSpacing: 1,
-                      fontWeight: FontWeight.bold),
-                ),
+      body: Padding(
+        padding: EdgeInsets.only(top: _statusBarHeight),
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: _statusBarHeight),
+                child: ProfileHeaderSectionView(
+                    profileUrl: 'assets/images/girl_light.png',
+                    name: 'Chrono',
+                    color: AppTheme.dark_purple,
+                    onTap: () {}),
               ),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-              DesignedPostCard(
-                  title:
-                      "Jelly Eye Mask ပြန်ရပြီ\nPrice-3500 \nအရောင်ပုံ ရွေးမရပါ",
-                  profileUrl: 'assets/images/girl_light.png',
-                  name: 'Chrono',
-                  duration: '2 hours ago',
-                  commentCount: '12',
-                  color: AppTheme.fresh_red,
-                  onTap: () {}),
-              DesignedPostCard(
-                  title:
-                      "ကျနော်လက်ရှိသုံးနေတဲ့ Budget Gaming PC လေးရောင်းချင်ပါတယ် AAA title game  တွေ အေးဆေးဆော့လို့ရပါတယ်",
-                  profileUrl: 'assets/images/boy_light.png',
-                  name: 'Dota God',
-                  duration: '2 minutes ago',
-                  commentCount: '4',
-                  color: AppTheme.fresh_red,
-                  onTap: () {}),
-              DesignedPostCard(
-                  title: "You have to be\nhuman to be played\nwith you",
-                  profileUrl: 'assets/images/girl_light_2.png',
-                  name: 'Ella',
-                  duration: '2 hours ago',
-                  commentCount: '12',
-                  color: AppTheme.fresh_red,
-                  onTap: () {}),
-            ])),
-          )
-        ],
+            ),
+            SliverStickyHeader(
+              controller: _stickyHeaderController,
+                header: Container(
+                  height: 60,
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  alignment: Alignment.centerLeft,
+                  color: !_isAppBarExpanded?Colors.transparent: Colors.white,
+                  child: Text(
+                    'Your Posts',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: AppTheme.fresh_red,
+                        fontSize: AppDimen.TEXT_REGULAR_3X,
+                        fontFamily: 'Poppins',
+                        letterSpacing: 1,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                DesignedPostCard(
+                    title:
+                        "Jelly Eye Mask ပြန်ရပြီ\nPrice-3500 \nအရောင်ပုံ ရွေးမရပါ",
+                    profileUrl: 'assets/images/girl_light.png',
+                    name: 'Chrono',
+                    duration: '2 hours ago',
+                    commentCount: '12',
+                    color: AppTheme.fresh_red,
+                    onTap: () {}),
+                DesignedPostCard(
+                    title:
+                        "ကျနော်လက်ရှိသုံးနေတဲ့ Budget Gaming PC လေးရောင်းချင်ပါတယ် AAA title game  တွေ အေးဆေးဆော့လို့ရပါတယ်",
+                    profileUrl: 'assets/images/boy_light.png',
+                    name: 'Dota God',
+                    duration: '2 minutes ago',
+                    commentCount: '4',
+                    color: AppTheme.fresh_red,
+                    onTap: () {}),
+                DesignedPostCard(
+                    title: "You have to be\nhuman to be played\nwith you",
+                    profileUrl: 'assets/images/girl_light_2.png',
+                    name: 'Ella',
+                    duration: '2 hours ago',
+                    commentCount: '12',
+                    color: AppTheme.fresh_red,
+                    onTap: () {}),
+              ])),
+            )
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppTheme.dark_purple,
