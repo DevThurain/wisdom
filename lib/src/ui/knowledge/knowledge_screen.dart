@@ -20,7 +20,7 @@ class KnowledgeScreen extends StatefulWidget {
 class _KnowledgeScreenState extends State<KnowledgeScreen> {
   late ScrollController _scrollController;
   bool expanded = false;
-  KnowlegeProvider knowlegeProvider = locator<KnowlegeProvider>();
+  var knowlegeProvider = locator<KnowlegeProvider>();
 
   @override
   void initState() {
@@ -48,41 +48,39 @@ class _KnowledgeScreenState extends State<KnowledgeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<KnowlegeProvider>(
-      create: (context) => knowlegeProvider,
-      child: Scaffold(
-        body: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            _buildSliverAppBar(),
-            Consumer<KnowlegeProvider>(
-              builder: (context, provider, child) {
-                _scrollController.addListener(() {
-                  if (_scrollController.offset ==
-                          _scrollController.position.maxScrollExtent &&
-                      !provider.paginateLock) {
-                    provider.paginateLock = true;
-                    provider.fetchPaginatedList();
-                  }
-                });
+    return Scaffold(
+      body: CustomScrollView(
+        controller: _scrollController,
+        slivers: [
+          _buildSliverAppBar(),
+          Consumer<KnowlegeProvider>(
+            builder: (context, provider, child) {
+              _scrollController.addListener(() {
+                if (_scrollController.offset ==
+                        _scrollController.position.maxScrollExtent &&
+                    !provider.paginateLock) {
+                  provider.paginateLock = true;
+                  provider.fetchPaginatedList();
+                }
+              });
 
-                return SliverList(
-                    delegate: SliverChildListDelegate(
-                  provider.facts
-                      .map((post) => DesignedPostCard(
-                          title: post.fact.toString(),
-                          profileUrl: 'assets/images/girl_light.png',
-                          name: 'Chrono',
-                          duration: '2 hours ago',
-                          commentCount: '12',
-                          color: AppTheme.dark_purple,
-                          onTap: () {}))
-                      .toList(),
-                ));
-              },
-            )
-          ],
-        ),
+              return SliverList(
+            
+                  delegate: SliverChildListDelegate(
+                provider.facts
+                    .map((post) => DesignedPostCard(
+                        title: post.fact.toString(),
+                        profileUrl: 'assets/images/girl_light.png',
+                        name: 'Chrono',
+                        duration: '2 hours ago',
+                        commentCount: '12',
+                        color: AppTheme.dark_purple,
+                        onTap: () {}))
+                    .toList(),
+              ));
+            },
+          )
+        ],
       ),
     );
   }
