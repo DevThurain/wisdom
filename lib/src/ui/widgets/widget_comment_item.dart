@@ -52,7 +52,7 @@ class CommentItemWidget extends StatelessWidget {
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              color: AppTheme.fresh_red,
+                              color: AppTheme.dark_purple,
                               fontSize: AppDimen.TEXT_REGULAR_2X,
                               fontFamily: 'MyanUni',
                               height: 1,
@@ -67,7 +67,7 @@ class CommentItemWidget extends StatelessWidget {
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              color: AppTheme.fresh_red,
+                              color: AppTheme.dark_purple,
                               fontSize: AppDimen.TEXT_REGULAR_2X,
                               fontFamily: 'MyanUni',
                               height: 1,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
-import 'package:wisdom/src/app_utils/expanded_view_port.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
 import 'package:wisdom/src/ui/widgets/widget_comment_item.dart';
 
@@ -100,8 +99,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                       padding: EdgeInsets.all(AppDimen.MARGIN_CARD_MEDIUM),
                       shape: CircleBorder(),
                       elevation: 0,
-                      primary: AppTheme.fresh_red.withOpacity(0.4),
-                      onPrimary: AppTheme.fresh_red.withOpacity(0.4),
+                      primary: AppTheme.dark_purple.withOpacity(0.4),
+                      onPrimary: AppTheme.dark_purple.withOpacity(0.4),
                     ),
                   )
                 ],

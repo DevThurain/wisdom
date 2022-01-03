@@ -213,7 +213,7 @@ class GradientBackground extends StatelessWidget {
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: [
-              AppTheme.fresh_red,
+              AppTheme.dark_purple,
               AppTheme.fresh_purple,
             ])),
       ),

@@ -80,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     'Your Posts',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        color: AppTheme.fresh_red,
+                        color: AppTheme.dark_purple,
                         fontSize: AppDimen.TEXT_REGULAR_3X,
                         fontFamily: 'Poppins',
                         letterSpacing: 1,
@@ -96,7 +96,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     name: 'Chrono',
                     duration: '2 hours ago',
                     commentCount: '12',
-                    color: AppTheme.fresh_red,
+                    color: AppTheme.dark_purple,
                     onTap: () {}),
                 DesignedPostCard(
                     title:
@@ -105,7 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     name: 'Dota God',
                     duration: '2 minutes ago',
                     commentCount: '4',
-                    color: AppTheme.fresh_red,
+                    color: AppTheme.dark_purple,
                     onTap: () {}),
                 DesignedPostCard(
                     title: "You have to be\nhuman to be played\nwith you",
@@ -113,7 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     name: 'Ella',
                     duration: '2 hours ago',
                     commentCount: '12',
-                    color: AppTheme.fresh_red,
+                    color: AppTheme.dark_purple,
                     onTap: () {}),
               ])),
             )
@@ -319,7 +319,7 @@ class CustomDialog extends StatelessWidget {
                     borderRadius: const BorderRadius.all(
                        Radius.circular(AppDimen.MARGIN_MEDIUM),
                     ),
-                    borderSide: BorderSide(color: AppTheme.fresh_purple.withOpacity(0.2)),
+                    borderSide: BorderSide(color: AppTheme.dark_purple.withOpacity(0.2)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: const BorderRadius.all(

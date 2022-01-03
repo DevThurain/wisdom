@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
-import 'package:wisdom/src/ui/knowledge/knowledge_screen.dart';
 import 'package:wisdom/src/ui/profile/profile_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/view_models/home_provider.dart';
@@ -61,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: 20),
               DesignedCard(
                 title: 'Fun',
-                color: AppTheme.fresh_red,
+                color: AppTheme.dark_purple,
                 onTap: () {},
               )
             ],
