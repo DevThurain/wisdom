@@ -79,7 +79,7 @@ class ButtonSectionView extends StatelessWidget {
             decoration: InputDecoration(
                 fillColor: AppTheme.white,
                 filled: true,
-                hintText: 'Nick Name ...',
+                hintText: 'Referral Code',
                 hintStyle: TextStyle(
                   fontFamily: 'Poppins',
                   color: AppTheme.black.withOpacity(0.5),

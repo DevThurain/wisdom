@@ -1,40 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/ui/post_detail/post_detail_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
-import 'package:wisdom/src/view_models/knowledge_provider.dart';
+import 'package:wisdom/src/view_models/fun_provider.dart';
 
-class KnowledgeScreen extends StatefulWidget {
-  static const routeName = '/knowledge_screen';
-  const KnowledgeScreen({Key? key}) : super(key: key);
+class FunListScreen extends StatefulWidget {
+  static const routeName = '/fun_list_screen';
+
+  const FunListScreen({Key? key}) : super(key: key);
 
   @override
-  _KnowledgeScreenState createState() => _KnowledgeScreenState();
+  _FunListScreenState createState() => _FunListScreenState();
 }
 
-class _KnowledgeScreenState extends State<KnowledgeScreen> {
+class _FunListScreenState extends State<FunListScreen> {
   late ScrollController _scrollController;
+
   bool expanded = false;
-  var knowledgeProvider = locator<KnowlegeProvider>();
+  var funProvider = locator<FunProvider>();
 
   @override
   void initState() {
+    funProvider.getFunList();
     _scrollController = ScrollController()
       ..addListener(() {
         if (_isAppBarExpanded) {
           setState(() {
             expanded = true;
           });
-          print('expanded');
         } else {
           setState(() {
             expanded = false;
           });
-          print('not expanded');
         }
       });
 
@@ -48,38 +49,33 @@ class _KnowledgeScreenState extends State<KnowledgeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          _buildSliverAppBar(),
-          Consumer<KnowlegeProvider>(
-            builder: (context, provider, child) {
-              _scrollController.addListener(() {
-                if (_scrollController.offset ==
-                        _scrollController.position.maxScrollExtent &&
-                    !provider.paginateLock) {
-                  provider.paginateLock = true;
-                  provider.fetchPaginatedList();
-                }
-              });
-
-              return SliverList(
-
-                  delegate: SliverChildListDelegate(
-                provider.facts
-                    .map((post) => DesignedPostCard(
-                        title: post.fact.toString(),
-                        profileUrl: 'assets/images/girl_light.png',
-                        name: 'Chrono',
-                        duration: '2 hours ago',
-                        commentCount: '12',
-                        color: AppTheme.dark_purple,
-                        onTap: () {}))
-                    .toList(),
-              ));
-            },
-          )
-        ],
+      body: Consumer<FunProvider>(
+        builder: (context, provider, child) => CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            _buildSliverAppBar(),
+            SliverList(
+                delegate: SliverChildListDelegate(
+              provider.funListDao!.funList!
+                  .map(
+                    (post) => DesignedPostCard(
+                      title: post.content.toString(),
+                      profileUrl: post.profileUrl ?? "",
+                      name: post.userNickName ?? "",
+                      duration: post.postUploadedAt ?? "",
+                      commentCount: post.commentCount ?? "",
+                      color: AppTheme.dark_purple,
+                      onTap: () => Navigator.pushNamed(
+                        context,
+                        PostDetailScreen.routeName,
+                        arguments: post,
+                      ),
+                    ),
+                  )
+                  .toList(),
+            )),
+          ],
+        ),
       ),
     );
   }
@@ -95,7 +91,8 @@ class _KnowledgeScreenState extends State<KnowledgeScreen> {
         child: Container(
           width: double.infinity,
           height: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: AppDimen.MARGIN_CARD_MEDIUM_2),
+          padding:
+              EdgeInsets.symmetric(horizontal: AppDimen.MARGIN_CARD_MEDIUM_2),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -116,7 +113,7 @@ class _KnowledgeScreenState extends State<KnowledgeScreen> {
                     ),
                   ),
                   Text(
-                    'Daily feed',
+                    'Fun feed',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: AppTheme.dark_purple,
@@ -136,35 +133,6 @@ class _KnowledgeScreenState extends State<KnowledgeScreen> {
         ),
       ),
       backgroundColor: AppTheme.white,
-    );
-  }
-}
-
-class ProfileSectionView extends StatelessWidget {
-  const ProfileSectionView({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return  Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Text(
-          AppLocalizations.of(context)!.home_logout,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-              color: AppTheme.dark_purple,
-              fontSize: AppDimen.TEXT_REGULAR,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.normal),
-        ),
-        SizedBox(width: AppDimen.MARGIN_MEDIUM_3),
-        CircularPersonFace(
-          width: 20,
-          imgPath: 'assets/images/girl_light.png',
-        )
-      ],
     );
   }
 }

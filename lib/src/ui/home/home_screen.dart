@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/ui/fun/fun_list_screen.dart';
+import 'package:wisdom/src/ui/knowledge/knowledge_screen.dart';
 import 'package:wisdom/src/ui/profile/profile_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/view_models/home_provider.dart';
@@ -39,10 +41,9 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppDimen.MARGIN_MEDIUM_2),
+                padding: EdgeInsets.all(AppDimen.MARGIN_MEDIUM_2),
                 child: ProfileSectionView(),
               ),
-              SizedBox(height: 20),
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: AppDimen.MARGIN_MEDIUM_2,
@@ -54,14 +55,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 title: 'Knowledge',
                 color: AppTheme.dark_purple,
                 onTap: () {
-                  Navigator.pushNamed(context, "/knowledge_screen");
+                  Navigator.pushNamed(context, KnowledgeScreen.routeName);
                 },
               ),
               SizedBox(height: 20),
               DesignedCard(
                 title: 'Fun',
                 color: AppTheme.dark_purple,
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, FunListScreen.routeName);
+                },
               )
             ],
           ),
@@ -78,34 +81,27 @@ class ProfileSectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TweenAnimationBuilder(
-      duration: Duration(seconds: 2),
-      tween: Tween<double>(begin: 0.0, end: 16.0),
-      builder: (_, double value, __) => Padding(
-        padding: EdgeInsets.only(top: value),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              AppLocalizations.of(context)!.home_logout,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  color: AppTheme.dark_purple,
-                  fontSize: AppDimen.TEXT_REGULAR,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.normal),
-            ),
-            SizedBox(width: AppDimen.MARGIN_MEDIUM_3),
-            InkWell(
-              onTap: ()=> Navigator.pushNamed(context, ProfileScreen.routeName),
-              child: CircularPersonFace(
-                width: 20,
-                imgPath: 'assets/images/girl_light.png',
-              ),
-            )
-          ],
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text(
+          AppLocalizations.of(context)!.home_logout,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+              color: AppTheme.dark_purple,
+              fontSize: AppDimen.TEXT_REGULAR,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.normal),
         ),
-      ),
+        SizedBox(width: AppDimen.MARGIN_MEDIUM_3),
+        InkWell(
+          onTap: ()=> Navigator.pushNamed(context, ProfileScreen.routeName),
+          child: CircularPersonFace(
+            width: 20,
+            imgPath: 'assets/images/girl_light.png',
+          ),
+        )
+      ],
     );
   }
 }

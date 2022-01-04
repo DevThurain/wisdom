@@ -1,21 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
+import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/data_models/daos/fun_list_dao.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
 import 'package:wisdom/src/ui/widgets/widget_comment_item.dart';
+import 'package:wisdom/src/view_models/fun_provider.dart';
 
 class PostDetailScreen extends StatefulWidget {
   static const routeName = '/post_detail_screen';
+  final FunItem postItem;
 
-  const PostDetailScreen({Key? key}) : super(key: key);
+  const PostDetailScreen(this.postItem, {Key? key}) : super(key: key);
 
   @override
   _PostDetailScreenState createState() => _PostDetailScreenState();
 }
 
 class _PostDetailScreenState extends State<PostDetailScreen> {
+  var funProvider = locator<FunProvider>();
+
   double get _statusBarHeight {
     return MediaQuery.of(context).padding.top;
+  }
+
+  FunItem get _postItem {
+    return widget.postItem;
+  }
+
+  @override
+  void initState() {
+    funProvider.getCommentList();
+    super.initState();
   }
 
   @override
@@ -28,33 +45,59 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
             child: CustomScrollView(
               slivers: <Widget>[
                 SliverToBoxAdapter(
-                  child: PostDetailSectionView(),
-                ),
-                SliverPadding(
-                  padding: const EdgeInsets.only(
-                    bottom: 80,
-                    top: AppDimen.MARGIN_LARGE,
-                  ),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) =>
-                          CommentItemWidget(
-                            name: "Ma Ma",
-                            profileUrl: 'assets/images/girl_light.png',
-                            commentText: "$index",
-                            duration: "2W",
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      PostDetailSectionView(_postItem),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextButton(
+                          onPressed: () => funProvider.getCommentList(),
+                          style: TextButton.styleFrom(
+                            minimumSize: Size.zero,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: AppDimen.MARGIN_MEDIUM,
+                            ),
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
-                      childCount: 20,
-                    ),
+                          child: Text(
+                            "Load more comments..",
+                            style: TextStyle(
+                              fontSize: AppDimen.TEXT_REGULAR,
+                              fontFamily: 'MyanUni',
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+                CommentListSectionView(),
+                SliverPadding(
+                  padding: EdgeInsets.only(bottom: AppDimen.MARGIN_XXLARGE * 2),
+                )
               ],
             ),
           ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              color: AppTheme.comment_box_bg_color,
+              decoration: BoxDecoration(
+                color: AppTheme.comment_box_bg_color,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(AppDimen.MARGIN_MEDIUM),
+                  topRight: Radius.circular(AppDimen.MARGIN_MEDIUM),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppTheme.dark_purple.withOpacity(0.5),
+                    blurRadius: 4.0,
+                    spreadRadius: 0.0,
+                    offset: Offset(0, 1.0), // shadow direction: bottom right
+                  )
+                ],
+              ),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
@@ -83,12 +126,13 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                           fontSize: AppDimen.TEXT_REGULAR_2X,
                           fontFamily: 'MyanUni',
                           letterSpacing: 0.5,
+                          color: AppTheme.black.withOpacity(0.5),
                         ),
                         hintText: "Enter comment here ...",
                         contentPadding: EdgeInsets.all(
                           AppDimen.MARGIN_CARD_MEDIUM_2,
                         ),
-                        fillColor: AppTheme.comment_box_bg_color,
+                        fillColor: Colors.transparent,
                       ),
                     ),
                   ),
@@ -115,8 +159,36 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   sendMessage() {}
 }
 
+class CommentListSectionView extends StatelessWidget {
+  const CommentListSectionView({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<FunProvider>(
+      builder: (context, provider, child) => SliverList(
+          delegate: SliverChildListDelegate(
+        provider.commentListDao!.commentList!
+            .map(
+              (comment) => CommentItemWidget(
+                name: comment.userNickName??"",
+                profileUrl:  comment.profileUrl??"",
+                commentText: comment.comment??"",
+                duration: comment.commentAt??"",
+              ),
+            )
+            .toList(),
+      )),
+    );
+  }
+}
+
 class PostDetailSectionView extends StatelessWidget {
-  const PostDetailSectionView({
+  final FunItem postItem;
+
+  const PostDetailSectionView(
+    this.postItem, {
     Key? key,
   }) : super(key: key);
 
@@ -148,18 +220,18 @@ class PostDetailSectionView extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   PostProfileUI(
                     profileUrl: 'assets/images/girl_light.png',
                     color: AppTheme.dark_purple,
-                    name: "Ma Ma",
-                    duration: "2 Hrs Ago",
+                    name: postItem.userNickName ?? "",
+                    duration: postItem.postUploadedAt ?? "",
                   ),
                   SizedBox(
                     height: AppDimen.MARGIN_MEDIUM_2,
                   ),
                   Text(
-                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                    postItem.content ?? "",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize: AppDimen.TEXT_REGULAR_2X,
@@ -171,7 +243,7 @@ class PostDetailSectionView extends StatelessWidget {
                     height: AppDimen.MARGIN_MEDIUM_2,
                   ),
                   PostCommentUI(
-                    commentCount: "12",
+                    commentCount: postItem.commentCount ?? "",
                   ),
                 ],
               ),

@@ -35,11 +35,12 @@ class CommentItemWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
+                    width: MediaQuery.of(context).size.width * 0.6,
                     padding: EdgeInsets.all(AppDimen.MARGIN_MEDIUM),
                     margin: EdgeInsets.symmetric(
                         horizontal: AppDimen.MARGIN_MEDIUM),
                     decoration: BoxDecoration(
-                        color: AppTheme.comment_box_bg_color,
+                        color: AppTheme.dark_purple.withOpacity(0.1),
                         borderRadius: BorderRadius.all(
                       Radius.circular(AppDimen.MARGIN_MEDIUM),
                     )),
@@ -64,13 +65,12 @@ class CommentItemWidget extends StatelessWidget {
                         Text(
                           commentText,
                           textAlign: TextAlign.start,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
+                          softWrap : true,
                           style: TextStyle(
-                              color: AppTheme.dark_purple,
-                              fontSize: AppDimen.TEXT_REGULAR_2X,
+                              color: AppTheme.black.withOpacity(0.5),
+                              fontSize: AppDimen.TEXT_REGULAR,
                               fontFamily: 'MyanUni',
-                              height: 1,
+                              height: 1.5,
                               fontWeight: FontWeight.normal),
                         ),
                       ],
