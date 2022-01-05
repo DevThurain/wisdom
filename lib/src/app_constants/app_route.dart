@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_screen.dart';
 import 'package:wisdom/src/ui/home/home_screen.dart';
 import 'package:wisdom/src/ui/intro/intro_screen.dart';
@@ -30,8 +31,11 @@ class AppRoute {
           case PostDetailScreen.routeName:
             return const PostDetailScreen();
 
+          case AddPostScreen.routeName:
+            return const AddPostScreen();
+
           default:
-            return const IntroScreen();
+            return const AddPostScreen();
         }
       },
     );
