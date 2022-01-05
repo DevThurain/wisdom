@@ -29,6 +29,7 @@ class RepositoryImpl implements Repository {
 
   @override
   Future<FunListDao> getFunList() async {
+    await Future.delayed(Duration(seconds: 3));
     final String response =
     await rootBundle.loadString('assets/jsons/fun_list.json');
     var data = json.decode(response);

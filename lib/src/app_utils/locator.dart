@@ -10,5 +10,5 @@ Future setupLocator() async {
   locator.registerLazySingleton(() => RepositoryImpl());
   locator.registerLazySingleton(() => HomeProvider());
   locator.registerLazySingleton(() => KnowlegeProvider());
-  locator.registerLazySingleton(() => FunProvider());
+  locator.registerFactory(() => FunProvider());
 }

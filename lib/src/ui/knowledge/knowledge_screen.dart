@@ -29,12 +29,10 @@ class _KnowledgeScreenState extends State<KnowledgeScreen> {
           setState(() {
             expanded = true;
           });
-          print('expanded');
         } else {
           setState(() {
             expanded = false;
           });
-          print('not expanded');
         }
       });
 

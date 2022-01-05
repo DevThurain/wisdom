@@ -14,12 +14,10 @@ void main() async {
   await settingsController.loadSettings();
 
   var knowledgeProvider = locator<KnowlegeProvider>();
-  var funProvider = locator<FunProvider>();
 
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => knowledgeProvider),
-      ChangeNotifierProvider(create: (context) => funProvider)
     ],
     child: MyApp(settingsController: settingsController)));
 }

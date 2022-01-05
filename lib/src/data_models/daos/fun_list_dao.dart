@@ -50,7 +50,7 @@ class FunItem {
 
   int? get id => _id;
   String? get profileUrl => _profileUrl;
-  String? get userNickName => "${DateTime.now().microsecond} $_userNickName";
+  String? get userNickName => _userNickName;
   String? get userKey => _userKey;
   int? get userId => _userId;
   String? get content => _content;
@@ -79,7 +79,7 @@ class FunItem {
   FunItem.fromJson(dynamic json) {
     _id = json['id'];
     _profileUrl = json['profileUrl'];
-    _userNickName = json['userNickName'];
+    _userNickName = "${json['id']} ${json['userNickName']}";
     _userKey = json['userKey'];
     _userId = json['userId'];
     _content = json['content'];
