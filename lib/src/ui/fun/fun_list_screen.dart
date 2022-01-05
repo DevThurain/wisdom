@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/ui/post_detail/post_detail_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
+import 'package:wisdom/src/ui/widgets/widget_footer_text.dart';
 import 'package:wisdom/src/view_models/fun_provider.dart';
 
 class FunListScreen extends StatefulWidget {
@@ -19,6 +22,7 @@ class FunListScreen extends StatefulWidget {
 
 class _FunListScreenState extends State<FunListScreen> {
   late ScrollController _scrollController;
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   bool expanded = false;
   var funProvider = locator<FunProvider>();
@@ -50,31 +54,97 @@ class _FunListScreenState extends State<FunListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Consumer<FunProvider>(
-        builder: (context, provider, child) => CustomScrollView(
+        builder: (context, provider, child) => NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              _buildSliverAppBar(),
+            ];
+          },
           controller: _scrollController,
-          slivers: [
-            _buildSliverAppBar(),
-            SliverList(
-                delegate: SliverChildListDelegate(
-              provider.funListDao!.funList!
-                  .map(
-                    (post) => DesignedPostCard(
-                      title: post.content.toString(),
-                      profileUrl: post.profileUrl ?? "",
-                      name: post.userNickName ?? "",
-                      duration: post.postUploadedAt ?? "",
-                      commentCount: post.commentCount ?? "",
-                      color: AppTheme.dark_purple,
-                      onTap: () => Navigator.pushNamed(
-                        context,
-                        PostDetailScreen.routeName,
-                        arguments: post,
-                      ),
+          body: SmartRefresher(
+            controller: _refreshController,
+            enablePullUp: true,
+              header: CustomHeader(
+                builder: (context, mode) {
+                  return SizedBox(
+                    height: 18.0,
+                    child: Center(
+                      child: LoadingIndicator(
+                        indicatorType:
+                        Indicator.lineSpinFadeLoader,
+                        colors: const [AppTheme.dark_purple],
+                       ),
                     ),
-                  )
-                  .toList(),
-            )),
-          ],
+                  );
+                },
+              ),
+              footer: CustomFooter(
+                builder: (context, mode) {
+                  Widget body ;
+                  if(mode==LoadStatus.idle){
+                    body =  FooterText(text: "pull up load");
+                  }
+                  else if(mode==LoadStatus.loading){
+                    body =   SizedBox(
+                      height: 18.0,
+                      child: Center(
+                        child: LoadingIndicator(
+                          indicatorType:
+                          Indicator.lineSpinFadeLoader,
+                          colors: const [AppTheme.dark_purple],
+                        ),
+                      ),
+                    );
+                  }
+                  else if(mode == LoadStatus.failed){
+                    body = FooterText(text : "Load Failed!Click retry!");
+                  }
+                  else if(mode == LoadStatus.canLoading){
+                    body = FooterText( text :"release to load more");
+                  }
+                  else{
+                    body = FooterText(text : "No more Data");
+                  }
+                  return SizedBox(
+                    height: 48,
+                    child: Center(child:body),
+                  );
+                },
+              ),
+            onRefresh: ()=> {
+              funProvider.getFunList(),
+              _refreshController.refreshCompleted(),
+            },
+            onLoading: ()=> {
+              print("Loading"),
+              funProvider.getFunList(),
+              //_refreshController.loadComplete(),
+            },
+            child: CustomScrollView(
+              slivers: [
+                SliverList(
+                    delegate: SliverChildListDelegate(
+                  provider.funList!
+                      .map(
+                        (post) => DesignedPostCard(
+                          title: post.content.toString(),
+                          profileUrl: post.profileUrl ?? "",
+                          name: post.userNickName ?? "",
+                          duration: post.postUploadedAt ?? "",
+                          commentCount: post.commentCount ?? "",
+                          color: AppTheme.dark_purple,
+                          onTap: () => Navigator.pushNamed(
+                            context,
+                            PostDetailScreen.routeName,
+                            arguments: post,
+                          ),
+                        ),
+                      )
+                      .toList(),
+                )),
+              ],
+            ),
+          ),
         ),
       ),
     );

@@ -50,7 +50,7 @@ class FunItem {
 
   int? get id => _id;
   String? get profileUrl => _profileUrl;
-  String? get userNickName => _userNickName;
+  String? get userNickName => "${DateTime.now().microsecond} $_userNickName";
   String? get userKey => _userKey;
   int? get userId => _userId;
   String? get content => _content;

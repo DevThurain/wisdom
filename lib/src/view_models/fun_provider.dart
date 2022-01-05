@@ -6,16 +6,18 @@ import 'package:wisdom/src/data_source/repository_impl.dart';
 
 class FunProvider with ChangeNotifier{
   final _repository = locator<RepositoryImpl>();
-  FunListDao? _funListDao;
-  CommentListDao? _commentListDao;
+  final List<CommentItem>  _commentList = <CommentItem>[];
+  final List<FunItem>  _funList = <FunItem>[];
 
-  FunListDao? get funListDao => _funListDao;
-  CommentListDao? get commentListDao => _commentListDao;
+  List<FunItem>? get funList => _funList;
+  List<CommentItem>? get commentList => _commentList;
 
 
   Future<void> getFunList() async {
     try {
-      _funListDao = await _repository.getFunList();
+       await _repository.getFunList().then((value) =>
+          _funList.addAll(value.funList!.toList())
+      );
       notifyListeners();
     } catch (_) {
       rethrow;
@@ -24,7 +26,9 @@ class FunProvider with ChangeNotifier{
 
   Future<void> getCommentList() async {
     try {
-      _commentListDao = await _repository.getCommentList();
+      await _repository.getCommentList().then((value) =>
+          _commentList.addAll(value.commentList!.toList())
+      );
       notifyListeners();
     } catch (_) {
       rethrow;

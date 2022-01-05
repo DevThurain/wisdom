@@ -37,121 +37,146 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            margin: EdgeInsets.only(top: _statusBarHeight),
-            child: CustomScrollView(
-              slivers: <Widget>[
-                SliverToBoxAdapter(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      PostDetailSectionView(_postItem),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextButton(
-                          onPressed: () => funProvider.getCommentList(),
-                          style: TextButton.styleFrom(
-                            minimumSize: Size.zero,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: AppDimen.MARGIN_MEDIUM,
+    return Consumer<FunProvider>(
+      builder: (context, provider, child) => Scaffold(
+        body: Stack(
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: _statusBarHeight),
+              child: NestedScrollView(
+                headerSliverBuilder: (context, innerBoxIsScrolled) {
+                  return <Widget>[
+                    SliverToBoxAdapter(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          PostDetailSectionView(_postItem),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextButton(
+                              onPressed: () => funProvider.getCommentList(),
+                              style: TextButton.styleFrom(
+                                minimumSize: Size.zero,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: AppDimen.MARGIN_MEDIUM,
+                                ),
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                              child: Text(
+                                "Load more comments..",
+                                style: TextStyle(
+                                  fontSize: AppDimen.TEXT_REGULAR,
+                                  fontFamily: 'MyanUni',
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
                             ),
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
-                          child: Text(
-                            "Load more comments..",
-                            style: TextStyle(
-                              fontSize: AppDimen.TEXT_REGULAR,
-                              fontFamily: 'MyanUni',
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ];
+                },
+                body: CustomScrollView(
+                  slivers: [
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        provider.commentList!
+                            .map(
+                              (comment) => CommentItemWidget(
+                                name: comment.userNickName ?? "",
+                                profileUrl: comment.profileUrl ?? "",
+                                commentText: comment.comment ?? "",
+                                duration: comment.commentAt ?? "",
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.only(
+                        bottom: AppDimen.MARGIN_XXLARGE * 2,
+                      ),
+                    )
+                  ],
                 ),
-                CommentListSectionView(),
-                SliverPadding(
-                  padding: EdgeInsets.only(bottom: AppDimen.MARGIN_XXLARGE * 2),
-                )
-              ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppTheme.comment_box_bg_color,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(AppDimen.MARGIN_MEDIUM),
-                  topRight: Radius.circular(AppDimen.MARGIN_MEDIUM),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppTheme.dark_purple.withOpacity(0.5),
-                    blurRadius: 4.0,
-                    spreadRadius: 0.0,
-                    offset: Offset(0, 1.0), // shadow direction: bottom right
-                  )
-                ],
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Flexible(
-                    child: TextField(
-                      keyboardType: TextInputType.multiline,
-                      maxLines: 3,
-                      minLines: 1,
-                      autofocus: false,
-                      style: TextStyle(
-                        fontSize: AppDimen.TEXT_REGULAR_2X,
-                        fontFamily: 'MyanUni',
-                        letterSpacing: 0.5,
-                      ),
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(0.0)),
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(0.0)),
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                        filled: true,
-                        hintStyle: TextStyle(
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppTheme.comment_box_bg_color,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(AppDimen.MARGIN_MEDIUM),
+                    topRight: Radius.circular(AppDimen.MARGIN_MEDIUM),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppTheme.dark_purple.withOpacity(0.5),
+                      blurRadius: 4.0,
+                      spreadRadius: 0.0,
+                      offset: Offset(0, 1.0), // shadow direction: bottom right
+                    )
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Flexible(
+                      child: TextField(
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 3,
+                        minLines: 1,
+                        autofocus: false,
+                        style: TextStyle(
                           fontSize: AppDimen.TEXT_REGULAR_2X,
                           fontFamily: 'MyanUni',
                           letterSpacing: 0.5,
-                          color: AppTheme.black.withOpacity(0.5),
                         ),
-                        hintText: "Enter comment here ...",
-                        contentPadding: EdgeInsets.all(
-                          AppDimen.MARGIN_CARD_MEDIUM_2,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(0.0)),
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(0.0)),
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                          filled: true,
+                          hintStyle: TextStyle(
+                            fontSize: AppDimen.TEXT_REGULAR_2X,
+                            fontFamily: 'MyanUni',
+                            letterSpacing: 0.5,
+                            color: AppTheme.black.withOpacity(0.5),
+                          ),
+                          hintText: "Enter comment here ...",
+                          contentPadding: EdgeInsets.all(
+                            AppDimen.MARGIN_CARD_MEDIUM_2,
+                          ),
+                          fillColor: Colors.transparent,
                         ),
-                        fillColor: Colors.transparent,
                       ),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Icon(Icons.send_rounded, color: Colors.white),
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.all(AppDimen.MARGIN_CARD_MEDIUM),
-                      shape: CircleBorder(),
-                      elevation: 0,
-                      primary: AppTheme.dark_purple.withOpacity(0.4),
-                      onPrimary: AppTheme.dark_purple.withOpacity(0.4),
-                    ),
-                  )
-                ],
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Icon(Icons.send_rounded, color: Colors.white),
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.all(AppDimen.MARGIN_CARD_MEDIUM),
+                        shape: CircleBorder(),
+                        elevation: 0,
+                        primary: AppTheme.dark_purple.withOpacity(0.4),
+                        onPrimary: AppTheme.dark_purple.withOpacity(0.4),
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -159,30 +184,6 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   sendMessage() {}
 }
 
-class CommentListSectionView extends StatelessWidget {
-  const CommentListSectionView({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<FunProvider>(
-      builder: (context, provider, child) => SliverList(
-          delegate: SliverChildListDelegate(
-        provider.commentListDao!.commentList!
-            .map(
-              (comment) => CommentItemWidget(
-                name: comment.userNickName??"",
-                profileUrl:  comment.profileUrl??"",
-                commentText: comment.comment??"",
-                duration: comment.commentAt??"",
-              ),
-            )
-            .toList(),
-      )),
-    );
-  }
-}
 
 class PostDetailSectionView extends StatelessWidget {
   final FunItem postItem;
