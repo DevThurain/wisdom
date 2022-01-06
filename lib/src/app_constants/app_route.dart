@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
 import 'package:wisdom/src/data_models/daos/fun_list_dao.dart';
 import 'package:wisdom/src/ui/fun/fun_list_screen.dart';
 import 'package:wisdom/src/ui/home/home_screen.dart';
@@ -31,8 +32,11 @@ class AppRoute {
           case PostDetailScreen.routeName:
             return  PostDetailScreen(routeSettings.arguments as FunItem);
 
+          case AddPostScreen.routeName:
+            return const AddPostScreen();
+
           default:
-            return const IntroScreen();
+            return const AddPostScreen();
         }
       },
     );
