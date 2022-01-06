@@ -39,7 +39,7 @@ class AppRoute {
             return const RegisterScreen();
 
           default:
-            return const IntroScreen();
+            return const RegisterScreen();
         }
       },
     );

@@ -61,62 +61,6 @@ class _IntroScreenState extends State<IntroScreen> {
   }
 }
 
-class ButtonSectionView extends StatelessWidget {
-  const ButtonSectionView({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width * 0.7,
-          height: 55,
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(20)),
-          ),
-          child: TextField(
-            decoration: InputDecoration(
-                fillColor: AppTheme.white,
-                filled: true,
-                hintText: 'Nick Name ...',
-                hintStyle: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: AppTheme.black.withOpacity(0.5),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  borderSide: BorderSide.none,
-                )),
-          ),
-        ),
-        SizedBox(height: AppDimen.MARGIN_CARD_MEDIUM),
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, HomeScreen.routeName);
-          },
-          child: Container(
-              width: MediaQuery.of(context).size.width * 0.7,
-              height: 55,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
-                color: Colors.blue,
-              ),
-              child: Center(
-                child: Text(
-                  'Register',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: AppTheme.white,
-                  ),
-                ),
-              )),
-        )
-      ],
-    );
-  }
-}
 
 class PersonCardSection extends StatelessWidget {
   const PersonCardSection({
@@ -130,7 +74,6 @@ class PersonCardSection extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.5,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(AppDimen.MARGIN_MEDIUM_3)),
-        color: AppTheme.white.withOpacity(0.2),
       ),
       child: Stack(
         clipBehavior: Clip.none,
@@ -196,4 +139,3 @@ class PersonCardSection extends StatelessWidget {
     );
   }
 }
-
