@@ -26,7 +26,7 @@ class _FunListScreenState extends State<FunListScreen> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-  // bool expanded = false;
+   bool expanded = false;
   var funProvider = locator<FunProvider>();
 
   @override
@@ -59,8 +59,9 @@ class _FunListScreenState extends State<FunListScreen> {
         create: (context) => funProvider,
         child: Consumer<FunProvider>(builder: (context, provider, child) {
           if (_refreshController.isLoading) _refreshController.loadComplete();
-          if (_refreshController.isRefresh)
+          if (_refreshController.isRefresh) {
             _refreshController.refreshCompleted();
+          }
 
           return NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {

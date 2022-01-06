@@ -36,7 +36,7 @@ class AppRoute {
             return const AddPostScreen();
 
           default:
-            return const AddPostScreen();
+            return const IntroScreen();
         }
       },
     );
