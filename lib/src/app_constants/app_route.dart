@@ -6,6 +6,7 @@ import 'package:wisdom/src/ui/intro/intro_screen.dart';
 import 'package:wisdom/src/ui/knowledge/knowledge_screen.dart';
 import 'package:wisdom/src/ui/post_detail/post_detail_screen.dart';
 import 'package:wisdom/src/ui/profile/profile_screen.dart';
+import 'package:wisdom/src/ui/register/register_screen.dart';
 
 class AppRoute {
   static Route<dynamic>? generateRoute(RouteSettings routeSettings) {
@@ -34,8 +35,11 @@ class AppRoute {
           case AddPostScreen.routeName:
             return const AddPostScreen();
 
+          case RegisterScreen.routeName:
+            return const RegisterScreen();
+
           default:
-            return const AddPostScreen();
+            return const IntroScreen();
         }
       },
     );

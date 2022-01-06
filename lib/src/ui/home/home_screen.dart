@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
 import 'package:wisdom/src/ui/profile/profile_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/view_models/home_provider.dart';
@@ -27,7 +28,9 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           backgroundColor: AppTheme.dark_purple,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, AddPostScreen.routeName);
+          },
           child: SvgPicture.asset(
             'assets/svgs/quil.svg',
             width: 28,
@@ -97,7 +100,7 @@ class ProfileSectionView extends StatelessWidget {
             ),
             SizedBox(width: AppDimen.MARGIN_MEDIUM_3),
             InkWell(
-              onTap: ()=> Navigator.pushNamed(context, ProfileScreen.routeName),
+              onTap: () => Navigator.pushNamed(context, ProfileScreen.routeName),
               child: CircularPersonFace(
                 width: 20,
                 imgPath: 'assets/images/girl_light.png',
