@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
+import 'package:wisdom/src/app_utils/base_view_model.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
-import 'package:wisdom/src/app_utils/response_view_state.dart';
-import 'package:wisdom/src/data_models/daos/fun_list_dao.dart';
 import 'package:wisdom/src/ui/post_detail/post_detail_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
@@ -24,35 +22,35 @@ class FunListScreen extends StatefulWidget {
 }
 
 class _FunListScreenState extends State<FunListScreen> {
-  late ScrollController _scrollController;
+  //late ScrollController _scrollController;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-  bool expanded = false;
+  // bool expanded = false;
   var funProvider = locator<FunProvider>();
 
   @override
   void initState() {
     funProvider.getFunList();
-    _scrollController = ScrollController()
-      ..addListener(() {
-        if (_isAppBarExpanded) {
-          setState(() {
-            expanded = true;
-          });
-        } else {
-          setState(() {
-            expanded = false;
-          });
-        }
-      });
+    //_scrollController = ScrollController();
+    //   ..addListener(() {
+    //     if (_isAppBarExpanded) {
+    //       setState(() {
+    //         expanded = true;
+    //       });
+    //     } else {
+    //       setState(() {
+    //         expanded = false;
+    //       });
+    //     }
+    //   });
 
     super.initState();
   }
 
-  bool get _isAppBarExpanded {
-    return _scrollController.hasClients && _scrollController.offset > 100;
-  }
+  // bool get _isAppBarExpanded {
+  //   return _scrollController.hasClients && _scrollController.offset > 100;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +58,17 @@ class _FunListScreenState extends State<FunListScreen> {
       body: ChangeNotifierProvider(
         create: (context) => funProvider,
         child: Consumer<FunProvider>(builder: (context, provider, child) {
+          if (_refreshController.isLoading) _refreshController.loadComplete();
+          if (_refreshController.isRefresh)
+            _refreshController.refreshCompleted();
+
           return NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
                 _buildSliverAppBar(),
               ];
             },
-            controller: _scrollController,
+            // controller: _scrollController,
             body: handlingWidget(provider),
           );
         }),
@@ -93,9 +95,9 @@ class _FunListScreenState extends State<FunListScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children: const [
                   Visibility(
-                    visible: !expanded,
+                    //visible: !_isAppBarExpanded,
                     child: Text(
                       'Friday, January 16th',
                       textAlign: TextAlign.center,
@@ -131,23 +133,12 @@ class _FunListScreenState extends State<FunListScreen> {
   }
 
   handlingWidget(FunProvider provider) {
-    if (_refreshController.isLoading) _refreshController.loadComplete();
-    if (_refreshController.isRefresh) _refreshController.refreshCompleted();
-
-    if (provider.funResponse!.isNotEmpty ||
-        funProvider.state == ViewState.COMPLETE) {
-      if (funProvider.state == ViewState.LOADING) {
-        Fluttertoast.showToast(msg: "Loading");
-      } else if (funProvider.state == ViewState.ERROR) {
-        Fluttertoast.showToast(msg: "Error");
-      } else if (funProvider.state == ViewState.NO_INTERNET) {
-        Fluttertoast.showToast(msg: "No Internet");
-      }
-
+    if (funProvider.state == ViewState.COMPLETE) {
       return SmartRefresher(
         controller: _refreshController,
         enablePullUp: true,
         header: CustomHeader(
+          height: 24,
           builder: (context, mode) {
             return SizedBox(
               height: 18.0,
@@ -161,6 +152,8 @@ class _FunListScreenState extends State<FunListScreen> {
           },
         ),
         footer: CustomFooter(
+          loadStyle: LoadStyle.ShowWhenLoading,
+          height: 24,
           builder: (context, mode) {
             Widget body;
             if (mode == LoadStatus.idle) {
@@ -182,57 +175,60 @@ class _FunListScreenState extends State<FunListScreen> {
             } else {
               body = FooterText(text: "No more Data");
             }
-            return SizedBox(
-              height: 48,
-              child: Center(child: body),
+            return Center(
+              child: SizedBox(
+                height: 18,
+                child: Center(child: body),
+              ),
             );
           },
         ),
         onRefresh: () => {
-          funProvider.funResponse!.clear(),
           funProvider.getFunList(pagination: 1),
         },
         onLoading: () => {
           funProvider.getFunList(pagination: 2),
         },
         child: CustomScrollView(
-
           slivers: [
             SliverList(
-              key: UniqueKey(),
-                delegate: SliverChildListDelegate(
-              provider.funResponse!
-                  .map(
-                    (post) => DesignedPostCard(
-                      title: post.content.toString(),
-                      profileUrl: post.profileUrl ?? "",
-                      name: post.userNickName ?? "",
-                      duration: post.postUploadedAt ?? "",
-                      commentCount: post.commentCount ?? "",
-                      color: AppTheme.dark_purple,
-                      onTap: () => Navigator.pushNamed(
-                        context,
-                        PostDetailScreen.routeName,
-                        arguments: post,
+              delegate: SliverChildListDelegate(
+                provider.funList!
+                    .map(
+                      (post) => DesignedPostCard(
+                        title: post.content.toString(),
+                        profileUrl: post.profileUrl ?? "",
+                        name: post.userNickName ?? "",
+                        duration: post.postUploadedAt ?? "",
+                        commentCount: post.commentCount ?? "",
+                        color: AppTheme.dark_purple,
+                        onTap: () => Navigator.pushNamed(
+                          context,
+                          PostDetailScreen.routeName,
+                          arguments: post,
+                        ),
                       ),
-                    ),
-                  )
-                  .toList(),
-            )),
+                    )
+                    .toList(),
+              ),
+            ),
           ],
         ),
       );
     } else if (funProvider.state == ViewState.LOADING) {
       return Container(
         color: Colors.amber,
+        child: Text("Loading"),
       );
     } else if (funProvider.state == ViewState.NO_INTERNET) {
       return Container(
         color: Colors.brown,
+        child: Text("No Internet"),
       );
     } else {
       return Container(
         color: Colors.red,
+        child: Text("Error"),
       );
     }
   }
