@@ -48,7 +48,7 @@ class _IntroScreenState extends State<IntroScreen> {
                         ),
                       ),
                       const PersonCardSection(),
-                      //const ButtonSectionView()
+                      const ButtonSectionView()
                     ],
                   ),
                 ),
