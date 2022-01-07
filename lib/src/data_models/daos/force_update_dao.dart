@@ -1,62 +1,74 @@
-// To parse this JSON data, do
-//
-//     final forceUpdateDao = forceUpdateDaoFromJson(jsonString);
+import 'package:package_info_plus/package_info_plus.dart';
 
-import 'package:meta/meta.dart';
-import 'dart:convert';
-
-ForceUpdateDao forceUpdateDaoFromJson(String str) => ForceUpdateDao.fromJson(json.decode(str));
-
-String forceUpdateDaoToJson(ForceUpdateDao data) => json.encode(data.toJson());
+/// forceUpdate : {"versionName":"1.1.5","isForceUpdate":true,"isAlreadyUpdated":true,"storeUrl":"https://play.google.com/store/apps/details?id=com.tamron.akoneya","directDownloadUrl":"https://play.google.com/store/apps/details?id=com.tamron.akoneya"}
 
 class ForceUpdateDao {
-    ForceUpdateDao({
-        required this.update,
-    });
-
-    final List<Update>? update;
-
-    factory ForceUpdateDao.fromJson(Map<String, dynamic> json) => ForceUpdateDao(
-        update: json["update"] == null ? null : List<Update>.from(json["update"].map((x) => Update.fromJson(x))),
-    );
-
-    Map<String, dynamic> toJson() => {
-        "update": update == null ? null : List<dynamic>.from(update!.map((x) => x.toJson())),
-    };
+  ForceUpdateDao({
+      ForceUpdate? forceUpdate,}){
+    _forceUpdate = forceUpdate;
 }
 
-class Update {
-    Update({
-        required this.id,
-        required this.version,
-        required this.forceUpdate,
-        required this.osType,
-        required this.storeUrl,
-        required this.directUrl,
-    });
+  ForceUpdateDao.fromJson(dynamic json) {
+    _forceUpdate = json['forceUpdate'] != null ? ForceUpdate.fromJson(json['forceUpdate']) : null;
+  }
+  ForceUpdate? _forceUpdate;
 
-    final int? id;
-    final String? version;
-    final bool? forceUpdate;
-    final int? osType;
-    final String? storeUrl;
-    final String? directUrl;
+  ForceUpdate? get forceUpdate => _forceUpdate;
 
-    factory Update.fromJson(Map<String, dynamic> json) => Update(
-        id: json["id"] == null ? null : json["id"],
-        version: json["version"] == null ? null : json["version"],
-        forceUpdate: json["force_update"] == null ? null : json["force_update"],
-        osType: json["os_type"] == null ? null : json["os_type"],
-        storeUrl: json["store_url"] == null ? null : json["store_url"],
-        directUrl: json["direct_url"] == null ? null : json["direct_url"],
-    );
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    if (_forceUpdate != null) {
+      map['forceUpdate'] = _forceUpdate?.toJson();
+    }
+    return map;
+  }
 
-    Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "version": version == null ? null : version,
-        "force_update": forceUpdate == null ? null : forceUpdate,
-        "os_type": osType == null ? null : osType,
-        "store_url": storeUrl == null ? null : storeUrl,
-        "direct_url": directUrl == null ? null : directUrl,
-    };
+}
+
+/// versionName : "1.1.5"
+/// isForceUpdate : true
+/// isAlreadyUpdated : true
+/// storeUrl : "https://play.google.com/store/apps/details?id=com.tamron.akoneya"
+/// directDownloadUrl : "https://play.google.com/store/apps/details?id=com.tamron.akoneya"
+
+class ForceUpdate {
+
+  String? _versionName;
+  bool? _isForceUpdate;
+  String? _storeUrl;
+  String? _directDownloadUrl;
+
+  String? get versionName => _versionName;
+  bool? get isForceUpdate => _isForceUpdate;
+  String? get storeUrl => _storeUrl;
+  String? get directDownloadUrl => _directDownloadUrl;
+
+  ForceUpdate({
+      String? versionName, 
+      bool? isForceUpdate, 
+      String? storeUrl,
+      String? directDownloadUrl,}){
+    _versionName = versionName;
+    _isForceUpdate = isForceUpdate;
+    _storeUrl = storeUrl;
+    _directDownloadUrl = directDownloadUrl;
+}
+
+  ForceUpdate.fromJson(dynamic json) {
+    _versionName = json['versionName'];
+    _isForceUpdate = json['isForceUpdate'];
+    _storeUrl = json['storeUrl'];
+    _directDownloadUrl = json['directDownloadUrl'];
+  }
+
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['versionName'] = _versionName;
+    map['isForceUpdate'] = _isForceUpdate;
+    map['storeUrl'] = _storeUrl;
+    map['directDownloadUrl'] = _directDownloadUrl;
+    return map;
+  }
+
 }

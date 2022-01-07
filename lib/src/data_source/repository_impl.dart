@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:wisdom/src/app_utils/device_detail.dart';
 import 'package:wisdom/src/data_models/daos/comment_list_dao.dart';
 import 'package:wisdom/src/data_models/daos/fact_list_dao.dart';
 import 'package:wisdom/src/data_models/daos/force_update_dao.dart';
@@ -11,6 +12,8 @@ class RepositoryImpl implements Repository {
   //force update
   @override
   Future<ForceUpdateDao> forceUpdate() async {
+     int osType = DeviceDetail.getOSType();
+     print("Os Type $osType");
     final String response =
         await rootBundle.loadString('assets/jsons/force_update_api.json');
     var data = json.decode(response);
