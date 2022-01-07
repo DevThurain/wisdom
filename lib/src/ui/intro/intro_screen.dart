@@ -6,6 +6,7 @@ import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wisdom/src/ui/home/home_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
+import 'package:wisdom/src/ui/widgets/gradient_background.dart';
 
 class IntroScreen extends StatefulWidget {
   static const routeName = '/intro_screen';
@@ -47,7 +48,7 @@ class _IntroScreenState extends State<IntroScreen> {
                         ),
                       ),
                       const PersonCardSection(),
-                      const ButtonSectionView()
+                      //const ButtonSectionView()
                     ],
                   ),
                 ),
@@ -160,7 +161,7 @@ class PersonCardSection extends StatelessWidget {
           ),
           Positioned(
             left: -2,
-            bottom: 0,
+            bottom: -20,
             child: CircularPersonFace(
               width: 25,
               imgPath: 'assets/images/boy_light.png',
@@ -196,27 +197,3 @@ class PersonCardSection extends StatelessWidget {
   }
 }
 
-class GradientBackground extends StatelessWidget {
-  const GradientBackground({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-      child: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: [
-              AppTheme.dark_purple,
-              AppTheme.fresh_purple,
-            ])),
-      ),
-    );
-  }
-}

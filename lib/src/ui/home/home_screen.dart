@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_list_screen.dart';
 import 'package:wisdom/src/ui/knowledge/knowledge_screen.dart';
 import 'package:wisdom/src/ui/profile/profile_screen.dart';
@@ -29,7 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           backgroundColor: AppTheme.dark_purple,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, AddPostScreen.routeName);
+          },
           child: SvgPicture.asset(
             'assets/svgs/quil.svg',
             width: 28,
