@@ -5,6 +5,7 @@ import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wisdom/src/ui/home/home_screen.dart';
+import 'package:wisdom/src/ui/register/register_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/gradient_background.dart';
 
@@ -17,6 +18,18 @@ class IntroScreen extends StatefulWidget {
 }
 
 class _IntroScreenState extends State<IntroScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    _goToRegisterScreen();
+    super.initState();
+  }
+
+  _goToRegisterScreen() async {
+    await Future.delayed(Duration(seconds: 2));
+    Navigator.pushNamed(context, RegisterScreen.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,62 +74,6 @@ class _IntroScreenState extends State<IntroScreen> {
   }
 }
 
-class ButtonSectionView extends StatelessWidget {
-  const ButtonSectionView({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width * 0.7,
-          height: 55,
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(20)),
-          ),
-          child: TextField(
-            decoration: InputDecoration(
-                fillColor: AppTheme.white,
-                filled: true,
-                hintText: 'Referral Code',
-                hintStyle: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: AppTheme.black.withOpacity(0.5),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  borderSide: BorderSide.none,
-                )),
-          ),
-        ),
-        SizedBox(height: AppDimen.MARGIN_CARD_MEDIUM),
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, HomeScreen.routeName);
-          },
-          child: Container(
-              width: MediaQuery.of(context).size.width * 0.7,
-              height: 55,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
-                color: Colors.blue,
-              ),
-              child: Center(
-                child: Text(
-                  'Register',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: AppTheme.white,
-                  ),
-                ),
-              )),
-        )
-      ],
-    );
-  }
-}
 
 class PersonCardSection extends StatelessWidget {
   const PersonCardSection({
@@ -130,7 +87,6 @@ class PersonCardSection extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.5,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(AppDimen.MARGIN_MEDIUM_3)),
-        color: AppTheme.white.withOpacity(0.2),
       ),
       child: Stack(
         clipBehavior: Clip.none,
@@ -196,4 +152,3 @@ class PersonCardSection extends StatelessWidget {
     );
   }
 }
-
