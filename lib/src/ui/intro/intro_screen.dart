@@ -5,6 +5,7 @@ import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wisdom/src/ui/home/home_screen.dart';
+import 'package:wisdom/src/ui/register/register_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/gradient_background.dart';
 
@@ -17,6 +18,18 @@ class IntroScreen extends StatefulWidget {
 }
 
 class _IntroScreenState extends State<IntroScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    _goToRegisterScreen();
+    super.initState();
+  }
+
+  _goToRegisterScreen() async {
+    await Future.delayed(Duration(seconds: 2));
+    Navigator.pushNamed(context, RegisterScreen.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +73,6 @@ class _IntroScreenState extends State<IntroScreen> {
     );
   }
 }
-
 
 class PersonCardSection extends StatelessWidget {
   const PersonCardSection({
