@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
+import 'package:wisdom/src/ui/widgets/square_person_face.dart';
 
 class AddPostScreen extends StatefulWidget {
   static const routeName = '/add_post_screen';
@@ -13,18 +14,18 @@ class AddPostScreen extends StatefulWidget {
 }
 
 class _AddPostScreenState extends State<AddPostScreen> {
-  double get _statusBarHeight {
-    return MediaQuery.of(context).padding.top;
-  }
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-            margin: EdgeInsets.only(top: _statusBarHeight),
+             decoration: BoxDecoration(
+               color: AppTheme.dark_purple.withOpacity(0.001)
+             ),
             child: CustomScrollView(
-              slivers: const [
+              slivers:  [
+                _buildSliverAppBar(),
                SliverToBoxAdapter(child:  AddPostSectionView()),
               ],
             ),
@@ -34,6 +35,59 @@ class _AddPostScreenState extends State<AddPostScreen> {
   }
 }
 
+SliverAppBar _buildSliverAppBar() {
+  return SliverAppBar(
+    expandedHeight: 65,
+    collapsedHeight: 65,
+    automaticallyImplyLeading: false,
+    elevation: 0,
+    pinned: true,
+    flexibleSpace: SafeArea(
+      child: Container(
+        width: double.infinity,
+        height: double.infinity,
+        padding:
+        EdgeInsets.symmetric(horizontal: AppDimen.MARGIN_CARD_MEDIUM_2),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Create Post',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: AppTheme.dark_purple,
+                  fontSize: AppDimen.TEXT_REGULAR_3X,
+                  fontFamily: 'Poppins',
+                  letterSpacing: 1,
+                  fontWeight: FontWeight.bold),
+            ),
+            TextButton(
+              onPressed: () => {},
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.blue.withOpacity(0.1),
+                minimumSize: Size.zero,
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppDimen.MARGIN_MEDIUM_2,
+                  vertical: AppDimen.MARGIN_SMALL,
+                ),
+
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              child: Text(
+                "Post",
+                style: TextStyle(
+                  fontSize: AppDimen.TEXT_REGULAR_2X,
+                  fontFamily: 'MyanUni',
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+    backgroundColor: AppTheme.white,
+  );
+}
 
 class AddPostSectionView extends StatelessWidget {
   const AddPostSectionView({
@@ -42,82 +96,60 @@ class AddPostSectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppTheme.dark_purple.withOpacity(0.1),
-      child: Stack(
-        children: [
-          Positioned(
-            right: -150,
-            bottom: 0,
-            child: Opacity(
-              opacity: 0.4,
-              child: RotatedBox(
-                //4,1
-                quarterTurns: 3,
-                child: Image.asset(
-                  'assets/images/curve_1.png',
-                  color: AppTheme.white,
-                ),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding:  EdgeInsets.all(AppDimen.MARGIN_LARGE),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children:  [
-                  PostProfileUI(
-                    profileUrl: 'assets/images/girl_light.png',
+    return Padding(
+      padding:  EdgeInsets.all(AppDimen.MARGIN_CARD_MEDIUM_2),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:  [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SquarePersonFace(width: 48, imgPath: 'assets/images/girl_light.png'),
+              SizedBox(width: AppDimen.MARGIN_MEDIUM,),
+              Text(
+                'Ma Ma',
+                textAlign: TextAlign.center,
+                style: TextStyle(
                     color: AppTheme.dark_purple,
-                    name: "Ma Ma",
-                    duration: "2 Hrs Ago",
-                  ),
-                  SizedBox(
-                    height: AppDimen.MARGIN_MEDIUM_2,
-                  ),
-                  TextField(
-                    maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                    textAlign: TextAlign.start,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      hintText: 'What is in your mind'
-                    ),
-            
-                    style: TextStyle(
-                      fontSize: AppDimen.TEXT_REGULAR_2X,
-                      fontFamily: 'MyanUni',
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                  SizedBox(
-                    height: AppDimen.MARGIN_MEDIUM_2,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                        Container(
-                          width: 100,
-                          height: 45,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                            color: AppTheme.fresh_purple,
-                          ),
-                          child: Center(
-                            child : Text('Post',
-                            style: TextStyle(
-                              color: AppTheme.white
-                            ),)
-                          ),
-                        )
-                    ],
-                  )
-                 
-                ],
+                    fontSize: AppDimen.TEXT_REGULAR_2X,
+                    fontFamily: 'Poppins',
+                    letterSpacing: 1,
+                    fontWeight: FontWeight.bold),
               ),
+            ],
+          ),
+          SizedBox(height: AppDimen.MARGIN_MEDIUM,),
+          TextField(
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            minLines: 1,
+            autofocus: false,
+            style: TextStyle(
+              fontSize: AppDimen.TEXT_REGULAR_2X,
+              fontFamily: 'MyanUni',
+              letterSpacing: 0.5,
+            ),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.zero,
+              enabledBorder: OutlineInputBorder(
+                borderRadius:
+                BorderRadius.all(Radius.circular(0.0)),
+                borderSide: BorderSide(color: Colors.transparent),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius:
+                BorderRadius.all(Radius.circular(0.0)),
+                borderSide: BorderSide(color: Colors.transparent),
+              ),
+              filled: true,
+              hintStyle: TextStyle(
+                fontSize: AppDimen.TEXT_REGULAR_3X,
+                fontFamily: 'MyanUni',
+                letterSpacing: 0.5,
+                color: AppTheme.black.withOpacity(0.5),
+              ),
+              hintText: 'What is in your mind?',
+              fillColor: Colors.transparent,
             ),
           ),
         ],

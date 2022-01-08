@@ -8,7 +8,7 @@ GetIt locator = GetIt.instance;
 
 Future setupLocator() async {
   locator.registerLazySingleton(() => RepositoryImpl());
-  locator.registerLazySingleton(() => HomeProvider());
+  locator.registerFactory(() => HomeProvider());
   locator.registerLazySingleton(() => KnowlegeProvider());
   locator.registerFactory(() => FunProvider());
 }
