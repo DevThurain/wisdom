@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/view_models/fun_provider.dart';
+import 'package:wisdom/src/view_models/home_provider.dart';
+import 'package:wisdom/src/view_models/knowledge_provider.dart';
 
 import 'src/app.dart';
 import 'src/settings/settings_controller.dart';
 import 'src/settings/settings_service.dart';
 
 void main() async {
-  // Set up the SettingsController, which will glue user settings to multiple
-  // Flutter Widgets.
+  await setupLocator();
   final settingsController = SettingsController(SettingsService());
-
-  // Load the user's preferred theme while the splash screen is displayed.
-  // This prevents a sudden theme change when the app is first displayed.
   await settingsController.loadSettings();
 
-  // Run the app and pass in the SettingsController. The app listens to the
-  // SettingsController for changes, then passes it further down to the
-  // SettingsView.
-  runApp(MyApp(settingsController: settingsController));
+  var knowledgeProvider = locator<KnowlegeProvider>();
+  var homeProvider = locator<HomeProvider>();
+
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => knowledgeProvider),
+    ],
+    child: MyApp(settingsController: settingsController)));
 }

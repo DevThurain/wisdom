@@ -1,4 +1,5 @@
 {
   "appTitle": "wisdom",
-  "greeting" : "Hello"
+  "greeting" : "Hello",
+  "home_logout" : "Log out"
 }

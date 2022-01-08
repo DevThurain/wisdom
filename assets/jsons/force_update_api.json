@@ -1,0 +1,10 @@
+{
+    "success": true,
+    "message": "App version",
+    "forceUpdate": {
+        "versionName": "1.1.5",
+        "isForceUpdate": false,
+        "storeUrl": "https://play.google.com/store/apps/details?id=com.tamron.akoneya",
+        "directDownloadUrl": "https://play.google.com/store/apps/details?id=com.tamron.akoneya"
+    }
+}
