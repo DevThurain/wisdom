@@ -67,19 +67,28 @@ class _RegisterScreenState extends State<RegisterScreen> with TickerProviderStat
 
                         Stack(
                           children: [
-                            RefercodeSection(animationController: _animationController),
-                            NameSection(animationController: _animationController),
+                            Stack(
+                              children: [
+                                RefercodeSection(animationController: _animationController),
+                                NameSection(animationController: _animationController),
+                                
+                              ],
+                            ),
                             Align(
                               alignment: Alignment.bottomCenter,
                               child: ButtonSectionV2(
                                   animationController: _animationController,
                                   onPressed: () {
-                                    if (_animationController.value > 0.0 &&
-                                        _animationController.value < 0.4)
+                                    print(_animationController.value.toString());
+
+                                    if (_animationController.value >= 0.0 &&
+                                        _animationController.value < 0.4) {
                                       _animationController.animateTo(0.4);
-                                    if (_animationController.value >= 0.4 &&
-                                        _animationController.value < 0.6)
-                                      _animationController.animateTo(0.6);
+                                    } else if (_animationController.value >= 0.4 &&
+                                        _animationController.value < 0.6) {
+                                      print('go to home');
+                                      Navigator.pushNamed(context, HomeScreen.routeName);
+                                    }
                                   }),
                             )
                           ],

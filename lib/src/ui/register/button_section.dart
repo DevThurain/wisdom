@@ -46,7 +46,7 @@ class ButtonSectionV2 extends StatelessWidget {
         curve: Curves.fastOutSlowIn,
       ),
     ));
-    
+
     final _topMoveAnimation =
         Tween<Offset>(begin: Offset(0, 0), end: Offset(0, 2)).animate(CurvedAnimation(
       parent: animationController,
@@ -58,7 +58,7 @@ class ButtonSectionV2 extends StatelessWidget {
     ));
 
     return Padding(
-      padding: const EdgeInsets.only(top: 150),
+      padding: const EdgeInsets.symmetric(vertical: 145.0),
       child: SlideTransition(
         position: _topMoveAnimation,
         child: ScaleTransition(
@@ -97,11 +97,10 @@ class ButtonSectionV2 extends StatelessWidget {
                             child: Text(
                               'register',
                               style: TextStyle(
-                                color: AppTheme.fresh_purple,
-                                fontFamily: 'Poppins',
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold
-                              ),
+                                  color: AppTheme.fresh_purple,
+                                  fontFamily: 'Poppins',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         )
