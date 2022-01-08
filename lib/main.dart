@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/view_models/fun_provider.dart';
 import 'package:wisdom/src/view_models/knowledge_provider.dart';
 
 import 'src/app.dart';
@@ -12,11 +13,11 @@ void main() async {
   final settingsController = SettingsController(SettingsService());
   await settingsController.loadSettings();
 
-  var knowlegeProvider = locator<KnowlegeProvider>();
+  var knowledgeProvider = locator<KnowlegeProvider>();
 
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (context) => knowlegeProvider)
+      ChangeNotifierProvider(create: (context) => knowledgeProvider),
     ],
     child: MyApp(settingsController: settingsController)));
 }

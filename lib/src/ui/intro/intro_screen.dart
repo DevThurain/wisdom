@@ -74,6 +74,7 @@ class _IntroScreenState extends State<IntroScreen> {
   }
 }
 
+
 class PersonCardSection extends StatelessWidget {
   const PersonCardSection({
     Key? key,

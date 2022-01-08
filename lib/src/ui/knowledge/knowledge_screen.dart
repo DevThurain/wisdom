@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
-import 'package:wisdom/src/ui/post_detail/post_detail_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
-import 'package:wisdom/src/ui/widgets/square_person_face.dart';
 import 'package:wisdom/src/view_models/knowledge_provider.dart';
 
 class KnowledgeScreen extends StatefulWidget {
@@ -21,7 +19,7 @@ class KnowledgeScreen extends StatefulWidget {
 class _KnowledgeScreenState extends State<KnowledgeScreen> {
   late ScrollController _scrollController;
   bool expanded = false;
-  var knowlegeProvider = locator<KnowlegeProvider>();
+  var knowledgeProvider = locator<KnowlegeProvider>();
 
   @override
   void initState() {
@@ -31,12 +29,10 @@ class _KnowledgeScreenState extends State<KnowledgeScreen> {
           setState(() {
             expanded = true;
           });
-          print('expanded');
         } else {
           setState(() {
             expanded = false;
           });
-          print('not expanded');
         }
       });
 
@@ -129,7 +125,10 @@ class _KnowledgeScreenState extends State<KnowledgeScreen> {
                   ),
                 ],
               ),
-              ProfileSectionView(),
+              CircularPersonFace(
+                width: 20,
+                imgPath: 'assets/images/girl_light.png',
+              ),
             ],
           ),
         ),
@@ -146,28 +145,24 @@ class ProfileSectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TweenAnimationBuilder(
-      duration: Duration(seconds: 2),
-      tween: Tween<double>(begin: 0.0, end: 16.0),
-      builder: (_, double value, __) => Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            AppLocalizations.of(context)!.home_logout,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-                color: AppTheme.dark_purple,
-                fontSize: AppDimen.TEXT_REGULAR,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.normal),
-          ),
-          SizedBox(width: AppDimen.MARGIN_MEDIUM_3),
-          CircularPersonFace(
-            width: 20,
-            imgPath: 'assets/images/girl_light.png',
-          )
-        ],
-      ),
+    return  Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text(
+          AppLocalizations.of(context)!.home_logout,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+              color: AppTheme.dark_purple,
+              fontSize: AppDimen.TEXT_REGULAR,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.normal),
+        ),
+        SizedBox(width: AppDimen.MARGIN_MEDIUM_3),
+        CircularPersonFace(
+          width: 20,
+          imgPath: 'assets/images/girl_light.png',
+        )
+      ],
     );
   }
 }
