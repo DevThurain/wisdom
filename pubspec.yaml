@@ -25,6 +25,10 @@ dependencies:
   fluttertoast: ^8.0.8
   connectivity: ^3.0.6
   device_info: ^2.0.3
+  retrofit: ^3.0.1
+  dio: ^4.0.4
+  retrofit_generator: ^3.0.1+1
+  pretty_dio_logger: ^1.1.1
 
   flutter_localizations:
     sdk: flutter
@@ -32,6 +36,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: ^2.1.7
+
 
   flutter_lints: ^1.0.0
 
