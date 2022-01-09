@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
-import 'package:wisdom/src/ui/register/register_screen.dart';
+import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/widgets/based_designed_card.dart';
 import 'package:wisdom/src/ui/widgets/custom_text_field.dart';
 
@@ -16,8 +16,8 @@ class RefercodeSection extends StatelessWidget {
         Tween<Offset>(begin: Offset(1, 0), end: Offset(0, 0)).animate(CurvedAnimation(
       parent: animationController,
       curve: Interval(
-        0.0,
         0.2,
+        0.4,
         curve: Curves.fastOutSlowIn,
       ),
     ));
@@ -26,8 +26,8 @@ class RefercodeSection extends StatelessWidget {
         Tween<Offset>(begin: Offset(0, 0), end: Offset(-1, 0)).animate(CurvedAnimation(
       parent: animationController,
       curve: Interval(
-        0.2,
         0.4,
+        0.6,
         curve: Curves.fastOutSlowIn,
       ),
     ));

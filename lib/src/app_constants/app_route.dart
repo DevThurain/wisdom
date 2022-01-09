@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
 import 'package:wisdom/src/data_models/daos/fun_list_dao.dart';
+import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_list_screen.dart';
 import 'package:wisdom/src/ui/home/home_screen.dart';
 import 'package:wisdom/src/ui/intro/intro_screen.dart';
 import 'package:wisdom/src/ui/knowledge/knowledge_screen.dart';
 import 'package:wisdom/src/ui/post_detail/post_detail_screen.dart';
 import 'package:wisdom/src/ui/profile/profile_screen.dart';
-import 'package:wisdom/src/ui/register/register_screen.dart';
 
 class AppRoute {
   static Route<dynamic>? generateRoute(RouteSettings routeSettings) {
@@ -36,8 +36,8 @@ class AppRoute {
           case AddPostScreen.routeName:
             return const AddPostScreen();
 
-          case RegisterScreen.routeName:
-            return const RegisterScreen();
+          case AuthScreen.routeName:
+            return const AuthScreen();
 
           default:
             return const IntroScreen();
