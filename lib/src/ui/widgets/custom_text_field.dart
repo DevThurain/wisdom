@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -34,6 +35,7 @@ class CustomTextField extends StatelessWidget {
         decoration: InputDecoration(
             fillColor: AppTheme.white,
             filled: true,
+            contentPadding: EdgeInsets.only(left: AppDimen.MARGIN_CARD_MEDIUM),
             hintText: hint,
             hintStyle: TextStyle(
               fontFamily: 'Poppins',

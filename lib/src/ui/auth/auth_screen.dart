@@ -99,7 +99,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                                     Navigator.pushNamed(context, HomeScreen.routeName);
                                   },
                                 ),
-                                RefercodeSection(
+                                ReferCodeSection(
                                     animationController: _animationController),
                                 RegisterSection(animationController: _animationController),
                               ],
@@ -125,6 +125,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       ),
     );
   }
+
 }
 
 class ButtonSectionView extends StatelessWidget {

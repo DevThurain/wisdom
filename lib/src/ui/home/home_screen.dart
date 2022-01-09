@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onWillPop: () async => provider.isAlreadyUpdated,
                     child: CustomDialogBox(
                         title: "Update Available!",
-                        descriptions: "A new version is available for this app. You can install it from store and direct link.",
+                        descriptions: "A new version is available for this app. You can update it from store or direct link.",
                         titleImage: "",
                         isForceUpdate: provider.isForceUpdate,
                         onClickButton: () => print("update")),

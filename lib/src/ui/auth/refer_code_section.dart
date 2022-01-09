@@ -5,9 +5,9 @@ import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/widgets/based_designed_card.dart';
 import 'package:wisdom/src/ui/widgets/custom_text_field.dart';
 
-class RefercodeSection extends StatelessWidget {
+class ReferCodeSection extends StatelessWidget {
   final AnimationController animationController;
-  RefercodeSection({Key? key, required this.animationController}) : super(key: key);
+  ReferCodeSection({Key? key, required this.animationController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
