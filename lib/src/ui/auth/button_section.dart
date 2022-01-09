@@ -14,8 +14,8 @@ class ButtonSectionV2 extends StatelessWidget {
     final _enterAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: animationController,
       curve: Interval(
-        0.0,
         0.2,
+        0.4,
         curve: Curves.elasticInOut,
       ),
     ));
@@ -24,16 +24,16 @@ class ButtonSectionV2 extends StatelessWidget {
         Tween<Offset>(begin: Offset(0, 0), end: Offset(4, 0)).animate(CurvedAnimation(
       parent: animationController,
       curve: Interval(
-        0.3,
-        0.4,
+        0.5,
+        0.6,
         curve: Curves.fastOutSlowIn,
       ),
     ));
     final _widthAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: animationController,
       curve: Interval(
-        0.2,
         0.4,
+        0.6,
         curve: Curves.elasticInOut,
       ),
     ));
@@ -41,8 +41,8 @@ class ButtonSectionV2 extends StatelessWidget {
     final _singUpAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: animationController,
       curve: Interval(
-        0.35,
-        0.4,
+        0.5,
+        0.6,
         curve: Curves.fastOutSlowIn,
       ),
     ));
@@ -51,8 +51,8 @@ class ButtonSectionV2 extends StatelessWidget {
         Tween<Offset>(begin: Offset(0, 0), end: Offset(0, 2)).animate(CurvedAnimation(
       parent: animationController,
       curve: Interval(
-        0.2,
         0.4,
+        0.6,
         curve: Curves.fastOutSlowIn,
       ),
     ));
