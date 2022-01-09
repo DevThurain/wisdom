@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/home/home_screen.dart';
 import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
