@@ -5,9 +5,9 @@ import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/widgets/based_designed_card.dart';
 import 'package:wisdom/src/ui/widgets/custom_text_field.dart';
 
-class NameSection extends StatelessWidget {
+class RegisterSection extends StatelessWidget {
   final AnimationController animationController;
-  NameSection({Key? key, required this.animationController}) : super(key: key);
+  RegisterSection({Key? key, required this.animationController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

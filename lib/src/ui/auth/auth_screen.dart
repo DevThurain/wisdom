@@ -7,7 +7,7 @@ import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/ui/home/home_screen.dart';
 import 'package:wisdom/src/ui/auth/button_section.dart';
 import 'package:wisdom/src/ui/auth/login_section.dart';
-import 'package:wisdom/src/ui/auth/name_section.dart';
+import 'package:wisdom/src/ui/auth/register_section.dart';
 import 'package:wisdom/src/ui/auth/refer_code_section.dart';
 import 'package:wisdom/src/ui/auth/title_section.dart';
 import 'package:wisdom/src/ui/widgets/gradient_background.dart';
@@ -101,7 +101,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                                 ),
                                 RefercodeSection(
                                     animationController: _animationController),
-                                NameSection(animationController: _animationController),
+                                RegisterSection(animationController: _animationController),
                               ],
                             ),
                             Align(
