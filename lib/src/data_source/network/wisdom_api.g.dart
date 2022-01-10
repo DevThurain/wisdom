@@ -31,6 +31,28 @@ class _WisdomAPI implements WisdomAPI {
     return value;
   }
 
+  @override
+  Future<ResponseRegisterVO> registerUser(
+      nickname, code, deviceId, password) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'nickname': nickname,
+      r'code': code,
+      r'device_id': deviceId,
+      r'password': password
+    };
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ResponseRegisterVO>(
+            Options(method: 'POST', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/wisdom-user/register',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ResponseRegisterVO.fromJson(_result.data!);
+    return value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

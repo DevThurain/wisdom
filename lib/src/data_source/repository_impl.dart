@@ -9,6 +9,8 @@ import 'package:wisdom/src/data_models/daos/comment_list_dao.dart';
 import 'package:wisdom/src/data_models/daos/fact_list_dao.dart';
 import 'package:wisdom/src/data_models/daos/force_update_dao.dart';
 import 'package:wisdom/src/data_models/daos/fun_list_dao.dart';
+import 'package:wisdom/src/data_models/request/request_register_vo.dart';
+import 'package:wisdom/src/data_models/response/response_register_vo.dart';
 import 'package:wisdom/src/data_models/vos/app_version_vo.dart';
 import 'package:wisdom/src/data_source/network/wisdom_api.dart';
 import 'package:wisdom/src/data_source/repository.dart';
@@ -66,16 +68,14 @@ class RepositoryImpl implements Repository {
   @override
   Future<FunListDao> getFunList() async {
     await Future.delayed(Duration(seconds: 3));
-    final String response =
-    await rootBundle.loadString('assets/jsons/fun_list.json');
+    final String response = await rootBundle.loadString('assets/jsons/fun_list.json');
     var data = json.decode(response);
     return FunListDao.fromJson(data);
   }
 
   @override
   Future<CommentListDao> getCommentList() async {
-    final String response =
-        await rootBundle.loadString('assets/jsons/comment_list.json');
+    final String response = await rootBundle.loadString('assets/jsons/comment_list.json');
     var data = json.decode(response);
     return CommentListDao.fromJson(data);
   }
@@ -83,5 +83,10 @@ class RepositoryImpl implements Repository {
   @override
   Future<AppVersionVo> checkAppVersion() {
     return mApi.checkAppVersion();
+  }
+
+  @override
+  Future<ResponseRegisterVO> registerUser(RequestRegisterVO request) {
+    return mApi.registerUser(request.nickname, request.code, request.deviceId, request.password);
   }
 }
