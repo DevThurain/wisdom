@@ -77,8 +77,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: AppDimen.MARGIN_MEDIUM_2,
-                      vertical: AppDimen.MARGIN_MEDIUM_2),
+                    horizontal: AppDimen.MARGIN_MEDIUM_2,
+                    vertical: AppDimen.MARGIN_MEDIUM_2,
+                  ),
                   child: TitleText(),
                 ),
                 SizedBox(height: 20),
@@ -120,10 +121,11 @@ class ProfileSectionView extends StatelessWidget {
           AppLocalizations.of(context)!.home_logout,
           textAlign: TextAlign.center,
           style: const TextStyle(
-              color: AppTheme.dark_purple,
-              fontSize: AppDimen.TEXT_REGULAR,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.normal),
+            color: AppTheme.dark_purple,
+            fontSize: AppDimen.TEXT_REGULAR,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.normal,
+          ),
         ),
         SizedBox(width: AppDimen.MARGIN_MEDIUM_3),
         InkWell(

@@ -32,25 +32,9 @@ class _FunListScreenState extends State<FunListScreen> {
   @override
   void initState() {
     funProvider.getFunList();
-    //_scrollController = ScrollController();
-    //   ..addListener(() {
-    //     if (_isAppBarExpanded) {
-    //       setState(() {
-    //         expanded = true;
-    //       });
-    //     } else {
-    //       setState(() {
-    //         expanded = false;
-    //       });
-    //     }
-    //   });
-
     super.initState();
   }
 
-  // bool get _isAppBarExpanded {
-  //   return _scrollController.hasClients && _scrollController.offset > 100;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -185,36 +169,46 @@ class _FunListScreenState extends State<FunListScreen> {
           },
         ),
         onRefresh: () => {
-          funProvider.getFunList(pagination: 1),
+          funProvider.getFunList(currentPage: 1),
         },
-        onLoading: () => {
-          funProvider.getFunList(pagination: 2),
+        onLoading: () =>
+        {
+          funProvider.getFunList(currentPage: 2),
         },
-        child: CustomScrollView(
-          slivers: [
-            SliverList(
-              delegate: SliverChildListDelegate(
-                provider.funList!
-                    .map(
-                      (post) => DesignedPostCard(
-                        title: post.content.toString(),
-                        profileUrl: post.profileUrl ?? "",
-                        name: post.userNickName ?? "",
-                        duration: post.postUploadedAt ?? "",
-                        commentCount: post.commentCount ?? "",
-                        color: AppTheme.dark_purple,
-                        onTap: () => Navigator.pushNamed(
-                          context,
-                          PostDetailScreen.routeName,
-                          arguments: post,
-                        ),
-                      ),
-                    )
-                    .toList(),
+        child: provider.funList!.isNotEmpty
+            ? CustomScrollView(
+                slivers: [
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      provider.funList!
+                          .map(
+                            (item) => DesignedPostCard(
+                              title: item.post.toString(),
+                              profileUrl: item.creator!.code ?? "",
+                              name: item.creator!.nickname ?? "",
+                              duration: item.date ?? "",
+                              commentCount: item.commentCount == null
+                                  ? "No comment"
+                                  : item.commentCount.toString(),
+                              color: AppTheme.dark_purple,
+                              onTap: () => Navigator.pushNamed(
+                                context,
+                                PostDetailScreen.routeName,
+                                arguments: item,
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                ],
+              )
+            : Center(
+                child: Container(
+                  color: Colors.green,
+                  child: Text("There is No Fun Feeds"),
+                ),
               ),
-            ),
-          ],
-        ),
       );
     } else if (funProvider.state == ViewState.LOADING) {
       return Container(
