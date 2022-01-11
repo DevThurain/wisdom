@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisdom/src/app_utils/device_detail.dart';
 import 'package:wisdom/src/data_models/daos/comment_list_dao.dart';
 import 'package:wisdom/src/data_models/daos/fact_list_dao.dart';
@@ -27,19 +28,19 @@ class RepositoryImpl implements Repository {
     return _singleton;
   }
 
-  RepositoryImpl.internal() {
+  RepositoryImpl.internal(){
     //TODO:User Token => Get From Share Preferences or Some Storage
-    const String userToken = "159|hQQA49IHNxx5c80NVrmB6vTVLq2PVI3rsWl1ABVx";
+    String userToken = "159|hQQA49IHNxx5c80NVrmB6vTVLq2PVI3rsWl1ABVx";
     final dio = Dio();
     dio.options.connectTimeout = 10000;
 
-    if(userToken == null){
+    if (userToken == null || userToken.isEmpty) {
       dio.options.headers = {
         "Content-Type": Headers.jsonContentType,
         "Accept": Headers.jsonContentType,
         "X-API-TOKEN": "ZBJ3MafcVGQvEdCYPfGT",
       };
-    }else {
+    } else {
       dio.options.headers = {
         "Content-Type": Headers.jsonContentType,
         "Accept": Headers.jsonContentType,
@@ -91,8 +92,7 @@ class RepositoryImpl implements Repository {
 
   @override
   Future<CommentListDao> getCommentList() async {
-    final String response =
-    await rootBundle.loadString('assets/jsons/comment_list.json');
+    final String response = await rootBundle.loadString('assets/jsons/comment_list.json');
     var data = json.decode(response);
     return CommentListDao.fromJson(data);
   }
@@ -111,7 +111,15 @@ class RepositoryImpl implements Repository {
   @override
   Future<ResponseLoginVO> loginUser(RequestLoginVO request) {
     return mApi.loginUser(request.nickname, request.password);
+  }
+
   Future<PostListVo> getFunList() {
     return mApi.getFunList();
   }
 }
+
+// Future<bool> checkTokenStored() async {
+//   var _pref = await SharedPreferences.getInstance();
+//   String token = _pref.getString('PREF_TOKEN') ?? '';
+//   return token.isNotEmpty;
+// }

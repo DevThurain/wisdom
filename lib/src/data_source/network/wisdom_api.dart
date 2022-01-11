@@ -27,7 +27,7 @@ abstract class WisdomAPI {
      @Query("nickname") String nickname,
       @Query("password") String password
   );
-}
+
   @GET("/wisdom/posts")
   Future<PostListVo> getFunList();
 
