@@ -9,6 +9,10 @@ import 'package:wisdom/src/data_models/daos/comment_list_dao.dart';
 import 'package:wisdom/src/data_models/daos/fact_list_dao.dart';
 import 'package:wisdom/src/data_models/daos/force_update_dao.dart';
 import 'package:wisdom/src/data_models/daos/fun_list_dao.dart';
+import 'package:wisdom/src/data_models/request/request_login_vo.dart';
+import 'package:wisdom/src/data_models/request/request_register_vo.dart';
+import 'package:wisdom/src/data_models/response/response_login_vo.dart';
+import 'package:wisdom/src/data_models/response/response_register_vo.dart';
 import 'package:wisdom/src/data_models/vos/app_version_vo.dart';
 import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
 import 'package:wisdom/src/data_source/network/wisdom_api.dart';
@@ -80,8 +84,7 @@ class RepositoryImpl implements Repository {
   @override
   Future<FunListDao> getLocalFunList() async {
     await Future.delayed(Duration(seconds: 3));
-    final String response =
-    await rootBundle.loadString('assets/jsons/fun_list.json');
+    final String response = await rootBundle.loadString('assets/jsons/fun_list.json');
     var data = json.decode(response);
     return FunListDao.fromJson(data);
   }
@@ -100,6 +103,14 @@ class RepositoryImpl implements Repository {
   }
 
   @override
+  Future<ResponseRegisterVO> registerUser(RequestRegisterVO request) {
+    return mApi.registerUser(
+        request.nickname, request.code, request.deviceId, request.password);
+  }
+
+  @override
+  Future<ResponseLoginVO> loginUser(RequestLoginVO request) {
+    return mApi.loginUser(request.nickname, request.password);
   Future<PostListVo> getFunList() {
     return mApi.getFunList();
   }

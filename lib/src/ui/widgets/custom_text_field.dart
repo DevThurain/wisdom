@@ -8,6 +8,7 @@ class CustomTextField extends StatelessWidget {
     this.width = double.infinity,
     required this.onChanged,
     required this.hint,
+    required this.controller,
     this.textInputType = TextInputType.text,
     this.textInputAction = TextInputAction.done,
   }) : super(key: key);
@@ -17,6 +18,7 @@ class CustomTextField extends StatelessWidget {
   final String hint;
   final TextInputType textInputType;
   final TextInputAction textInputAction;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,7 @@ class CustomTextField extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(20)),
       ),
       child: TextField(
+        controller: controller,
         textInputAction: textInputAction,
         keyboardType: textInputType,
         onChanged: (value) {
