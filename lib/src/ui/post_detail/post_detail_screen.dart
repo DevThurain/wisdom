@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
-import 'package:wisdom/src/data_models/daos/fun_list_dao.dart';
+import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
 import 'package:wisdom/src/ui/widgets/widget_comment_item.dart';
 import 'package:wisdom/src/view_models/fun_provider.dart';
@@ -228,14 +228,14 @@ class PostDetailSectionView extends StatelessWidget {
                   PostProfileUI(
                     profileUrl: 'assets/images/girl_light.png',
                     color: AppTheme.dark_purple,
-                    name: postItem.userNickName ?? "",
-                    duration: postItem.postUploadedAt ?? "",
+                    name: postItem.creator!.nickname ?? "",
+                    duration: postItem.date ?? "",
                   ),
                   SizedBox(
                     height: AppDimen.MARGIN_MEDIUM_2,
                   ),
                   Text(
-                    postItem.content ?? "",
+                    postItem.post ?? "",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize: AppDimen.TEXT_REGULAR_2X,
@@ -247,7 +247,7 @@ class PostDetailSectionView extends StatelessWidget {
                     height: AppDimen.MARGIN_MEDIUM_2,
                   ),
                   PostCommentUI(
-                    commentCount: postItem.commentCount ?? "",
+                    commentCount: "${postItem.commentCount?? ""} " ,
                   ),
                 ],
               ),

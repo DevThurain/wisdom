@@ -34,6 +34,7 @@ class HomeProvider extends BaseViewModel {
   // }
 
   // methods
+
   void checkAppVersion() async {
     await repository.checkAppVersion().then((value) => {
       _appVersionVo = value,

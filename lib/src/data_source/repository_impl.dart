@@ -14,6 +14,7 @@ import 'package:wisdom/src/data_models/request/request_register_vo.dart';
 import 'package:wisdom/src/data_models/response/response_login_vo.dart';
 import 'package:wisdom/src/data_models/response/response_register_vo.dart';
 import 'package:wisdom/src/data_models/vos/app_version_vo.dart';
+import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
 import 'package:wisdom/src/data_source/network/wisdom_api.dart';
 import 'package:wisdom/src/data_source/repository.dart';
 
@@ -27,13 +28,26 @@ class RepositoryImpl implements Repository {
   }
 
   RepositoryImpl.internal() {
+    //TODO:User Token => Get From Share Preferences or Some Storage
+    const String userToken = "159|hQQA49IHNxx5c80NVrmB6vTVLq2PVI3rsWl1ABVx";
     final dio = Dio();
-    dio.options.headers = {
-      "Content-Type": Headers.jsonContentType,
-      "Accept": Headers.jsonContentType,
-      "X-API-TOKEN": "ZBJ3MafcVGQvEdCYPfGT"
-    };
     dio.options.connectTimeout = 10000;
+
+    if(userToken == null){
+      dio.options.headers = {
+        "Content-Type": Headers.jsonContentType,
+        "Accept": Headers.jsonContentType,
+        "X-API-TOKEN": "ZBJ3MafcVGQvEdCYPfGT",
+      };
+    }else {
+      dio.options.headers = {
+        "Content-Type": Headers.jsonContentType,
+        "Accept": Headers.jsonContentType,
+        "X-API-TOKEN": "ZBJ3MafcVGQvEdCYPfGT",
+        "Authorization": "Bearer " + userToken
+      };
+    }
+
 // customization
     dio.interceptors.add(PrettyDioLogger(
         requestHeader: true,
@@ -68,7 +82,7 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Future<FunListDao> getFunList() async {
+  Future<FunListDao> getLocalFunList() async {
     await Future.delayed(Duration(seconds: 3));
     final String response = await rootBundle.loadString('assets/jsons/fun_list.json');
     var data = json.decode(response);
@@ -77,7 +91,8 @@ class RepositoryImpl implements Repository {
 
   @override
   Future<CommentListDao> getCommentList() async {
-    final String response = await rootBundle.loadString('assets/jsons/comment_list.json');
+    final String response =
+    await rootBundle.loadString('assets/jsons/comment_list.json');
     var data = json.decode(response);
     return CommentListDao.fromJson(data);
   }
@@ -96,5 +111,7 @@ class RepositoryImpl implements Repository {
   @override
   Future<ResponseLoginVO> loginUser(RequestLoginVO request) {
     return mApi.loginUser(request.nickname, request.password);
+  Future<PostListVo> getFunList() {
+    return mApi.getFunList();
   }
 }
