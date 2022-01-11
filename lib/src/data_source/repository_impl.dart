@@ -9,7 +9,9 @@ import 'package:wisdom/src/data_models/daos/comment_list_dao.dart';
 import 'package:wisdom/src/data_models/daos/fact_list_dao.dart';
 import 'package:wisdom/src/data_models/daos/force_update_dao.dart';
 import 'package:wisdom/src/data_models/daos/fun_list_dao.dart';
+import 'package:wisdom/src/data_models/request/request_login_vo.dart';
 import 'package:wisdom/src/data_models/request/request_register_vo.dart';
+import 'package:wisdom/src/data_models/response/response_login_vo.dart';
 import 'package:wisdom/src/data_models/response/response_register_vo.dart';
 import 'package:wisdom/src/data_models/vos/app_version_vo.dart';
 import 'package:wisdom/src/data_source/network/wisdom_api.dart';
@@ -87,6 +89,12 @@ class RepositoryImpl implements Repository {
 
   @override
   Future<ResponseRegisterVO> registerUser(RequestRegisterVO request) {
-    return mApi.registerUser(request.nickname, request.code, request.deviceId, request.password);
+    return mApi.registerUser(
+        request.nickname, request.code, request.deviceId, request.password);
+  }
+
+  @override
+  Future<ResponseLoginVO> loginUser(RequestLoginVO request) {
+    return mApi.loginUser(request.nickname, request.password);
   }
 }

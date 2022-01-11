@@ -2,11 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/base_view_model.dart';
+import 'package:wisdom/src/app_utils/dialog_utils.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/data_models/request/request_login_vo.dart';
 import 'package:wisdom/src/data_models/request/request_register_vo.dart';
 import 'package:wisdom/src/ui/home/home_screen.dart';
 import 'package:wisdom/src/ui/auth/button_section.dart';
@@ -50,38 +53,38 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<AuthProvider>(
         create: (context) => _authProvider,
-        child: 
-           WillPopScope(
-            onWillPop: () async {
-              _onExit();
-              return false;
-            },
-            child: Scaffold(
-              body: Stack(
-                children: [
-                  GradientBackground(),
-                  CustomScrollView(
-                    physics: BouncingScrollPhysics(),
-                    slivers: [
-                      SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.2,
-                        ),
+        child: WillPopScope(
+          onWillPop: () async {
+            _onExit();
+            return false;
+          },
+          child: Scaffold(
+            body: Stack(
+              children: [
+                GradientBackground(),
+                CustomScrollView(
+                  physics: BouncingScrollPhysics(),
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.2,
                       ),
-                      SliverToBoxAdapter(
-                        child: Container(
-                          padding: EdgeInsets.only(top: 8),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              TitleSection(animationController: _animationController),
-                              SizedBox(height: AppDimen.MARGIN_MEDIUM_3),
-                              Stack(
-                                children: [
-                                  Stack(
-                                    children: [
-                                      LoginSection(
+                    ),
+                    SliverToBoxAdapter(
+                      child: Container(
+                        padding: EdgeInsets.only(top: 8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TitleSection(animationController: _animationController),
+                            SizedBox(height: AppDimen.MARGIN_MEDIUM_3),
+                            Stack(
+                              children: [
+                                Stack(
+                                  children: [
+                                    Builder(builder: (context) {
+                                      return LoginSection(
                                         loginNickNameController: _loginNickNameController,
                                         loginPasswordController: _loginPasswordController,
                                         animationController: _animationController,
@@ -89,53 +92,90 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                                           _animationController.animateTo(0.4);
                                         },
                                         onPressLogin: () {
-                                          Navigator.pushNamed(
-                                              context, HomeScreen.routeName);
+                                          _loginUser(Provider.of<AuthProvider>(context,
+                                              listen: false));
                                         },
-                                      ),
-                                      ReferCodeSection(
-                                          referCodeController: _referCodeController,
-                                          animationController: _animationController),
-                                      RegisterSection(
-                                          registerNickNameController:
-                                              _registerNickNameController,
-                                          registerPasswordController:
-                                              _registerPasswordController,
-                                          animationController: _animationController),
-                                    ],
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: ButtonSectionV2(
-                                        animationController: _animationController,
-                                        onPressed: () {
-                                          _onNext(_authProvider);
-                                        }),
-                                  ),
-                                ],
-                              ),
-                              Consumer<AuthProvider>(builder: (context, provider, child) {
-                                if (provider.state == ViewState.LOADING) {
-                                  return CircularProgressIndicator();
-                                } else if (provider.state == ViewState.COMPLETE) {
-                                  return Text('success');
-                                } else if (provider.state == ViewState.ERROR) {
-                                  return Text(provider.errorCode + "  "+ provider.errorMessage);
-                                } else {
-                                  return Text(provider.state.toString());
-                                }
-                              }),
-                            ],
-                          ),
+                                      );
+                                    }),
+                                    ReferCodeSection(
+                                        referCodeController: _referCodeController,
+                                        animationController: _animationController),
+                                    RegisterSection(
+                                        registerNickNameController:
+                                            _registerNickNameController,
+                                        registerPasswordController:
+                                            _registerPasswordController,
+                                        animationController: _animationController),
+                                  ],
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: ButtonSectionV2(
+                                      animationController: _animationController,
+                                      onPressed: () {
+                                        _onNext(_authProvider);
+                                      }),
+                                ),
+                              ],
+                            ),
+                            Consumer<AuthProvider>(builder: (context, provider, child) {
+                              if (provider.state == ViewState.LOADING) {
+                              } else if (provider.state == ViewState.COMPLETE) {
+                                WidgetsBinding.instance!.addPostFrameCallback((_) {
+                                  Navigator.pushReplacementNamed(
+                                      context, HomeScreen.routeName);
+                                });
+                              } else if (provider.state == ViewState.ERROR) {
+                                WidgetsBinding.instance!.addPostFrameCallback((_) {
+                                  showErrorDialog(
+                                      context, 'Error', provider.errorMessage, provider);
+                                });
+                              }
+                              return Container();
+                            }),
+                          ],
                         ),
-                      )
-                    ],
-                  )
-                ],
-              ),
+                      ),
+                    )
+                  ],
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: AppDimen.MARGIN_MEDIUM_2),
+                    child: Consumer<AuthProvider>(
+                        builder: (context, provider, child) {
+                          if (provider.state == ViewState.LOADING)
+                            return child ?? Container();
+                          return Container();
+                        },
+                        child:
+                            Lottie.asset('assets/jsons/white_loading.json', width: 80)),
+                  ),
+                )
+              ],
             ),
-          )
-        );
+          ),
+        ));
+  }
+
+  void showErrorDialog(
+      BuildContext ctx, String title, String message, AuthProvider provider) {
+    provider.setState(ViewState.NONE);
+    showDialog(
+        context: ctx,
+        barrierDismissible: true,
+        builder: (_) {
+          return WillPopScope(
+            onWillPop: () async {
+              return true;
+            },
+            child: ErrorDialogBox(
+              title: title,
+              message: message,
+            ),
+          );
+        });
   }
 
   _onNext(AuthProvider provider) {
@@ -170,6 +210,14 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       password: _registerPasswordController.text,
     );
     provider.registerUser(request);
+  }
+
+  _loginUser(AuthProvider provider) {
+    RequestLoginVO request = RequestLoginVO(
+      nickname: _loginNickNameController.text,
+      password: _loginPasswordController.text,
+    );
+    provider.loginUser(request);
   }
 }
 
