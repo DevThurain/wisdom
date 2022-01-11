@@ -206,7 +206,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     RequestRegisterVO request = RequestRegisterVO(
       nickname: _registerNickNameController.text,
       code: _referCodeController.text,
-      deviceId: '123123',
+      deviceId: '',
       password: _registerPasswordController.text,
     );
     provider.registerUser(request);
