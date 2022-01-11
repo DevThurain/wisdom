@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
 import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
-import 'package:wisdom/src/data_models/daos/fun_list_dao.dart';
 import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_list_screen.dart';
 import 'package:wisdom/src/ui/home/home_screen.dart';
