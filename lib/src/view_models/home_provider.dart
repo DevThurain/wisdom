@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:wisdom/src/app_utils/base_view_model.dart';
 import 'package:wisdom/src/app_utils/check_update_util.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
@@ -10,6 +11,9 @@ class HomeProvider extends BaseViewModel {
   AppVersionVo? _appVersionVo;
   bool _isAlreadyUpdated = true;
   bool _isForceUpdate = false;
+  bool logout = false;
+  String errorCode = '';
+  String errorMessage = '';
   var repository = locator<RepositoryImpl>();
 
   ForceUpdateDao? get forceUpdateDao => _forceUpdateDao;
@@ -36,16 +40,15 @@ class HomeProvider extends BaseViewModel {
   // methods
 
   void checkAppVersion() async {
-    await repository.checkAppVersion().then((value) => {
-      _appVersionVo = value,
-      _isForceUpdate = _appVersionVo!.forceUpdate ?? false
-    });
+    await repository.checkAppVersion().then((value) =>
+        {_appVersionVo = value, _isForceUpdate = _appVersionVo!.forceUpdate ?? false});
 
     if (_appVersionVo != null) {
-      await CheckUpdateUtil.getIsAlreadyUpdated(
-          _appVersionVo!.version!)
+      await CheckUpdateUtil.getIsAlreadyUpdated(_appVersionVo!.version!)
           .then((value) => {_isAlreadyUpdated = value ?? true});
     }
     notifyListeners();
   }
+
+ 
 }

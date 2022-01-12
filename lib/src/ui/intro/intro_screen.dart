@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/data_source/shared_pref/share_pref_helper.dart';
 import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/home/home_screen.dart';
 import 'package:wisdom/src/ui/auth/auth_screen.dart';
@@ -19,16 +21,24 @@ class IntroScreen extends StatefulWidget {
 }
 
 class _IntroScreenState extends State<IntroScreen> {
+  var sharePreference = locator<SharedPreferenceHelper>();
+
   @override
   void initState() {
-    // TODO: implement initState
     _goToRegisterScreen();
     super.initState();
   }
 
   _goToRegisterScreen() async {
     await Future.delayed(Duration(seconds: 2));
-    Navigator.pushReplacementNamed(context, AuthScreen.routeName);
+    String token = await sharePreference.getString('PREF_TOKEN');
+    if (token.isEmpty) {
+      print("token" + token);
+      Navigator.pushReplacementNamed(context, AuthScreen.routeName);
+    } else {
+      print("token" + token);
+      Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+    }
   }
 
   @override
@@ -74,7 +84,6 @@ class _IntroScreenState extends State<IntroScreen> {
     );
   }
 }
-
 
 class PersonCardSection extends StatelessWidget {
   const PersonCardSection({

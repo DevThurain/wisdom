@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisdom/src/app_utils/device_detail.dart';
+import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/data_models/daos/comment_list_dao.dart';
 import 'package:wisdom/src/data_models/daos/fact_list_dao.dart';
 import 'package:wisdom/src/data_models/daos/force_update_dao.dart';
@@ -14,11 +15,13 @@ import 'package:wisdom/src/data_models/request/request_login_vo.dart';
 import 'package:wisdom/src/data_models/request/request_register_vo.dart';
 import 'package:wisdom/src/data_models/response/response_login_vo.dart';
 import 'package:wisdom/src/data_models/response/response_register_vo.dart';
+import 'package:wisdom/src/data_models/response/response_success_vo.dart';
 import 'package:wisdom/src/data_models/vos/app_version_vo.dart';
 import 'package:wisdom/src/data_models/vos/fun_detail_vo.dart';
 import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
 import 'package:wisdom/src/data_source/network/wisdom_api.dart';
 import 'package:wisdom/src/data_source/repository.dart';
+import 'package:wisdom/src/data_source/shared_pref/share_pref_helper.dart';
 
 class RepositoryImpl implements Repository {
   late WisdomAPI mApi;
@@ -29,26 +32,37 @@ class RepositoryImpl implements Repository {
     return _singleton;
   }
 
-  RepositoryImpl.internal(){
+  RepositoryImpl.internal() {
     //TODO:User Token => Get From Share Preferences or Some Storage
-    String userToken = "159|hQQA49IHNxx5c80NVrmB6vTVLq2PVI3rsWl1ABVx";
+    //String userToken = "159|hQQA49IHNxx5c80NVrmB6vTVLq2PVI3rsWl1ABVx";
     final dio = Dio();
     dio.options.connectTimeout = 10000;
 
-    if (userToken == null || userToken.isEmpty) {
+    SharedPreferences.getInstance().then((pref) {
+      String userToken = pref.getString('PREF_TOKEN') ?? '';
+      print("token ===>" + userToken.toString());
+
+      if (userToken.isEmpty) {
+        dio.options.headers = {
+          "Content-Type": Headers.jsonContentType,
+          "Accept": Headers.jsonContentType,
+          "X-API-TOKEN": "ZBJ3MafcVGQvEdCYPfGT",
+        };
+      } else {
+        dio.options.headers = {
+          "Content-Type": Headers.jsonContentType,
+          "Accept": Headers.jsonContentType,
+          "X-API-TOKEN": "ZBJ3MafcVGQvEdCYPfGT",
+          "Authorization": "Bearer " + userToken
+        };
+      }
+    }).onError((error, stackTrace) {
       dio.options.headers = {
         "Content-Type": Headers.jsonContentType,
         "Accept": Headers.jsonContentType,
         "X-API-TOKEN": "ZBJ3MafcVGQvEdCYPfGT",
       };
-    } else {
-      dio.options.headers = {
-        "Content-Type": Headers.jsonContentType,
-        "Accept": Headers.jsonContentType,
-        "X-API-TOKEN": "ZBJ3MafcVGQvEdCYPfGT",
-        "Authorization": "Bearer " + userToken
-      };
-    }
+    });
 
 // customization
     dio.interceptors.add(PrettyDioLogger(
@@ -124,6 +138,10 @@ class RepositoryImpl implements Repository {
     return mApi.getFunDetail(postId, true);
   }
 
+  @override
+  Future<ResponseSuccessVO> logoutUser() {
+    return mApi.logoutUser();
+  }
 }
 
 // Future<bool> checkTokenStored() async {
