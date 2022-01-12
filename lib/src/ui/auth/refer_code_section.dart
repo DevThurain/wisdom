@@ -7,7 +7,8 @@ import 'package:wisdom/src/ui/widgets/custom_text_field.dart';
 
 class ReferCodeSection extends StatelessWidget {
   final AnimationController animationController;
-  ReferCodeSection({Key? key, required this.animationController}) : super(key: key);
+  final TextEditingController referCodeController;
+ ReferCodeSection({Key? key, required this.animationController, required this.referCodeController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +45,7 @@ class ReferCodeSection extends StatelessWidget {
               TextFieldTitle(text: "refer code"),
               SizedBox(height: AppDimen.MARGIN_CARD_MEDIUM),
               CustomTextField(
+                controller: referCodeController,
                 onChanged: (value) {},
                 hint: 'code',
                 textInputAction: TextInputAction.next,

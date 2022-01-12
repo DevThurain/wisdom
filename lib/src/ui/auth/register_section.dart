@@ -7,7 +7,9 @@ import 'package:wisdom/src/ui/widgets/custom_text_field.dart';
 
 class RegisterSection extends StatelessWidget {
   final AnimationController animationController;
-  RegisterSection({Key? key, required this.animationController}) : super(key: key);
+  final TextEditingController registerNickNameController;
+  final TextEditingController registerPasswordController;
+  RegisterSection({Key? key, required this.animationController, required this.registerNickNameController, required this.registerPasswordController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +45,7 @@ class RegisterSection extends StatelessWidget {
               TextFieldTitle(text: "enter nickname"),
               SizedBox(height: AppDimen.MARGIN_CARD_MEDIUM),
               CustomTextField(
+                controller: registerNickNameController,
                 onChanged: (value) {},
                 hint: 'nick name',
                 textInputAction: TextInputAction.next,
@@ -51,6 +54,7 @@ class RegisterSection extends StatelessWidget {
               TextFieldTitle(text: "create password"),
               SizedBox(height: AppDimen.MARGIN_CARD_MEDIUM),
               CustomTextField(
+                controller: registerPasswordController,
                 onChanged: (value) {},
                 hint: 'password',
                 textInputAction: TextInputAction.next,

@@ -8,12 +8,16 @@ import 'package:wisdom/src/ui/widgets/wisdom_logo.dart';
 
 class LoginSection extends StatelessWidget {
   final AnimationController animationController;
+  final TextEditingController loginNickNameController;
+  final TextEditingController loginPasswordController;
   final Function onPressRegister;
   final Function onPressLogin;
   LoginSection(
       {Key? key,
       required this.animationController,
       required this.onPressLogin,
+      required this.loginNickNameController,
+      required this.loginPasswordController,
       required this.onPressRegister})
       : super(key: key);
 
@@ -58,6 +62,7 @@ class LoginSection extends StatelessWidget {
                 TextFieldTitle(text: "enter your nickname"),
                 SizedBox(height: AppDimen.MARGIN_CARD_MEDIUM),
                 CustomTextField(
+                  controller: loginNickNameController,
                   onChanged: (value) {},
                   hint: 'nick name',
                   textInputAction: TextInputAction.next,
@@ -66,9 +71,10 @@ class LoginSection extends StatelessWidget {
                 TextFieldTitle(text: "password"),
                 SizedBox(height: AppDimen.MARGIN_CARD_MEDIUM),
                 CustomTextField(
+                  controller: loginPasswordController,
                   onChanged: (value) {},
                   hint: 'password',
-                  textInputAction: TextInputAction.next,
+                  textInputAction: TextInputAction.done,
                 ),
                 // SizedBox(height: AppDimen.MARGIN_CARD_MEDIUM_2),
                 // TextFieldTitle(text: "confirm password"),

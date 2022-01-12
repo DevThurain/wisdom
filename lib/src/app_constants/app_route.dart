@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
 import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
 import 'package:wisdom/src/ui/auth/auth_screen.dart';
@@ -10,6 +11,9 @@ import 'package:wisdom/src/ui/post_detail/post_detail_screen.dart';
 import 'package:wisdom/src/ui/profile/profile_screen.dart';
 
 class AppRoute {
+  AppRoute(){
+    
+  }
   static Route<dynamic>? generateRoute(RouteSettings routeSettings) {
     return MaterialPageRoute<void>(
       settings: routeSettings,
@@ -31,7 +35,7 @@ class AppRoute {
             return const IntroScreen();
 
           case PostDetailScreen.routeName:
-            return  PostDetailScreen(routeSettings.arguments as FunItem);
+            return PostDetailScreen(routeSettings.arguments as FunItem);
 
           case AddPostScreen.routeName:
             return const AddPostScreen();
@@ -45,4 +49,10 @@ class AppRoute {
       },
     );
   }
+}
+
+Future<bool> checkTokenStored() async {
+  var _pref = await SharedPreferences.getInstance();
+  String token = _pref.getString('PREF_TOKEN') ?? '';
+  return token.isNotEmpty;
 }
