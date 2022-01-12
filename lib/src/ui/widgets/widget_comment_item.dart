@@ -40,7 +40,7 @@ class CommentItemWidget extends StatelessWidget {
                     margin: EdgeInsets.symmetric(
                         horizontal: AppDimen.MARGIN_MEDIUM),
                     decoration: BoxDecoration(
-                        color: AppTheme.dark_purple.withOpacity(0.1),
+                        color: Color(0xffb7b7f5).withOpacity(0.15),
                         borderRadius: BorderRadius.all(
                       Radius.circular(AppDimen.MARGIN_MEDIUM),
                     )),

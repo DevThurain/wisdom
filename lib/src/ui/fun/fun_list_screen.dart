@@ -6,7 +6,7 @@ import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/base_view_model.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
-import 'package:wisdom/src/ui/post_detail/post_detail_screen.dart';
+import 'package:wisdom/src/ui/fun/fun_detail_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
 import 'package:wisdom/src/ui/widgets/widget_footer_text.dart';
@@ -193,7 +193,7 @@ class _FunListScreenState extends State<FunListScreen> {
                               color: AppTheme.dark_purple,
                               onTap: () => Navigator.pushNamed(
                                 context,
-                                PostDetailScreen.routeName,
+                                FunDetailScreen.routeName,
                                 arguments: item,
                               ),
                             ),

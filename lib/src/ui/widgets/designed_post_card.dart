@@ -106,16 +106,16 @@ class PostCommentUI extends StatelessWidget {
         Image.asset(
           'assets/images/ic_comment.png',
           color: AppTheme.black.withOpacity(0.5),
-          width: 24,
+          width: 16,
         ),
         SizedBox(width: AppDimen.MARGIN_MEDIUM),
         Text(
-          '$commentCount comments',
+          '$commentCount comment',
           textAlign: TextAlign.center,
           style: TextStyle(
               color: AppTheme.black.withOpacity(0.5),
               fontSize: AppDimen.TEXT_REGULAR,
-              fontFamily: 'Poppins',
+              fontFamily: 'MyanUni',
               fontWeight: FontWeight.normal),
         ),
       ],
@@ -140,11 +140,13 @@ class PostProfileUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SquarePersonFace(width: 40, imgPath: profileUrl),
         SizedBox(width: AppDimen.MARGIN_MEDIUM),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               name,
@@ -153,7 +155,7 @@ class PostProfileUI extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                   color: color,
-                  fontSize: AppDimen.TEXT_REGULAR_2X,
+                  fontSize: AppDimen.TEXT_REGULAR_3X,
                   fontFamily: 'MyanUni',
                   height: 1,
                   fontWeight: FontWeight.normal),
@@ -163,7 +165,7 @@ class PostProfileUI extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: Color(0xffAFAFBD),
-                  fontSize: AppDimen.TEXT_REGULAR,
+                  fontSize: AppDimen.TEXT_SMALL,
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.normal),
             ),

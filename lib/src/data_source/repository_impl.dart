@@ -15,6 +15,7 @@ import 'package:wisdom/src/data_models/request/request_register_vo.dart';
 import 'package:wisdom/src/data_models/response/response_login_vo.dart';
 import 'package:wisdom/src/data_models/response/response_register_vo.dart';
 import 'package:wisdom/src/data_models/vos/app_version_vo.dart';
+import 'package:wisdom/src/data_models/vos/fun_detail_vo.dart';
 import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
 import 'package:wisdom/src/data_source/network/wisdom_api.dart';
 import 'package:wisdom/src/data_source/repository.dart';
@@ -113,9 +114,16 @@ class RepositoryImpl implements Repository {
     return mApi.loginUser(request.nickname, request.password);
   }
 
+  @override
   Future<PostListVo> getFunList() {
     return mApi.getFunList();
   }
+
+  @override
+  Future<FunDetailVo> getCommentListById(int postId) {
+    return mApi.getFunDetail(postId, true);
+  }
+
 }
 
 // Future<bool> checkTokenStored() async {

@@ -31,7 +31,7 @@ class BaseViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> handleConnectionView(bool isReplaceView) async {
+  Future<bool> handleConnectionView({bool isReplaceView = false}) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       if (isReplaceView) {

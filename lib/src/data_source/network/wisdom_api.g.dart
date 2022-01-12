@@ -32,6 +32,47 @@ class _WisdomAPI implements WisdomAPI {
   }
 
   @override
+  Future<ResponseRegisterVO> registerUser(
+      nickname, code, deviceId, password) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'nickname': nickname,
+      r'code': code,
+      r'device_id': deviceId,
+      r'password': password
+    };
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ResponseRegisterVO>(
+            Options(method: 'POST', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/wisdom-user/register',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ResponseRegisterVO.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<ResponseLoginVO> loginUser(nickname, password) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'nickname': nickname,
+      r'password': password
+    };
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ResponseLoginVO>(
+            Options(method: 'POST', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/wisdom-user/login',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ResponseLoginVO.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<PostListVo> getFunList() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -44,6 +85,22 @@ class _WisdomAPI implements WisdomAPI {
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = PostListVo.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<FunDetailVo> getFunDetail(postId, isDetail) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'detail': isDetail};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<FunDetailVo>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/wisdom/post/${postId}',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = FunDetailVo.fromJson(_result.data!);
     return value;
   }
 
