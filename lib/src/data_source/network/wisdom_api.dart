@@ -3,6 +3,7 @@ import 'package:retrofit/retrofit.dart';
 import 'package:wisdom/src/app_constants/app_api_route.dart';
 import 'package:wisdom/src/data_models/response/response_login_vo.dart';
 import 'package:wisdom/src/data_models/response/response_register_vo.dart';
+import 'package:wisdom/src/data_models/response/response_success_vo.dart';
 import 'package:wisdom/src/data_models/vos/app_version_vo.dart';
 import 'package:wisdom/src/data_models/vos/fun_detail_vo.dart';
 import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
@@ -28,6 +29,9 @@ abstract class WisdomAPI {
     @Query("nickname") String nickname,
     @Query("password") String password,
   );
+
+  @POST("/wisdom-user/logout")
+  Future<ResponseSuccessVO> logoutUser();
 
   @GET("/wisdom/posts")
   Future<PostListVo> getFunList();

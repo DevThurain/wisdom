@@ -14,6 +14,14 @@ class SharedPreferenceHelper {
     return _sharedPreference.setBool(key, value);
   }
 
+  Future<String> getString(String key) async {
+    return _sharedPreference.getString(key) ?? '';
+  }
+
+  Future<void> clear() async {
+    _sharedPreference.clear();
+  }
+
   // Future<bool> removeAuthToken() async {
   //   return _sharedPreference.remove(Preferences.auth_token);
   // }

@@ -10,8 +10,8 @@ import 'package:wisdom/src/view_models/knowledge_provider.dart';
 GetIt locator = GetIt.instance;
 
 Future setupLocator() async {
-  // await SharedPreferences.getInstance().then((value) =>
-  //     locator.registerLazySingleton(() => SharedPreferenceHelper(value)));
+  await SharedPreferences.getInstance().then((value) =>
+      locator.registerLazySingleton(() => SharedPreferenceHelper(value)));
   locator.registerLazySingleton(() => RepositoryImpl());
   locator.registerFactory(() => HomeProvider());
   locator.registerLazySingleton(() => KnowlegeProvider());

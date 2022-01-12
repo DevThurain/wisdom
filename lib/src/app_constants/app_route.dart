@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
+import 'package:wisdom/src/data_source/shared_pref/share_pref_helper.dart';
 import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
 import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_detail_screen.dart';
@@ -11,10 +13,9 @@ import 'package:wisdom/src/ui/knowledge/knowledge_screen.dart';
 import 'package:wisdom/src/ui/profile/profile_screen.dart';
 
 class AppRoute {
-  AppRoute(){
-    
-  }
+
   static Route<dynamic>? generateRoute(RouteSettings routeSettings) {
+
     return MaterialPageRoute<void>(
       settings: routeSettings,
       builder: (BuildContext context) {

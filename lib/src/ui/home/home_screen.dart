@@ -6,7 +6,9 @@ import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/dialog_utils.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/data_source/shared_pref/share_pref_helper.dart';
 import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
+import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_list_screen.dart';
 import 'package:wisdom/src/ui/knowledge/knowledge_screen.dart';
 import 'package:wisdom/src/ui/profile/profile_screen.dart';
@@ -24,11 +26,17 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   var homeProvider = locator<HomeProvider>();
+  var sharePreference = locator<SharedPreferenceHelper>();
 
   @override
   void initState() {
     homeProvider.checkAppVersion();
     super.initState();
+  }
+
+  _logoutUser() async {
+    await sharePreference.clear();
+    Navigator.pushReplacementNamed(context, AuthScreen.routeName);
   }
 
   @override
@@ -47,13 +55,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     onWillPop: () async => provider.isAlreadyUpdated,
                     child: CustomDialogBox(
                         title: "Update Available!",
-                        descriptions: "A new version is available for this app. You can update it from store or direct link.",
+                        descriptions:
+                            "A new version is available for this app. You can update it from store or direct link.",
                         titleImage: "",
                         isForceUpdate: provider.isForceUpdate,
                         onClickButton: () => print("update")),
                   );
                 });
           });
+        }
+
+        if (provider.logout) {
+          _logoutUser();
         }
 
         return Scaffold(
@@ -74,7 +87,11 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Padding(
                   padding: EdgeInsets.all(AppDimen.MARGIN_MEDIUM_2),
-                  child: ProfileSectionView(),
+                  child: ProfileSectionView(
+                    onTap: () {
+                      _logoutUser();
+                    },
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -111,21 +128,29 @@ class _HomeScreenState extends State<HomeScreen> {
 class ProfileSectionView extends StatelessWidget {
   const ProfileSectionView({
     Key? key,
+    required this.onTap,
   }) : super(key: key);
+
+  final Function onTap;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text(
-          AppLocalizations.of(context)!.home_logout,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: AppTheme.dark_purple,
-            fontSize: AppDimen.TEXT_REGULAR,
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.normal,
+        GestureDetector(
+          onTap: () {
+            onTap();
+          },
+          child: Text(
+            AppLocalizations.of(context)!.home_logout,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: AppTheme.dark_purple,
+              fontSize: AppDimen.TEXT_REGULAR,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.normal,
+            ),
           ),
         ),
         SizedBox(width: AppDimen.MARGIN_MEDIUM_3),
