@@ -2,12 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 
 class CustomDialogBox extends StatefulWidget {
   final String? title, descriptions;
-  final String? titleImage;
   final Function? onClickButton;
   final bool? isForceUpdate;
 
@@ -15,7 +15,6 @@ class CustomDialogBox extends StatefulWidget {
     Key? key,
     this.title,
     this.descriptions,
-    this.titleImage,
     this.onClickButton,
     this.isForceUpdate = false,
   }) : super(key: key);
@@ -87,15 +86,72 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                 SizedBox(
                   height: 22,
                 ),
-                Container(
-                  height: 48,
-                  color: Colors.redAccent,
+                ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  child: Column(
+                    children: [
+                      GestureDetector(
+                        onTap: ()=> Fluttertoast.showToast(msg: "Store Link"),
+                        child: Container(
+                          height: 48,
+                          color: Color(0xffb7b7f5).withOpacity(0.5),
+                          child: Row(
+                            children:  [
+                              SizedBox(width: AppDimen.MARGIN_MEDIUM,),
+                              Image.asset(
+                                'assets/images/download.png',
+                                width: 24,
+                                height: 24,
+                              ),
+                              SizedBox(width: AppDimen.MARGIN_MEDIUM,),
+                              Text(
+                                "Store link",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: AppTheme.dark_purple,
+                                  fontSize: AppDimen.TEXT_REGULAR_2X,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(color: Colors.white, height: 1,),
+                      GestureDetector(
+                        onTap: ()=> Fluttertoast.showToast(msg: "Direct Link"),
+                        child: Container(
+                          height: 48,
+                          width: double.infinity,
+                          color: Color(0xffb7b7f5).withOpacity(0.5),
+                          child: Row(
+                            children: [
+                              SizedBox(width: AppDimen.MARGIN_MEDIUM,),
+                              Image.asset(
+                                'assets/images/download.png',
+                                width: 24,
+                                height: 24,
+                              ),
+                              SizedBox(width: AppDimen.MARGIN_MEDIUM,),
+                              Text(
+                                "Direct link",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: AppTheme.dark_purple,
+                                  fontSize: AppDimen.TEXT_REGULAR_2X,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                Container(
-                  height: 48,
-                  width: double.infinity,
-                  color: Colors.blue,
-                ),
+
               ],
             ),
           ),
