@@ -1,3 +1,5 @@
+import 'package:wisdom/src/app_utils/user_profile_generator.dart';
+
 /// data : [{"id":4,"post":"I am fking genius.","date":"6 minutes ago","comment_count":0,"created_at":"2022-01-09T10:22:05.000000Z","creator":{"id":1,"nickname":"test","code":"testing123","device_id":"1234567890","type":"normal","ban":false,"banned_by":null,"deleted_by":null,"deleted_at":null,"created_at":"2022-01-09T03:01:37.000000Z","updated_at":"2022-01-09T03:01:37.000000Z"}},{"id":3,"post":"I am fking genius.","date":"7 minutes ago","comment_count":0,"created_at":"2022-01-09T10:21:28.000000Z","creator":{"id":1,"nickname":"test","code":"testing123","device_id":"1234567890","type":"normal","ban":false,"banned_by":null,"deleted_by":null,"deleted_at":null,"created_at":"2022-01-09T03:01:37.000000Z","updated_at":"2022-01-09T03:01:37.000000Z"}},{"id":2,"post":"Hello Mate","date":"9 minutes ago","comment_count":0,"created_at":"2022-01-09T10:19:23.000000Z","creator":{"id":1,"nickname":"test","code":"testing123","device_id":"1234567890","type":"normal","ban":false,"banned_by":null,"deleted_by":null,"deleted_at":null,"created_at":"2022-01-09T03:01:37.000000Z","updated_at":"2022-01-09T03:01:37.000000Z"}},{"id":1,"post":"wtf","date":"4 hours ago","comment_count":0,"created_at":"2022-01-09T06:03:30.000000Z","creator":{"id":1,"nickname":"test","code":"testing123","device_id":"1234567890","type":"normal","ban":false,"banned_by":null,"deleted_by":null,"deleted_at":null,"created_at":"2022-01-09T03:01:37.000000Z","updated_at":"2022-01-09T03:01:37.000000Z"}}]
 /// links : {"first":"http://adsmob.test/mobile/wisdom/posts?page=1","last":"http://adsmob.test/mobile/wisdom/posts?page=1","prev":null,"next":null}
 /// meta : {"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"http://adsmob.test/mobile/wisdom/posts?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"http://adsmob.test/mobile/wisdom/posts","per_page":15,"to":4,"total":4}
@@ -175,6 +177,7 @@ class FunItem {
     _commentCount = commentCount;
     _createdAt = createdAt;
     _creator = creator;
+
 }
 
   FunItem.fromJson(dynamic json) {
@@ -184,6 +187,7 @@ class FunItem {
     _commentCount = json['comment_count'];
     _createdAt = json['created_at'];
     _creator = json['creator'] != null ? Creator.fromJson(json['creator']) : null;
+
   }
   int? _id;
   String? _post;
@@ -264,6 +268,8 @@ class Creator {
     _deletedAt = json['deleted_at'];
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
+    _profileAssetsUrl = profileAssetsUrlList["$_id".length - 1];
+
   }
   int? _id;
   String? _nickname;
@@ -276,6 +282,7 @@ class Creator {
   dynamic _deletedAt;
   String? _createdAt;
   String? _updatedAt;
+  String? _profileAssetsUrl;
 
   int? get id => _id;
   String? get nickname => _nickname;
@@ -288,6 +295,7 @@ class Creator {
   dynamic get deletedAt => _deletedAt;
   String? get createdAt => _createdAt;
   String? get updatedAt => _updatedAt;
+  String get profileAssetsUrl => _profileAssetsUrl ?? "assets/images/user_profile/ic_age_bulk.jpeg";
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

@@ -1,3 +1,5 @@
+import 'package:wisdom/src/app_utils/user_profile_generator.dart';
+
 /// data : {"id":2,"post":"Hello Mate","date":"34 minutes ago","comment_count":3,"created_at":"2022-01-09T10:19:23.000000Z","creator":{"id":1,"nickname":"test","code":"testing123","device_id":"1234567890","type":"normal","ban":false,"banned_by":null,"deleted_by":null,"deleted_at":null,"created_at":"2022-01-09T03:01:37.000000Z","updated_at":"2022-01-09T03:01:37.000000Z"},"comments":[{"id":1,"post_id":2,"date":"2 minutes ago","created_at":"2022-01-09T10:50:56.000000Z","comment":"What's up","creator":{"id":1,"nickname":"test","code":"testing123","device_id":"1234567890","type":"normal","ban":false,"banned_by":null,"deleted_by":null,"deleted_at":null,"created_at":"2022-01-09T03:01:37.000000Z","updated_at":"2022-01-09T03:01:37.000000Z"}},{"id":2,"post_id":2,"date":"2 minutes ago","created_at":"2022-01-09T10:51:19.000000Z","comment":"What's up","creator":{"id":1,"nickname":"test","code":"testing123","device_id":"1234567890","type":"normal","ban":false,"banned_by":null,"deleted_by":null,"deleted_at":null,"created_at":"2022-01-09T03:01:37.000000Z","updated_at":"2022-01-09T03:01:37.000000Z"}},{"id":3,"post_id":2,"date":"1 minute ago","created_at":"2022-01-09T10:52:24.000000Z","comment":"What's up","creator":{"id":1,"nickname":"test","code":"testing123","device_id":"1234567890","type":"normal","ban":false,"banned_by":null,"deleted_by":null,"deleted_at":null,"created_at":"2022-01-09T03:01:37.000000Z","updated_at":"2022-01-09T03:01:37.000000Z"}}]}
 
 class FunDetailVo {
@@ -300,6 +302,8 @@ class CommentCreator {
     _deletedAt = json['deleted_at'];
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
+    _updatedAt = json['updated_at'];
+    _profileAssetsUrl = profileAssetsUrlList["$_id".length - 1];
   }
   int? _id;
   String? _nickname;
@@ -312,6 +316,7 @@ class CommentCreator {
   dynamic _deletedAt;
   String? _createdAt;
   String? _updatedAt;
+  String? _profileAssetsUrl;
 
   int? get id => _id;
   String? get nickname => _nickname;
@@ -324,6 +329,7 @@ class CommentCreator {
   dynamic get deletedAt => _deletedAt;
   String? get createdAt => _createdAt;
   String? get updatedAt => _updatedAt;
+  String get profileAssetsUrl => _profileAssetsUrl ?? "assets/images/user_profile/ic_age_bulk.jpeg";
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

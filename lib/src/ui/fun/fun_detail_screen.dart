@@ -66,7 +66,7 @@ class _FunDetailScreenState extends State<FunDetailScreen> {
                                 .map(
                                   (comment) => CommentItemWidget(
                                     name: comment.creator!.nickname ?? "",
-                                    profileUrl: comment.creator!.nickname ?? "",
+                                    profileUrl: comment.creator!.profileAssetsUrl ?? "",
                                     commentText: comment.comment ?? "",
                                     duration: comment.date ?? "",
                                   ),
@@ -215,7 +215,7 @@ class PostDetailHeader extends StatelessWidget {
           padding:
               const EdgeInsets.symmetric(horizontal: AppDimen.MARGIN_LARGE),
           child: PostProfileUI(
-            profileUrl: 'assets/images/girl_light.png',
+            profileUrl: postItem.creator!.profileAssetsUrl,
             color: AppTheme.dark_purple,
             name: postItem.creator!.nickname ?? "",
             duration: postItem.date ?? "",

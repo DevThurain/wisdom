@@ -184,7 +184,7 @@ class _FunListScreenState extends State<FunListScreen> {
                           .map(
                             (item) => DesignedPostCard(
                               title: item.post.toString(),
-                              profileUrl: item.creator!.code ?? "",
+                              profileUrl: item.creator!.profileAssetsUrl,
                               name: item.creator!.nickname ?? "",
                               duration: item.date ?? "",
                               commentCount: item.commentCount == null
