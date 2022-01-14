@@ -23,9 +23,11 @@ import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
 import 'package:wisdom/src/data_source/network/wisdom_api.dart';
 import 'package:wisdom/src/data_source/repository.dart';
 import 'package:wisdom/src/data_source/shared_pref/share_pref_helper.dart';
+import 'package:wisdom/src/data_source/source/api_source.dart';
 
 class RepositoryImpl implements Repository {
-  late WisdomAPI mApi;
+  late ApiSource _mSource;
+  late SharedPreferenceHelper _pref = locator<SharedPreferenceHelper>();
 
   static final RepositoryImpl _singleton = RepositoryImpl.internal();
 
@@ -34,47 +36,7 @@ class RepositoryImpl implements Repository {
   }
 
   RepositoryImpl.internal() {
-    //TODO:User Token => Get From Share Preferences or Some Storage
-    //String userToken = "159|hQQA49IHNxx5c80NVrmB6vTVLq2PVI3rsWl1ABVx";
-    final dio = Dio();
-    dio.options.connectTimeout = 10000;
-
-    SharedPreferences.getInstance().then((pref) {
-      String userToken = pref.getString('PREF_TOKEN') ?? '';
-      print("token ===>" + userToken.toString());
-
-      if (userToken.isEmpty) {
-        dio.options.headers = {
-          "Content-Type": Headers.jsonContentType,
-          "Accept": Headers.jsonContentType,
-          "X-API-TOKEN": "ZBJ3MafcVGQvEdCYPfGT",
-        };
-      } else {
-        dio.options.headers = {
-          "Content-Type": Headers.jsonContentType,
-          "Accept": Headers.jsonContentType,
-          "X-API-TOKEN": "ZBJ3MafcVGQvEdCYPfGT",
-          "Authorization": "Bearer " + userToken
-        };
-      }
-    }).onError((error, stackTrace) {
-      dio.options.headers = {
-        "Content-Type": Headers.jsonContentType,
-        "Accept": Headers.jsonContentType,
-        "X-API-TOKEN": "ZBJ3MafcVGQvEdCYPfGT",
-      };
-    });
-
-// customization
-    dio.interceptors.add(PrettyDioLogger(
-        requestHeader: true,
-        requestBody: true,
-        responseBody: true,
-        responseHeader: false,
-        error: true,
-        compact: true,
-        maxWidth: 90));
-    mApi = WisdomAPI(dio);
+    _mSource = ApiSource();
   }
 
   //force update
@@ -115,38 +77,43 @@ class RepositoryImpl implements Repository {
 
   @override
   Future<AppVersionVo> checkAppVersion() {
-    return mApi.checkAppVersion();
+    return _mSource.publicApi().checkAppVersion();
   }
 
   @override
   Future<ResponseRegisterVO> registerUser(RequestRegisterVO request) {
-    return mApi.registerUser(
-        request.nickname, request.code, request.deviceId, request.password);
+    return _mSource
+        .publicApi()
+        .registerUser(request.nickname, request.code, request.deviceId, request.password);
   }
 
   @override
   Future<ResponseLoginVO> loginUser(RequestLoginVO request) {
-    return mApi.loginUser(request.nickname, request.password);
+    return _mSource.publicApi().loginUser(request.nickname, request.password);
   }
 
   @override
   Future<PostListVo> getFunList() {
-    return mApi.getFunList();
+    String token = _pref.getToken();
+    return _mSource.privateApi(token).getFunList();
   }
 
   @override
   Future<FunDetailVo> getCommentListById(int postId) {
-    return mApi.getFunDetail(postId, true);
+    String token = _pref.getToken();
+    return _mSource.privateApi(token).getFunDetail(postId, true);
   }
 
   @override
   Future<ResponseSuccessVO> logoutUser() {
-    return mApi.logoutUser();
+    String token = _pref.getToken();
+    return _mSource.privateApi(token).logoutUser();
   }
 
   @override
   Future<CommentResponseVo> sendComment(int postId, String commentData) {
-     return mApi.commentFunDetail(postId, commentData);
+    String token = _pref.getToken();
+    return _mSource.privateApi(token).commentFunDetail(postId, commentData);
   }
 }
 

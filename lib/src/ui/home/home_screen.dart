@@ -69,6 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
 
         return Scaffold(
+          backgroundColor: AppTheme.white,
           floatingActionButton: FloatingActionButton(
             backgroundColor: AppTheme.dark_purple,
             onPressed: () {
@@ -80,46 +81,85 @@ class _HomeScreenState extends State<HomeScreen> {
               color: AppTheme.white,
             ),
           ),
-          body: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(AppDimen.MARGIN_MEDIUM_2),
-                  child: ProfileSectionView(
-                    onTap: () {
-                      _logoutUser();
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: AppDimen.MARGIN_MEDIUM_2,
-                    vertical: AppDimen.MARGIN_MEDIUM_2,
-                  ),
-                  child: TitleText(),
-                ),
-                SizedBox(height: 20),
-                DesignedCard(
-                  title: 'Knowledge',
-                  color: AppTheme.dark_purple,
-                  onTap: () {
-                    Navigator.pushNamed(context, KnowledgeScreen.routeName);
-                  },
-                ),
-                SizedBox(height: 20),
-                DesignedCard(
-                  title: 'Fun',
-                  color: AppTheme.dark_purple,
-                  onTap: () {
-                    Navigator.pushNamed(context, FunListScreen.routeName);
-                  },
-                )
-              ],
-            ),
+          body: Stack(
+            children: [
+              TopGradient(),
+              CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: AppDimen.MARGIN_MEDIUM_2,
+                            right: AppDimen.MARGIN_MEDIUM_2,
+                            top: MediaQuery.of(context).padding.top + AppDimen.MARGIN_MEDIUM_2,
+                            bottom: AppDimen.MARGIN_MEDIUM_2,
+                          ),
+                          child: ProfileSectionView(
+                            onTap: () {
+                              _logoutUser();
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: AppDimen.MARGIN_MEDIUM_2,
+                            vertical: AppDimen.MARGIN_MEDIUM_2,
+                          ),
+                          child: TitleText(),
+                        ),
+                        SizedBox(height: 20),
+                        DesignedCard(
+                          title: 'Knowledge',
+                          color: AppTheme.dark_purple,
+                          onTap: () {
+                            Navigator.pushNamed(context, KnowledgeScreen.routeName);
+                          },
+                        ),
+                        SizedBox(height: 20),
+                        DesignedCard(
+                          title: 'Fun',
+                          color: AppTheme.dark_purple,
+                          onTap: () {
+                            Navigator.pushNamed(context, FunListScreen.routeName);
+                          },
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ],
           ),
         );
       }),
+    );
+  }
+}
+
+class TopGradient extends StatelessWidget {
+  const TopGradient({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Container(
+        height: 120,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: const [
+              Color(0xffb7b7f5),
+              Color(0xffe7e7f8),
+              AppTheme.white,
+            ])),
+      ),
     );
   }
 }
