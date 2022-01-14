@@ -22,6 +22,10 @@ class SharedPreferenceHelper {
     _sharedPreference.clear();
   }
 
+  String getToken() {
+    return _sharedPreference.getString('PREF_TOKEN') ?? '';
+  }
+
   // Future<bool> removeAuthToken() async {
   //   return _sharedPreference.remove(Preferences.auth_token);
   // }
