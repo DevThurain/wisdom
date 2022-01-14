@@ -45,12 +45,13 @@ class _HomeScreenState extends State<HomeScreen> {
       create: (context) => homeProvider,
       child: Consumer<HomeProvider>(builder: (context, provider, child) {
         //ToDo - Add "!" after testing at !provider.isAlreadyUpdated
-        if (!provider.isAlreadyUpdated) {
+        if (!provider.isAlreadyUpdated && provider.show) {
           WidgetsBinding.instance!.addPostFrameCallback((_) {
             showDialog(
                 context: context,
                 barrierDismissible: !provider.isAlreadyUpdated,
                 builder: (_) {
+                  provider.show = false;
                   return WillPopScope(
                     onWillPop: () async => provider.isAlreadyUpdated,
                     child: CustomDialogBox(
@@ -94,7 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: EdgeInsets.only(
                             left: AppDimen.MARGIN_MEDIUM_2,
                             right: AppDimen.MARGIN_MEDIUM_2,
-                            top: MediaQuery.of(context).padding.top + AppDimen.MARGIN_MEDIUM_2,
+                            top: MediaQuery.of(context).padding.top +
+                                AppDimen.MARGIN_MEDIUM_2,
                             bottom: AppDimen.MARGIN_MEDIUM_2,
                           ),
                           child: ProfileSectionView(

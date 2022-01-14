@@ -11,6 +11,7 @@ class HomeProvider extends BaseViewModel {
   AppVersionVo? _appVersionVo;
   bool _isAlreadyUpdated = true;
   bool _isForceUpdate = false;
+  bool show = true;
   bool logout = false;
   String errorCode = '';
   String errorMessage = '';
@@ -49,6 +50,4 @@ class HomeProvider extends BaseViewModel {
     }
     notifyListeners();
   }
-
- 
 }
