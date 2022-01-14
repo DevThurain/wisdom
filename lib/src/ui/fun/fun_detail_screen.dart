@@ -13,9 +13,9 @@ import 'package:wisdom/src/view_models/fun_provider.dart';
 
 class FunDetailScreen extends StatefulWidget {
   static const routeName = '/post_detail_screen';
-  final FunItem postItem;
+  final FunItem funItem;
 
-  const FunDetailScreen(this.postItem, {Key? key}) : super(key: key);
+  const FunDetailScreen(this.funItem, {Key? key}) : super(key: key);
 
   @override
   _FunDetailScreenState createState() => _FunDetailScreenState();
@@ -30,8 +30,10 @@ class _FunDetailScreenState extends State<FunDetailScreen> {
   }
 
   FunItem get _postItem {
-    return widget.postItem;
+    return widget.funItem;
   }
+
+
 
   @override
   void initState() {
@@ -41,147 +43,153 @@ class _FunDetailScreenState extends State<FunDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => funProvider,
-      child: Consumer<FunProvider>(
-        builder: (context, provider, child) => Scaffold(
-          body: Stack(
-            children: [
-              NestedScrollView(
-                headerSliverBuilder: (context, innerBoxIsScrolled) {
-                  return <Widget>[
-                    PostDetailHeader(_postItem),
-                    SliverToBoxAdapter(
-                      child: PostDetailSectionView(_postItem,
-                          commentCount: funProvider.commentList!.isEmpty
-                              ? _postItem.commentCount!
-                              : funProvider.commentList!.length),
-                    ),
-                  ];
-                },
-                body: Container(
-                  color: Colors.white,
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverPadding(
-                        padding: EdgeInsets.only(top: AppDimen.MARGIN_MEDIUM_2),
-                        sliver: SliverList(
-                          delegate: SliverChildListDelegate(
-                            provider.commentList!
-                                .map(
-                                  (comment) => CommentItemWidget(
-                                    name: comment.creator!.nickname ?? "",
-                                    profileUrl:
-                                        comment.creator!.profileAssetsUrl ?? "",
-                                    commentText: comment.comment ?? "",
-                                    duration: comment.date ?? "",
-                                  ),
-                                )
-                                .toList(),
+    return WillPopScope(
+      onWillPop: () async{
+        Navigator.pop(context, funProvider.commentList!.length);
+        return true;
+      },
+      child: ChangeNotifierProvider(
+        create: (context) => funProvider,
+        child: Consumer<FunProvider>(
+          builder: (context, provider, child) => Scaffold(
+            body: Stack(
+              children: [
+                NestedScrollView(
+                  headerSliverBuilder: (context, innerBoxIsScrolled) {
+                    return <Widget>[
+                      PostDetailHeader(_postItem),
+                      SliverToBoxAdapter(
+                        child: PostDetailSectionView(_postItem,
+                            commentCount: funProvider.commentList!.isEmpty
+                                ? _postItem.commentCount!
+                                : funProvider.commentList!.length),
+                      ),
+                    ];
+                  },
+                  body: Container(
+                    color: Colors.white,
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverPadding(
+                          padding: EdgeInsets.only(top: AppDimen.MARGIN_MEDIUM_2),
+                          sliver: SliverList(
+                            delegate: SliverChildListDelegate(
+                              provider.commentList!
+                                  .map(
+                                    (comment) => CommentItemWidget(
+                                      name: comment.creator!.nickname ?? "",
+                                      profileUrl:
+                                          comment.creator!.profileAssetsUrl ?? "",
+                                      commentText: comment.comment ?? "",
+                                      duration: comment.date ?? "",
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
                           ),
                         ),
-                      ),
-                      SliverPadding(
-                        padding: EdgeInsets.only(
-                          bottom: AppDimen.MARGIN_XXLARGE * 2,
-                        ),
-                      )
-                    ],
+                        SliverPadding(
+                          padding: EdgeInsets.only(
+                            bottom: AppDimen.MARGIN_XXLARGE * 2,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppTheme.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(AppDimen.MARGIN_MEDIUM),
-                      topRight: Radius.circular(AppDimen.MARGIN_MEDIUM),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppTheme.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(AppDimen.MARGIN_MEDIUM),
+                        topRight: Radius.circular(AppDimen.MARGIN_MEDIUM),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.dark_purple.withOpacity(0.5),
+                          blurRadius: 2.0,
+                          spreadRadius: 0.0,
+                          offset:
+                              Offset(0, 1.0), // shadow direction: bottom right
+                        )
+                      ],
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppTheme.dark_purple.withOpacity(0.5),
-                        blurRadius: 2.0,
-                        spreadRadius: 0.0,
-                        offset:
-                            Offset(0, 1.0), // shadow direction: bottom right
-                      )
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Flexible(
-                        child: TextField(
-                          controller: commentBoxController,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: 3,
-                          minLines: 1,
-                          autofocus: false,
-                          style: TextStyle(
-                            fontSize: AppDimen.TEXT_REGULAR_2X,
-                            fontFamily: 'MyanUni',
-                            letterSpacing: 0.5,
-                          ),
-                          decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(0.0)),
-                              borderSide: BorderSide(color: Colors.transparent),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(0.0)),
-                              borderSide: BorderSide(color: Colors.transparent),
-                            ),
-                            filled: true,
-                            hintStyle: TextStyle(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Flexible(
+                          child: TextField(
+                            controller: commentBoxController,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: 3,
+                            minLines: 1,
+                            autofocus: false,
+                            style: TextStyle(
                               fontSize: AppDimen.TEXT_REGULAR_2X,
                               fontFamily: 'MyanUni',
                               letterSpacing: 0.5,
-                              color: AppTheme.black.withOpacity(0.5),
                             ),
-                            hintText: "Add a comment ...",
-                            contentPadding: EdgeInsets.all(
-                              AppDimen.MARGIN_CARD_MEDIUM_2,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(0.0)),
+                                borderSide: BorderSide(color: Colors.transparent),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(0.0)),
+                                borderSide: BorderSide(color: Colors.transparent),
+                              ),
+                              filled: true,
+                              hintStyle: TextStyle(
+                                fontSize: AppDimen.TEXT_REGULAR_2X,
+                                fontFamily: 'MyanUni',
+                                letterSpacing: 0.5,
+                                color: AppTheme.black.withOpacity(0.5),
+                              ),
+                              hintText: "Add a comment ...",
+                              contentPadding: EdgeInsets.all(
+                                AppDimen.MARGIN_CARD_MEDIUM_2,
+                              ),
+                              fillColor: Colors.transparent,
                             ),
-                            fillColor: Colors.transparent,
                           ),
                         ),
-                      ),
-                      RawMaterialButton(
-                        onPressed: () => sendComment(commentBoxController),
-                        constraints: BoxConstraints(),
-                        elevation: 0,
-                        fillColor: Colors.white,
-                        hoverElevation: 0,
-                        focusElevation: 0,
-                        highlightElevation: 0,
-                        splashColor: Color(0xffb7b7f5).withOpacity(0.5),
-                        highlightColor: Color(0xffb7b7f5).withOpacity(0.5),
-                        child: ShaderMask(
-                          blendMode: BlendMode.srcIn,
-                          shaderCallback: (Rect bounds) {
-                            return ui.Gradient.linear(
-                              Offset(4.0, 24.0),
-                              Offset(24.0, 4.0),
-                              [Colors.deepPurple, Color(0xffb7b7f5)],
-                            );
-                          },
-                          child: Icon(
-                            Icons.send,
-                            size: 24.0,
+                        RawMaterialButton(
+                          onPressed: () => sendComment(commentBoxController),
+                          constraints: BoxConstraints(),
+                          elevation: 0,
+                          fillColor: Colors.white,
+                          hoverElevation: 0,
+                          focusElevation: 0,
+                          highlightElevation: 0,
+                          splashColor: Color(0xffb7b7f5).withOpacity(0.5),
+                          highlightColor: Color(0xffb7b7f5).withOpacity(0.5),
+                          child: ShaderMask(
+                            blendMode: BlendMode.srcIn,
+                            shaderCallback: (Rect bounds) {
+                              return ui.Gradient.linear(
+                                Offset(4.0, 24.0),
+                                Offset(24.0, 4.0),
+                                [Colors.deepPurple, Color(0xffb7b7f5)],
+                              );
+                            },
+                            child: Icon(
+                              Icons.send,
+                              size: 24.0,
+                            ),
                           ),
-                        ),
-                        padding: EdgeInsets.all(15.0),
-                        shape: CircleBorder(),
-                      )
-                    ],
+                          padding: EdgeInsets.all(15.0),
+                          shape: CircleBorder(),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

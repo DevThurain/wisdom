@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
+import 'package:wisdom/src/app_constants/screen_arguments.dart';
 import 'package:wisdom/src/app_utils/base_view_model.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/ui/fun/fun_detail_screen.dart';
@@ -181,23 +182,30 @@ class _FunListScreenState extends State<FunListScreen> {
                   SliverList(
                     delegate: SliverChildListDelegate(
                       provider.funList!
-                          .map(
-                            (item) => DesignedPostCard(
-                              title: item.post.toString(),
-                              profileUrl: item.creator!.profileAssetsUrl,
-                              name: item.creator!.nickname ?? "",
-                              duration: item.date ?? "",
-                              commentCount: item.commentCount == null
-                                  ? "No comment"
-                                  : item.commentCount.toString(),
-                              color: AppTheme.dark_purple,
-                              onTap: () => Navigator.pushNamed(
-                                context,
-                                FunDetailScreen.routeName,
-                                arguments: item,
-                              ),
-                            ),
-                          )
+                          .asMap()
+                          .map((index, item) => MapEntry(
+                              index,
+                              DesignedPostCard(
+                                title: item.post.toString(),
+                                profileUrl: item.creator!.profileAssetsUrl,
+                                name: item.creator!.nickname ?? "",
+                                duration: item.date ?? "",
+                                commentCount: item.commentCount == null
+                                    ? "No comment"
+                                    : item.commentCount.toString(),
+                                color: AppTheme.dark_purple,
+                                onTap: () async {
+                                  funProvider.currentSelectedFanId = index;
+                               int updatedCommentCount = await Navigator.pushNamed(
+                                    context,
+                                    FunDetailScreen.routeName,
+                                   arguments: item,
+                                  ) as int;
+
+                               funProvider.updateCommentCount(updatedCommentCount);
+                                },
+                              )))
+                          .values
                           .toList(),
                     ),
                   ),

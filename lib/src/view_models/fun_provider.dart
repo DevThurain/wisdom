@@ -11,11 +11,16 @@ class FunProvider extends BaseViewModel {
   final _repository = locator<RepositoryImpl>();
   final List<FunItem> _funList = <FunItem>[];
   final List<Comments> _commentList = <Comments>[];
-  final int _commentCount = 0;
+   int? _currentSelectedFanId;
 
   List<FunItem>? get funList => _funList;
 
   List<Comments>? get commentList => _commentList;
+
+
+  set currentSelectedFanId(int value) {
+    _currentSelectedFanId = value;
+  }
 
   Future<void> getFunList({int? currentPage = 1}) async {
     try {
@@ -72,7 +77,7 @@ class FunProvider extends BaseViewModel {
     if (_postCommentResponse.data != null) {
       Comment _postedSuccessComment = _postCommentResponse.data!;
 
-      commentList!.add(Comments(
+      _commentList.add(Comments(
         id: _postedSuccessComment.id,
         postId: _postedSuccessComment.postId,
         date: _postedSuccessComment.date,
@@ -82,7 +87,14 @@ class FunProvider extends BaseViewModel {
             id: _postedSuccessComment.creator!.id,
             nickname: _postedSuccessComment.creator!.nickname),
       ));
+
     }
     setState(ViewState.NONE);
   }
+
+  updateCommentCount(int updatedCommentCount){
+    _funList[_currentSelectedFanId!].setCommentCount = updatedCommentCount;
+    setState(ViewState.COMPLETE);
+  }
+
 }

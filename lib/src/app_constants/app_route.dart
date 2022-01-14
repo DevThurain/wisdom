@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/app_constants/screen_arguments.dart';
 import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
-import 'package:wisdom/src/data_source/shared_pref/share_pref_helper.dart';
 import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
 import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_detail_screen.dart';
@@ -36,8 +35,9 @@ class AppRoute {
             return const IntroScreen();
 
           case FunDetailScreen.routeName:
-            return FunDetailScreen(routeSettings.arguments as FunItem);
-
+            {
+              return FunDetailScreen(routeSettings.arguments as FunItem);
+            }
           case AddPostScreen.routeName:
             return const AddPostScreen();
 

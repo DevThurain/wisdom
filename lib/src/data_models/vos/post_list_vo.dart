@@ -207,6 +207,11 @@ class FunItem {
   String? _post;
   String? _date;
   int? _commentCount;
+
+  set setCommentCount(int value) {
+    _commentCount = value;
+  }
+
   String? _createdAt;
   Creator? _creator;
 
