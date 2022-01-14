@@ -271,8 +271,8 @@ class CommentCreator {
       String? code, 
       String? deviceId, 
       String? type, 
-      bool? ban, 
-      dynamic bannedBy, 
+      bool? ban,
+    dynamic bannedBy,
       dynamic deletedBy, 
       dynamic deletedAt, 
       String? createdAt, 
@@ -288,6 +288,7 @@ class CommentCreator {
     _deletedAt = deletedAt;
     _createdAt = createdAt;
     _updatedAt = updatedAt;
+    _profileAssetsUrl = TempProfileGenerator.getTempProfileUrl(_id);
 }
 
   CommentCreator.fromJson(dynamic json) {
@@ -303,7 +304,7 @@ class CommentCreator {
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
     _updatedAt = json['updated_at'];
-    _profileAssetsUrl = profileAssetsUrlList["$_id".length - 1];
+    _profileAssetsUrl = TempProfileGenerator.getTempProfileUrl(_id);
   }
   int? _id;
   String? _nickname;

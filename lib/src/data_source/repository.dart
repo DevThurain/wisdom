@@ -8,6 +8,7 @@ import 'package:wisdom/src/data_models/response/response_login_vo.dart';
 import 'package:wisdom/src/data_models/response/response_register_vo.dart';
 import 'package:wisdom/src/data_models/response/response_success_vo.dart';
 import 'package:wisdom/src/data_models/vos/app_version_vo.dart';
+import 'package:wisdom/src/data_models/vos/comment_response_vo.dart';
 import 'package:wisdom/src/data_models/vos/fun_detail_vo.dart';
 import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
 
@@ -25,4 +26,5 @@ abstract class Repository {
   Future<ResponseSuccessVO> logoutUser();
   Future<PostListVo> getFunList();
   Future<FunDetailVo> getCommentListById(int postId);
+  Future<CommentResponseVo> sendComment(int postId, String commentData);
 }

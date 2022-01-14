@@ -120,6 +120,22 @@ class _WisdomAPI implements WisdomAPI {
     return value;
   }
 
+  @override
+  Future<CommentResponseVo> commentFunDetail(postId, commentText) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'comment': commentText};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CommentResponseVo>(
+            Options(method: 'POST', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/wisdom/comment/${postId}',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = CommentResponseVo.fromJson(_result.data!);
+    return value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

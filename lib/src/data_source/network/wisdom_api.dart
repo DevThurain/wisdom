@@ -5,6 +5,7 @@ import 'package:wisdom/src/data_models/response/response_login_vo.dart';
 import 'package:wisdom/src/data_models/response/response_register_vo.dart';
 import 'package:wisdom/src/data_models/response/response_success_vo.dart';
 import 'package:wisdom/src/data_models/vos/app_version_vo.dart';
+import 'package:wisdom/src/data_models/vos/comment_response_vo.dart';
 import 'package:wisdom/src/data_models/vos/fun_detail_vo.dart';
 import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
 
@@ -41,4 +42,10 @@ abstract class WisdomAPI {
     @Path("postId") int postId,
     @Query("detail") bool isDetail,
   );
+
+  @POST("/wisdom/comment/{postId}")
+  Future<CommentResponseVo> commentFunDetail(
+      @Path("postId") int postId,
+      @Query("comment") String commentText,
+      );
 }

@@ -6,11 +6,12 @@ import 'package:wisdom/src/app_utils/user_profile_generator.dart';
 
 class PostListVo {
   PostListVo({
-      List<FunItem>? data,
-      Meta? meta,}){
+    List<FunItem>? data,
+    Meta? meta,
+  }) {
     _data = data;
     _meta = meta;
-}
+  }
 
   PostListVo.fromJson(dynamic json) {
     if (json['data'] != null) {
@@ -21,10 +22,12 @@ class PostListVo {
     }
     _meta = json['meta'] != null ? Meta.fromJson(json['meta']) : null;
   }
+
   List<FunItem>? _data;
   Meta? _meta;
 
   List<FunItem>? get funList => _data;
+
   Meta? get meta => _meta;
 
   Map<String, dynamic> toJson() {
@@ -37,7 +40,6 @@ class PostListVo {
     }
     return map;
   }
-
 }
 
 /// current_page : 1
@@ -51,14 +53,15 @@ class PostListVo {
 
 class Meta {
   Meta({
-      int? currentPage, 
-      int? from, 
-      int? lastPage, 
-      List<Links>? links, 
-      String? path, 
-      int? perPage, 
-      int? to, 
-      int? total,}){
+    int? currentPage,
+    int? from,
+    int? lastPage,
+    List<Links>? links,
+    String? path,
+    int? perPage,
+    int? to,
+    int? total,
+  }) {
     _currentPage = currentPage;
     _from = from;
     _lastPage = lastPage;
@@ -67,7 +70,7 @@ class Meta {
     _perPage = perPage;
     _to = to;
     _total = total;
-}
+  }
 
   Meta.fromJson(dynamic json) {
     _currentPage = json['current_page'];
@@ -84,6 +87,7 @@ class Meta {
     _to = json['to'];
     _total = json['total'];
   }
+
   int? _currentPage;
   int? _from;
   int? _lastPage;
@@ -94,12 +98,19 @@ class Meta {
   int? _total;
 
   int? get currentPage => _currentPage;
+
   int? get from => _from;
+
   int? get lastPage => _lastPage;
+
   List<Links>? get links => _links;
+
   String? get path => _path;
+
   int? get perPage => _perPage;
+
   int? get to => _to;
+
   int? get total => _total;
 
   Map<String, dynamic> toJson() {
@@ -116,7 +127,6 @@ class Meta {
     map['total'] = _total;
     return map;
   }
-
 }
 
 /// url : null
@@ -125,25 +135,29 @@ class Meta {
 
 class Links {
   Links({
-      dynamic url, 
-      String? label, 
-      bool? active,}){
+    dynamic url,
+    String? label,
+    bool? active,
+  }) {
     _url = url;
     _label = label;
     _active = active;
-}
+  }
 
   Links.fromJson(dynamic json) {
     _url = json['url'];
     _label = json['label'];
     _active = json['active'];
   }
+
   dynamic _url;
   String? _label;
   bool? _active;
 
   dynamic get url => _url;
+
   String? get label => _label;
+
   bool? get active => _active;
 
   Map<String, dynamic> toJson() {
@@ -153,7 +167,6 @@ class Links {
     map['active'] = _active;
     return map;
   }
-
 }
 
 /// id : 4
@@ -165,20 +178,20 @@ class Links {
 
 class FunItem {
   FunItem({
-      int? id, 
-      String? post, 
-      String? date, 
-      int? commentCount, 
-      String? createdAt, 
-      Creator? creator,}){
+    int? id,
+    String? post,
+    String? date,
+    int? commentCount,
+    String? createdAt,
+    Creator? creator,
+  }) {
     _id = id;
     _post = post;
     _date = date;
     _commentCount = commentCount;
     _createdAt = createdAt;
     _creator = creator;
-
-}
+  }
 
   FunItem.fromJson(dynamic json) {
     _id = json['id'];
@@ -186,9 +199,10 @@ class FunItem {
     _date = json['date'];
     _commentCount = json['comment_count'];
     _createdAt = json['created_at'];
-    _creator = json['creator'] != null ? Creator.fromJson(json['creator']) : null;
-
+    _creator =
+        json['creator'] != null ? Creator.fromJson(json['creator']) : null;
   }
+
   int? _id;
   String? _post;
   String? _date;
@@ -197,10 +211,15 @@ class FunItem {
   Creator? _creator;
 
   int? get id => _id;
+
   String? get post => _post;
+
   String? get date => _date;
+
   int? get commentCount => _commentCount;
+
   String? get createdAt => _createdAt;
+
   Creator? get creator => _creator;
 
   Map<String, dynamic> toJson() {
@@ -215,7 +234,6 @@ class FunItem {
     }
     return map;
   }
-
 }
 
 /// id : 1
@@ -232,17 +250,18 @@ class FunItem {
 
 class Creator {
   Creator({
-      int? id, 
-      String? nickname, 
-      String? code, 
-      String? deviceId, 
-      String? type, 
-      bool? ban, 
-      dynamic bannedBy, 
-      dynamic deletedBy, 
-      dynamic deletedAt, 
-      String? createdAt, 
-      String? updatedAt,}){
+    int? id,
+    String? nickname,
+    String? code,
+    String? deviceId,
+    String? type,
+    bool? ban,
+    dynamic bannedBy,
+    dynamic deletedBy,
+    dynamic deletedAt,
+    String? createdAt,
+    String? updatedAt,
+  }) {
     _id = id;
     _nickname = nickname;
     _code = code;
@@ -254,7 +273,7 @@ class Creator {
     _deletedAt = deletedAt;
     _createdAt = createdAt;
     _updatedAt = updatedAt;
-}
+  }
 
   Creator.fromJson(dynamic json) {
     _id = json['id'];
@@ -268,9 +287,9 @@ class Creator {
     _deletedAt = json['deleted_at'];
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
-    _profileAssetsUrl = profileAssetsUrlList["$_id".length - 1];
-
+    _profileAssetsUrl = TempProfileGenerator.getTempProfileUrl(_id);
   }
+
   int? _id;
   String? _nickname;
   String? _code;
@@ -285,17 +304,29 @@ class Creator {
   String? _profileAssetsUrl;
 
   int? get id => _id;
+
   String? get nickname => _nickname;
+
   String? get code => _code;
+
   String? get deviceId => _deviceId;
+
   String? get type => _type;
+
   bool? get ban => _ban;
+
   dynamic get bannedBy => _bannedBy;
+
   dynamic get deletedBy => _deletedBy;
+
   dynamic get deletedAt => _deletedAt;
+
   String? get createdAt => _createdAt;
+
   String? get updatedAt => _updatedAt;
-  String get profileAssetsUrl => _profileAssetsUrl ?? "assets/images/user_profile/ic_age_bulk.jpeg";
+
+  String get profileAssetsUrl =>
+      _profileAssetsUrl ?? "assets/images/user_profile/ic_age_bulk.jpeg";
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -312,5 +343,4 @@ class Creator {
     map['updated_at'] = _updatedAt;
     return map;
   }
-
 }

@@ -10,4 +10,13 @@ const List<String> profileAssetsUrlList = [
   "assets/images/tom.png",
   "assets/images/snow_man.png",
 ];
-  
+
+class TempProfileGenerator {
+  static String getTempProfileUrl(int? userId) {
+    try {
+      return profileAssetsUrlList[int.parse("$userId".split("").last)];
+    } catch (e) {
+      return profileAssetsUrlList[8];
+    }
+  }
+}

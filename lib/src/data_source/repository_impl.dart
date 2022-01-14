@@ -17,6 +17,7 @@ import 'package:wisdom/src/data_models/response/response_login_vo.dart';
 import 'package:wisdom/src/data_models/response/response_register_vo.dart';
 import 'package:wisdom/src/data_models/response/response_success_vo.dart';
 import 'package:wisdom/src/data_models/vos/app_version_vo.dart';
+import 'package:wisdom/src/data_models/vos/comment_response_vo.dart';
 import 'package:wisdom/src/data_models/vos/fun_detail_vo.dart';
 import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
 import 'package:wisdom/src/data_source/network/wisdom_api.dart';
@@ -141,6 +142,11 @@ class RepositoryImpl implements Repository {
   @override
   Future<ResponseSuccessVO> logoutUser() {
     return mApi.logoutUser();
+  }
+
+  @override
+  Future<CommentResponseVo> sendComment(int postId, String commentData) {
+     return mApi.commentFunDetail(postId, commentData);
   }
 }
 

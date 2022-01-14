@@ -1,5 +1,8 @@
+import 'package:dio/dio.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wisdom/src/app_utils/base_view_model.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/data_models/vos/comment_response_vo.dart';
 import 'package:wisdom/src/data_models/vos/fun_detail_vo.dart';
 import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
 import 'package:wisdom/src/data_source/repository_impl.dart';
@@ -8,6 +11,7 @@ class FunProvider extends BaseViewModel {
   final _repository = locator<RepositoryImpl>();
   final List<FunItem> _funList = <FunItem>[];
   final List<Comments> _commentList = <Comments>[];
+  final int _commentCount = 0;
 
   List<FunItem>? get funList => _funList;
 
@@ -15,7 +19,7 @@ class FunProvider extends BaseViewModel {
 
   Future<void> getFunList({int? currentPage = 1}) async {
     try {
-      if (await handleConnectionView(isReplaceView : _funList.isEmpty)) {
+      if (await handleConnectionView(isReplaceView: _funList.isEmpty)) {
         return;
       }
       if (currentPage == 1) {
@@ -41,13 +45,44 @@ class FunProvider extends BaseViewModel {
         return;
       }
       FunDetailVo funDetailVo = FunDetailVo();
-      await _repository.getCommentListById(postId!).then((value) => funDetailVo = value);
+      await _repository
+          .getCommentListById(postId!)
+          .then((value) => funDetailVo = value);
 
-      _commentList.addAll(funDetailVo.data!.comments ??[]);
+      _commentList.addAll(funDetailVo.data!.comments ?? []);
       setState(ViewState.COMPLETE);
     } catch (_) {
       await handleErrorView(_commentList.isEmpty);
       rethrow;
     }
+  }
+
+  Future<void> addComment(int postId, String commentData) async {
+    CommentResponseVo _postCommentResponse = CommentResponseVo();
+
+    await _repository.sendComment(postId, commentData).then((value) {
+      _postCommentResponse = value;
+    }).onError((error, stackTrace) {
+      final res = (error as DioError).response;
+      Fluttertoast.showToast(
+          msg: res?.data['message'] ?? 'Unknown Error. Please Try Later.');
+    });
+
+
+    if (_postCommentResponse.data != null) {
+      Comment _postedSuccessComment = _postCommentResponse.data!;
+
+      commentList!.add(Comments(
+        id: _postedSuccessComment.id,
+        postId: _postedSuccessComment.postId,
+        date: _postedSuccessComment.date,
+        createdAt: _postedSuccessComment.createdAt,
+        comment: _postedSuccessComment.comment,
+        creator: CommentCreator(
+            id: _postedSuccessComment.creator!.id,
+            nickname: _postedSuccessComment.creator!.nickname),
+      ));
+    }
+    setState(ViewState.NONE);
   }
 }

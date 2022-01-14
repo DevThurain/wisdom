@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
@@ -22,6 +23,7 @@ class FunDetailScreen extends StatefulWidget {
 
 class _FunDetailScreenState extends State<FunDetailScreen> {
   var funProvider = locator<FunProvider>();
+  TextEditingController commentBoxController = TextEditingController();
 
   double get _statusBarHeight {
     return MediaQuery.of(context).padding.top;
@@ -50,7 +52,10 @@ class _FunDetailScreenState extends State<FunDetailScreen> {
                   return <Widget>[
                     PostDetailHeader(_postItem),
                     SliverToBoxAdapter(
-                      child: PostDetailSectionView(_postItem),
+                      child: PostDetailSectionView(_postItem,
+                          commentCount: funProvider.commentList!.isEmpty
+                              ? _postItem.commentCount!
+                              : funProvider.commentList!.length),
                     ),
                   ];
                 },
@@ -66,7 +71,8 @@ class _FunDetailScreenState extends State<FunDetailScreen> {
                                 .map(
                                   (comment) => CommentItemWidget(
                                     name: comment.creator!.nickname ?? "",
-                                    profileUrl: comment.creator!.profileAssetsUrl ?? "",
+                                    profileUrl:
+                                        comment.creator!.profileAssetsUrl ?? "",
                                     commentText: comment.comment ?? "",
                                     duration: comment.date ?? "",
                                   ),
@@ -108,6 +114,7 @@ class _FunDetailScreenState extends State<FunDetailScreen> {
                     children: [
                       Flexible(
                         child: TextField(
+                          controller: commentBoxController,
                           keyboardType: TextInputType.multiline,
                           maxLines: 3,
                           minLines: 1,
@@ -144,7 +151,7 @@ class _FunDetailScreenState extends State<FunDetailScreen> {
                         ),
                       ),
                       RawMaterialButton(
-                        onPressed: () {},
+                        onPressed: () => sendComment(commentBoxController),
                         constraints: BoxConstraints(),
                         elevation: 0,
                         fillColor: Colors.white,
@@ -159,10 +166,7 @@ class _FunDetailScreenState extends State<FunDetailScreen> {
                             return ui.Gradient.linear(
                               Offset(4.0, 24.0),
                               Offset(24.0, 4.0),
-                              [
-                                Colors.deepPurple,
-                                Color(0xffb7b7f5)
-                              ],
+                              [Colors.deepPurple, Color(0xffb7b7f5)],
                             );
                           },
                           child: Icon(
@@ -184,7 +188,14 @@ class _FunDetailScreenState extends State<FunDetailScreen> {
     );
   }
 
-  sendMessage() {}
+  sendComment(TextEditingController commentBoxController) {
+    if (commentBoxController.text.isEmpty) {
+      Fluttertoast.showToast(msg: "Type something in comment box.");
+    } else {
+      funProvider.addComment(_postItem.id!, commentBoxController.text);
+      commentBoxController.clear();
+    }
+  }
 }
 
 class PostDetailHeader extends StatelessWidget {
@@ -208,7 +219,7 @@ class PostDetailHeader extends StatelessWidget {
                 end: Alignment.bottomCenter,
                 colors: const [
               Color(0xffb7b7f5),
-                  Color(0xffe7e7f8),
+              Color(0xffe7e7f8),
               AppTheme.white,
             ])),
         child: Padding(
@@ -228,9 +239,11 @@ class PostDetailHeader extends StatelessWidget {
 
 class PostDetailSectionView extends StatelessWidget {
   final FunItem postItem;
+  final int? commentCount;
 
   const PostDetailSectionView(
     this.postItem, {
+    this.commentCount = 0,
     Key? key,
   }) : super(key: key);
 
@@ -269,7 +282,7 @@ class PostDetailSectionView extends StatelessWidget {
               height: AppDimen.MARGIN_MEDIUM,
             ),
             PostCommentUI(
-              commentCount: "${postItem.commentCount ?? ""} ",
+              commentCount: "$commentCount",
             ),
           ],
         ),
