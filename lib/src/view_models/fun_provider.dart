@@ -63,6 +63,9 @@ class FunProvider extends BaseViewModel {
   }
 
   Future<void> addComment(int postId, String commentData) async {
+    if (await handleConnectionView()) {
+      return;
+    }
     CommentResponseVo _postCommentResponse = CommentResponseVo();
 
     await _repository.sendComment(postId, commentData).then((value) {

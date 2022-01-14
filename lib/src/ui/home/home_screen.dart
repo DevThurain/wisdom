@@ -30,8 +30,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    homeProvider.checkAppVersion();
     super.initState();
+    checkAppUpdateVersion();
+  }
+
+  void checkAppUpdateVersion() async {
+    await homeProvider.checkAppVersion().then((value) {
+      if (!homeProvider.isAlreadyUpdated) {
+        showDialog(
+            context: context,
+            barrierDismissible: !homeProvider.isAlreadyUpdated,
+            builder: (_) {
+              homeProvider.show = false;
+              return WillPopScope(
+                onWillPop: () async => homeProvider.isAlreadyUpdated,
+                child: CustomDialogBox(
+                    title: "Update Available!",
+                    descriptions:
+                    "A new version is available for this app. You can update it from store or direct link.",
+                    isForceUpdate: homeProvider.isForceUpdate,
+                    onClickButton: () => print("update")),
+              );
+            });
+      }
+    });
   }
 
   _logoutUser() async {
@@ -44,27 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return ChangeNotifierProvider(
       create: (context) => homeProvider,
       child: Consumer<HomeProvider>(builder: (context, provider, child) {
-        //ToDo - Add "!" after testing at !provider.isAlreadyUpdated
-        if (!provider.isAlreadyUpdated && provider.show) {
-          WidgetsBinding.instance!.addPostFrameCallback((_) {
-            showDialog(
-                context: context,
-                barrierDismissible: !provider.isAlreadyUpdated,
-                builder: (_) {
-                  provider.show = false;
-                  return WillPopScope(
-                    onWillPop: () async => provider.isAlreadyUpdated,
-                    child: CustomDialogBox(
-                        title: "Update Available!",
-                        descriptions:
-                            "A new version is available for this app. You can update it from store or direct link.",
-                        isForceUpdate: provider.isForceUpdate,
-                        onClickButton: () => print("update")),
-                  );
-                });
-          });
-        }
-
         if (provider.logout) {
           _logoutUser();
         }
