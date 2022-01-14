@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
       create: (context) => homeProvider,
       child: Consumer<HomeProvider>(builder: (context, provider, child) {
         //ToDo - Add "!" after testing at !provider.isAlreadyUpdated
-        if (!provider.isAlreadyUpdated) {
+        if (provider.isAlreadyUpdated) {
           WidgetsBinding.instance!.addPostFrameCallback((_) {
             showDialog(
                 context: context,
