@@ -100,4 +100,9 @@ class FunProvider extends BaseViewModel {
     setState(ViewState.COMPLETE);
   }
 
+  updateFunList(FunItem funItem){
+    _funList.insert(0, funItem);
+    setState(ViewState.COMPLETE);
+  }
+
 }

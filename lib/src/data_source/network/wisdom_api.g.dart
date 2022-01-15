@@ -152,6 +152,38 @@ class _WisdomAPI implements WisdomAPI {
     return value;
   }
 
+  @override
+  Future<FunUploadResponse> createFunPost(content) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'post': content};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<FunUploadResponse>(
+            Options(method: 'POST', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/wisdom/post',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = FunUploadResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<KnowledgeUploadResponse> createKnowledgePost(content, link) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'note': content, r'link': link};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<KnowledgeUploadResponse>(
+            Options(method: 'POST', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/wisdom/note',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = KnowledgeUploadResponse.fromJson(_result.data!);
+    return value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

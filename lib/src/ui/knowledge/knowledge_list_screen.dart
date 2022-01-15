@@ -7,7 +7,8 @@ import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/base_view_model.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
-import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
+import 'package:wisdom/src/ui/add_post/fun_post_upload_screen.dart';
+import 'package:wisdom/src/ui/add_post/knowledge_post_upload_screen.dart';
 import 'package:wisdom/src/ui/knowledge/knowledge_detail_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
@@ -42,7 +43,7 @@ class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppTheme.dark_purple,
         onPressed: () {
-          Navigator.pushNamed(context, AddPostScreen.routeName);
+          Navigator.pushNamed(context, KnowledgePostUploadScreen.routeName);
         },
         child: SvgPicture.asset(
           'assets/svgs/quil.svg',

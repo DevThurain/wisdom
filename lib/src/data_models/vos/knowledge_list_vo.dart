@@ -171,7 +171,7 @@ class KnowledgeItem {
       String? note, 
       String? date,
       String? createdAt, 
-      Creator? creator,}){
+      KnowledgeCommentCreator? creator,}){
     _id = id;
     _note = note;
     _date = date;
@@ -184,18 +184,18 @@ class KnowledgeItem {
     _note = json['note'];
     _date = json['date'];
     _createdAt = json['created_at'];
-    _creator = json['creator'] != null ? Creator.fromJson(json['creator']) : null;
+    _creator = json['creator'] != null ? KnowledgeCommentCreator.fromJson(json['creator']) : null;
   }
   int? _id;
   String? _note;
   String? _date;
   String? _createdAt;
-  Creator? _creator;
+  KnowledgeCommentCreator? _creator;
   int? get id => _id;
   String? get note => _note;
   String? get date => _date;
   String? get createdAt => _createdAt;
-  Creator? get creator => _creator;
+  KnowledgeCommentCreator? get creator => _creator;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -211,8 +211,8 @@ class KnowledgeItem {
 
 }
 
-class Creator {
-  Creator({
+class KnowledgeCommentCreator {
+  KnowledgeCommentCreator({
       int? id, 
       String? nickname, 
       String? code, 
@@ -235,9 +235,10 @@ class Creator {
     _deletedAt = deletedAt;
     _createdAt = createdAt;
     _updatedAt = updatedAt;
-}
+    _profileAssetsUrl = TempProfileGenerator.getTempProfileUrl(_id);
+  }
 
-  Creator.fromJson(dynamic json) {
+  KnowledgeCommentCreator.fromJson(dynamic json) {
     _id = json['id'];
     _nickname = json['nickname'];
     _code = json['code'];

@@ -20,8 +20,9 @@ import 'package:wisdom/src/data_models/vos/app_version_vo.dart';
 import 'package:wisdom/src/data_models/vos/comment_response_vo.dart';
 import 'package:wisdom/src/data_models/vos/fun_detail_vo.dart';
 import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
+import 'package:wisdom/src/data_models/vos/fun_upload_response.dart';
 import 'package:wisdom/src/data_models/vos/knowledge_list_vo.dart';
-import 'package:wisdom/src/data_source/network/wisdom_api.dart';
+import 'package:wisdom/src/data_models/vos/knowledge_upload_response.dart';
 import 'package:wisdom/src/data_source/repository.dart';
 import 'package:wisdom/src/data_source/shared_pref/share_pref_helper.dart';
 import 'package:wisdom/src/data_source/source/api_source.dart';
@@ -121,6 +122,18 @@ class RepositoryImpl implements Repository {
   Future<KnowledgeListVo> getKnowledgeList() {
     String token = _pref.getToken();
     return _mSource.privateApi(token).getKnowledgeList();
+  }
+
+  @override
+  Future<FunUploadResponse> funPostUpload(String content) {
+    String token = _pref.getToken();
+    return _mSource.privateApi(token).createFunPost(content);
+  }
+
+  @override
+  Future<KnowledgeUploadResponse> knowledgePostUpload(String content, {String link = ""}) {
+    String token = _pref.getToken();
+    return _mSource.privateApi(token).createKnowledgePost(content, link);
   }
 
 

@@ -183,7 +183,7 @@ class FunItem {
     String? date,
     int? commentCount,
     String? createdAt,
-    Creator? creator,
+    FunCommentCreator? creator,
   }) {
     _id = id;
     _post = post;
@@ -200,7 +200,7 @@ class FunItem {
     _commentCount = json['comment_count'];
     _createdAt = json['created_at'];
     _creator =
-        json['creator'] != null ? Creator.fromJson(json['creator']) : null;
+        json['creator'] != null ? FunCommentCreator.fromJson(json['creator']) : null;
   }
 
   int? _id;
@@ -213,7 +213,7 @@ class FunItem {
   }
 
   String? _createdAt;
-  Creator? _creator;
+  FunCommentCreator? _creator;
 
   int? get id => _id;
 
@@ -225,7 +225,7 @@ class FunItem {
 
   String? get createdAt => _createdAt;
 
-  Creator? get creator => _creator;
+  FunCommentCreator? get creator => _creator;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -253,8 +253,8 @@ class FunItem {
 /// created_at : "2022-01-09T03:01:37.000000Z"
 /// updated_at : "2022-01-09T03:01:37.000000Z"
 
-class Creator {
-  Creator({
+class FunCommentCreator {
+  FunCommentCreator({
     int? id,
     String? nickname,
     String? code,
@@ -278,9 +278,10 @@ class Creator {
     _deletedAt = deletedAt;
     _createdAt = createdAt;
     _updatedAt = updatedAt;
+    _profileAssetsUrl = TempProfileGenerator.getTempProfileUrl(_id);
   }
 
-  Creator.fromJson(dynamic json) {
+  FunCommentCreator.fromJson(dynamic json) {
     _id = json['id'];
     _nickname = json['nickname'];
     _code = json['code'];

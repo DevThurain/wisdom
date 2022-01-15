@@ -6,6 +6,7 @@ import 'package:wisdom/src/view_models/auth_provider.dart';
 import 'package:wisdom/src/view_models/fun_provider.dart';
 import 'package:wisdom/src/view_models/home_provider.dart';
 import 'package:wisdom/src/view_models/knowledge_provider.dart';
+import 'package:wisdom/src/view_models/post_upload_provider.dart';
 
 GetIt locator = GetIt.instance;
 
@@ -14,7 +15,8 @@ Future setupLocator() async {
       locator.registerLazySingleton(() => SharedPreferenceHelper(value)));
   locator.registerLazySingleton(() => RepositoryImpl());
   locator.registerFactory(() => HomeProvider());
-  locator.registerLazySingleton(() => KnowledgeProvider());
+  locator.registerFactory(() => KnowledgeProvider());
   locator.registerFactory(() => FunProvider());
   locator.registerFactory(() => AuthProvider());
+  locator.registerFactory(() => PostUploadProvider());
 }

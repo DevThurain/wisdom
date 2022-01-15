@@ -11,7 +11,9 @@ import 'package:wisdom/src/data_models/vos/app_version_vo.dart';
 import 'package:wisdom/src/data_models/vos/comment_response_vo.dart';
 import 'package:wisdom/src/data_models/vos/fun_detail_vo.dart';
 import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
+import 'package:wisdom/src/data_models/vos/fun_upload_response.dart';
 import 'package:wisdom/src/data_models/vos/knowledge_list_vo.dart';
+import 'package:wisdom/src/data_models/vos/knowledge_upload_response.dart';
 
 abstract class Repository {
   //Sample Local
@@ -29,4 +31,6 @@ abstract class Repository {
   Future<FunDetailVo> getCommentListById(int postId);
   Future<CommentResponseVo> sendComment(int postId, String commentData);
   Future<KnowledgeListVo> getKnowledgeList();
+  Future<FunUploadResponse> funPostUpload(String content);
+  Future<KnowledgeUploadResponse> knowledgePostUpload(String content, {String link = ""});
 }

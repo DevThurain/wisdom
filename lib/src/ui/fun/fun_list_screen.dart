@@ -7,7 +7,8 @@ import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/base_view_model.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
-import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
+import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
+import 'package:wisdom/src/ui/add_post/fun_post_upload_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_detail_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
@@ -43,8 +44,12 @@ class _FunListScreenState extends State<FunListScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppTheme.dark_purple,
-        onPressed: () {
-          Navigator.pushNamed(context, AddPostScreen.routeName);
+        onPressed: () async {
+          FunItem funItem =
+              await Navigator.pushNamed(context, FunPostUploadScreen.routeName)
+                  as FunItem;
+          funProvider
+              .updateFunList(funItem);
         },
         child: SvgPicture.asset(
           'assets/svgs/quil.svg',
