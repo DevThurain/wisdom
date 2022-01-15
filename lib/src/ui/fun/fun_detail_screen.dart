@@ -6,13 +6,13 @@ import 'package:provider/provider.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
-import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
+import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
 import 'package:wisdom/src/ui/widgets/widget_comment_item.dart';
 import 'package:wisdom/src/view_models/fun_provider.dart';
 
 class FunDetailScreen extends StatefulWidget {
-  static const routeName = '/post_detail_screen';
+  static const routeName = '/fun_detail_screen';
   final FunItem funItem;
 
   const FunDetailScreen(this.funItem, {Key? key}) : super(key: key);

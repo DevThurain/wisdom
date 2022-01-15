@@ -4,7 +4,7 @@ import 'package:wisdom/src/app_utils/base_view_model.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/data_models/vos/comment_response_vo.dart';
 import 'package:wisdom/src/data_models/vos/fun_detail_vo.dart';
-import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
+import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
 import 'package:wisdom/src/data_source/repository_impl.dart';
 
 class FunProvider extends BaseViewModel {

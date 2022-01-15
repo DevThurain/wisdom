@@ -36,7 +36,7 @@ class AuthProvider extends BaseViewModel {
       setState(ViewState.LOADING);
       _repository.registerUser(request).then((response) {
         setState(ViewState.COMPLETE);
-        saveUser(response.token.toString(), response.user?.nickname ?? '');
+        saveUser(response.user!.id!,response.token.toString(), response.user?.nickname ?? '');
       }).onError((error, stackTrace) {
         final res = (error as DioError).response;
         errorCode = res?.statusCode.toString() ?? '';
@@ -60,7 +60,7 @@ class AuthProvider extends BaseViewModel {
       setState(ViewState.LOADING);
       _repository.loginUser(request).then((response) {
         setState(ViewState.COMPLETE);
-        saveUser(response.token.toString(), response.user?.nickname ?? '');
+        saveUser(response.user!.id! ,response.token.toString(), response.user?.nickname ?? '');
       }).onError((error, stackTrace) {
         final res = (error as DioError).response;
         errorCode = res?.statusCode.toString() ?? '';
@@ -72,8 +72,9 @@ class AuthProvider extends BaseViewModel {
     }
   }
 
-  void saveUser(String token, String nickName) async {
+  void saveUser(int userId, String token, String nickName) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setInt('PREF_USER_ID', userId);
     pref.setString('PREF_TOKEN', token);
     pref.setString('PREF_NAME', nickName);
   }

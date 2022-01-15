@@ -89,18 +89,18 @@ class _WisdomAPI implements WisdomAPI {
   }
 
   @override
-  Future<PostListVo> getFunList() async {
+  Future<FunListVo> getFunList() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<PostListVo>(
+        _setStreamType<FunListVo>(
             Options(method: 'GET', headers: _headers, extra: _extra)
                 .compose(_dio.options, '/wisdom/posts',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = PostListVo.fromJson(_result.data!);
+    final value = FunListVo.fromJson(_result.data!);
     return value;
   }
 
@@ -133,6 +133,22 @@ class _WisdomAPI implements WisdomAPI {
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = CommentResponseVo.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<KnowledgeListVo> getKnowledgeList() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<KnowledgeListVo>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/wisdom/notes',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = KnowledgeListVo.fromJson(_result.data!);
     return value;
   }
 

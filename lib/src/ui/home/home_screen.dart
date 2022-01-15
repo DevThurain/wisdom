@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/dialog_utils.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/app_utils/user_profile_generator.dart';
 import 'package:wisdom/src/data_source/shared_pref/share_pref_helper.dart';
 import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
 import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_list_screen.dart';
-import 'package:wisdom/src/ui/knowledge/knowledge_screen.dart';
+import 'package:wisdom/src/ui/knowledge/knowledge_list_screen.dart';
 import 'package:wisdom/src/ui/profile/profile_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/top_gradient.dart';
@@ -33,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     checkAppUpdateVersion();
+    homeProvider.getUserProfile();
   }
 
   void checkAppUpdateVersion() {
@@ -73,17 +76,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return Scaffold(
           backgroundColor: AppTheme.white,
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: AppTheme.dark_purple,
-            onPressed: () {
-              Navigator.pushNamed(context, AddPostScreen.routeName);
-            },
-            child: SvgPicture.asset(
-              'assets/svgs/quil.svg',
-              width: 28,
-              color: AppTheme.white,
-            ),
-          ),
           body: Stack(
             children: [
               TopGradient(),
@@ -119,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           title: 'Knowledge',
                           color: AppTheme.dark_purple,
                           onTap: () {
-                            Navigator.pushNamed(context, KnowledgeScreen.routeName);
+                            Navigator.pushNamed(context, KnowledgeListScreen.routeName);
                           },
                         ),
                         SizedBox(height: 20),
@@ -154,34 +146,43 @@ class ProfileSectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        GestureDetector(
-          onTap: () {
-            onTap();
-          },
-          child: Text(
-            AppLocalizations.of(context)!.home_logout,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: AppTheme.dark_purple,
-              fontSize: AppDimen.TEXT_REGULAR,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.normal,
+    return Consumer<HomeProvider>(builder: (context, provider, child) {
+       return Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          GestureDetector(
+            onTap: () {
+              onTap();
+            },
+            child: Text(
+              AppLocalizations.of(context)!.home_logout,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: AppTheme.dark_purple,
+                fontSize: AppDimen.TEXT_REGULAR,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.normal,
+              ),
             ),
           ),
-        ),
-        SizedBox(width: AppDimen.MARGIN_MEDIUM_3),
-        InkWell(
-          onTap: () => Navigator.pushNamed(context, ProfileScreen.routeName),
-          child: CircularPersonFace(
-            width: 20,
-            imgPath: 'assets/images/girl_light.png',
-          ),
-        )
-      ],
-    );
+          SizedBox(width: AppDimen.MARGIN_MEDIUM_3),
+          InkWell(
+            onTap: () => Navigator.pushNamed(context, ProfileScreen.routeName),
+            child: CircularPersonFace(
+              width: 20,
+              imgPath: provider.userProfile
+            ),
+          )
+        ],
+      );
+  });
+  }
+
+  Future<String> getUserProfile() async {
+  int userId =  await SharedPreferences.getInstance()
+        .then((_pref) => _pref.getInt('PREF_USER_ID')!);
+
+    return TempProfileGenerator.getTempProfileUrl(userId);
   }
 }
 

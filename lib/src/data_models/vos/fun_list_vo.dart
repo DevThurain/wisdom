@@ -4,8 +4,8 @@ import 'package:wisdom/src/app_utils/user_profile_generator.dart';
 /// links : {"first":"http://adsmob.test/mobile/wisdom/posts?page=1","last":"http://adsmob.test/mobile/wisdom/posts?page=1","prev":null,"next":null}
 /// meta : {"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"http://adsmob.test/mobile/wisdom/posts?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"http://adsmob.test/mobile/wisdom/posts","per_page":15,"to":4,"total":4}
 
-class PostListVo {
-  PostListVo({
+class FunListVo {
+  FunListVo({
     List<FunItem>? data,
     Meta? meta,
   }) {
@@ -13,7 +13,7 @@ class PostListVo {
     _meta = meta;
   }
 
-  PostListVo.fromJson(dynamic json) {
+  FunListVo.fromJson(dynamic json) {
     if (json['data'] != null) {
       _data = [];
       json['data'].forEach((v) {

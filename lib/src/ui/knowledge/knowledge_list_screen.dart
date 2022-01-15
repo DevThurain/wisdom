@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:loading_indicator/loading_indicator.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
@@ -9,32 +8,31 @@ import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/base_view_model.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
-import 'package:wisdom/src/ui/fun/fun_detail_screen.dart';
+import 'package:wisdom/src/ui/knowledge/knowledge_detail_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
-import 'package:wisdom/src/ui/widgets/top_gradient.dart';
 import 'package:wisdom/src/ui/widgets/widget_footer_text.dart';
-import 'package:wisdom/src/view_models/fun_provider.dart';
+import 'package:wisdom/src/view_models/knowledge_provider.dart';
 
-class FunListScreen extends StatefulWidget {
-  static const routeName = '/fun_list_screen';
+class KnowledgeListScreen extends StatefulWidget {
+  static const routeName = '/knowledge_list_screen';
 
-  const FunListScreen({Key? key}) : super(key: key);
+  const KnowledgeListScreen({Key? key}) : super(key: key);
 
   @override
-  _FunListScreenState createState() => _FunListScreenState();
+  _KnowledgeListScreenState createState() => _KnowledgeListScreenState();
 }
 
-class _FunListScreenState extends State<FunListScreen> {
-  //late ScrollController _scrollController;
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   bool expanded = false;
-  var funProvider = locator<FunProvider>();
+  var knowledgeProvider = locator<KnowledgeProvider>();
 
   @override
   void initState() {
-    funProvider.getFunList();
+    knowledgeProvider.getKnowledgeList();
     super.initState();
   }
 
@@ -53,8 +51,8 @@ class _FunListScreenState extends State<FunListScreen> {
         ),
       ),
       body: ChangeNotifierProvider(
-        create: (context) => funProvider,
-        child: Consumer<FunProvider>(builder: (context, provider, child) {
+        create: (context) => knowledgeProvider,
+        child: Consumer<KnowledgeProvider>(builder: (context, provider, child) {
           if (_refreshController.isLoading) _refreshController.loadComplete();
           if (_refreshController.isRefresh) {
             _refreshController.refreshCompleted();
@@ -81,62 +79,57 @@ class _FunListScreenState extends State<FunListScreen> {
       automaticallyImplyLeading: false,
       elevation: 0,
       pinned: true,
-      flexibleSpace: Stack(
-        children: [
-          TopGradient(),
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            padding: EdgeInsets.only(
-                right: AppDimen.MARGIN_CARD_MEDIUM_2,
-                left: AppDimen.MARGIN_CARD_MEDIUM_2,
-                top: MediaQuery.of(context).padding.top),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    // Visibility(
-                    //   //visible: !_isAppBarExpanded,
-                    //   child: Text(
-                    //     'Friday, January 16th',
-                    //     textAlign: TextAlign.center,
-                    //     style: TextStyle(
-                    //         color: Color(0xffAFAFBD),
-                    //         fontSize: AppDimen.TEXT_REGULAR,
-                    //         fontFamily: 'Poppins',
-                    //         fontWeight: FontWeight.normal),
-                    //   ),
-                    // ),
-                    Text(
-                      'Fun feed',
+      flexibleSpace: SafeArea(
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          padding:
+              EdgeInsets.symmetric(horizontal: AppDimen.MARGIN_CARD_MEDIUM_2),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Visibility(
+                    //visible: !_isAppBarExpanded,
+                    child: Text(
+                      'Friday, January 16th',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: AppTheme.dark_purple,
-                          fontSize: AppDimen.TEXT_REGULAR_3X,
+                          color: Color(0xffAFAFBD),
+                          fontSize: AppDimen.TEXT_REGULAR,
                           fontFamily: 'Poppins',
-                          letterSpacing: 1,
-                          fontWeight: FontWeight.bold),
+                          fontWeight: FontWeight.normal),
                     ),
-                  ],
-                ),
-                CircularPersonFace(
-                  width: 20,
-                  imgPath: 'assets/images/girl_light.png',
-                ),
-              ],
-            ),
+                  ),
+                  Text(
+                    'Knowledge feed',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: AppTheme.dark_purple,
+                        fontSize: AppDimen.TEXT_REGULAR_3X,
+                        fontFamily: 'Poppins',
+                        letterSpacing: 1,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              CircularPersonFace(
+                width: 20,
+                imgPath: 'assets/images/girl_light.png',
+              ),
+            ],
           ),
-        ],
+        ),
       ),
       backgroundColor: AppTheme.white,
     );
   }
 
-  handlingWidget(FunProvider provider) {
-    if (funProvider.state == ViewState.COMPLETE) {
+  handlingWidget(KnowledgeProvider provider) {
+    if (knowledgeProvider.state == ViewState.COMPLETE) {
       return SmartRefresher(
         controller: _refreshController,
         enablePullUp: true,
@@ -187,46 +180,35 @@ class _FunListScreenState extends State<FunListScreen> {
           },
         ),
         onRefresh: () => {
-          funProvider.getFunList(currentPage: 1),
+          knowledgeProvider.getKnowledgeList(currentPage: 1),
         },
         onLoading: () => {
-          funProvider.getFunList(currentPage: 2),
+          knowledgeProvider.getKnowledgeList(currentPage: 2),
         },
-        child: provider.funList!.isNotEmpty
+        child: provider.knowledgeList!.isNotEmpty
             ? CustomScrollView(
                 slivers: [
                   SliverList(
                     delegate: SliverChildListDelegate(
-                      provider.funList!
+                      provider.knowledgeList!
                           .asMap()
                           .map((index, item) => MapEntry(
                               index,
                               DesignedPostCard(
-                                title: item.post.toString(),
+                                title: item.note.toString(),
                                 profileUrl: item.creator!.profileAssetsUrl,
                                 name: item.creator!.nickname ?? "",
                                 duration: item.date ?? "",
-                                commentCount: item.commentCount == null
-                                    ? "No comment"
-                                    : item.commentCount.toString(),
                                 color: AppTheme.dark_purple,
-                                onTap: () async {
-                                  funProvider.currentSelectedFanId = index;
-
-                                  int updatedCommentCount =
-                                      await Navigator.pushNamed(
+                                onTap: () {
+                                  Navigator.pushNamed(
                                     context,
-                                    FunDetailScreen.routeName,
+                                    KnowledgeDetailScreen.routeName,
                                     arguments: item,
-                                  ) as int;
-
-
-                                  funProvider
-                                      .updateCommentCount(updatedCommentCount);
+                                  );
                                 },
-                              ),
-                            ),
-                          )
+                                commentCount: 'remove',
+                              )))
                           .values
                           .toList(),
                     ),
@@ -236,33 +218,24 @@ class _FunListScreenState extends State<FunListScreen> {
             : Center(
                 child: Container(
                   color: Colors.green,
-                  child: Text("There is No Fun Feeds"),
+                  child: Text("There is No Knowledge Feeds"),
                 ),
               ),
       );
-    } else if (funProvider.state == ViewState.LOADING) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Lottie.asset('assets/jsons/line_loading.json', width: 110),
-          Text('Loading Posts',style: TextStyle(color: AppTheme.dark_purple,fontFamily: 'Poppins'),)
-        ],
+    } else if (knowledgeProvider.state == ViewState.LOADING) {
+      return Container(
+        color: Colors.amber,
+        child: Text("Loading"),
       );
-    } else if (funProvider.state == ViewState.NO_INTERNET) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Lottie.asset('assets/jsons/no_internet.json', width: 110),
-          Text('No Internet Connection!',style: TextStyle(color: AppTheme.dark_purple,fontFamily: 'Poppins'),)
-        ],
+    } else if (knowledgeProvider.state == ViewState.NO_INTERNET) {
+      return Container(
+        color: Colors.brown,
+        child: Text("No Internet"),
       );
     } else {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Lottie.asset('assets/jsons/app_error.json',width: 110),
-          Text('Unknown Error',style: TextStyle(color: AppTheme.dark_purple,fontFamily: 'Poppins'),)
-        ],
+      return Container(
+        color: Colors.red,
+        child: Text("Error"),
       );
     }
   }

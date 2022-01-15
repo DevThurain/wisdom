@@ -19,7 +19,8 @@ import 'package:wisdom/src/data_models/response/response_success_vo.dart';
 import 'package:wisdom/src/data_models/vos/app_version_vo.dart';
 import 'package:wisdom/src/data_models/vos/comment_response_vo.dart';
 import 'package:wisdom/src/data_models/vos/fun_detail_vo.dart';
-import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
+import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
+import 'package:wisdom/src/data_models/vos/knowledge_list_vo.dart';
 import 'package:wisdom/src/data_source/network/wisdom_api.dart';
 import 'package:wisdom/src/data_source/repository.dart';
 import 'package:wisdom/src/data_source/shared_pref/share_pref_helper.dart';
@@ -27,7 +28,7 @@ import 'package:wisdom/src/data_source/source/api_source.dart';
 
 class RepositoryImpl implements Repository {
   late ApiSource _mSource;
-  late SharedPreferenceHelper _pref = locator<SharedPreferenceHelper>();
+  late final SharedPreferenceHelper _pref = locator<SharedPreferenceHelper>();
 
   static final RepositoryImpl _singleton = RepositoryImpl.internal();
 
@@ -93,7 +94,7 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Future<PostListVo> getFunList() {
+  Future<FunListVo> getFunList() {
     String token = _pref.getToken();
     return _mSource.privateApi(token).getFunList();
   }
@@ -115,6 +116,14 @@ class RepositoryImpl implements Repository {
     String token = _pref.getToken();
     return _mSource.privateApi(token).commentFunDetail(postId, commentData);
   }
+
+  @override
+  Future<KnowledgeListVo> getKnowledgeList() {
+    String token = _pref.getToken();
+    return _mSource.privateApi(token).getKnowledgeList();
+  }
+
+
 }
 
 // Future<bool> checkTokenStored() async {
