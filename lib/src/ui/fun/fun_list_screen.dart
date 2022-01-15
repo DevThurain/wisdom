@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
@@ -222,19 +223,28 @@ class _FunListScreenState extends State<FunListScreen> {
               ),
       );
     } else if (funProvider.state == ViewState.LOADING) {
-      return Container(
-        color: Colors.amber,
-        child: Text("Loading"),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/jsons/line_loading.json', width: 110),
+          Text('Loading Posts',style: TextStyle(color: AppTheme.dark_purple,fontFamily: 'Poppins'),)
+        ],
       );
     } else if (funProvider.state == ViewState.NO_INTERNET) {
-      return Container(
-        color: Colors.brown,
-        child: Text("No Internet"),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/jsons/no_internet.json', width: 110),
+          Text('No Internet Connection!',style: TextStyle(color: AppTheme.dark_purple,fontFamily: 'Poppins'),)
+        ],
       );
     } else {
-      return Container(
-        color: Colors.red,
-        child: Text("Error"),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/jsons/app_error.json',width: 110),
+          Text('Unknown Error',style: TextStyle(color: AppTheme.dark_purple,fontFamily: 'Poppins'),)
+        ],
       );
     }
   }
