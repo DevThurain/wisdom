@@ -22,7 +22,7 @@ class AuthProvider extends BaseViewModel {
     request.deviceId = DateTime.now().millisecondsSinceEpoch.toString();
 
     try {
-      if (await handleConnectionView(isReplaceView: false)) {
+      if (await handleConnectionView()) {
         return;
       }
       setState(ViewState.LOADING);
@@ -42,7 +42,7 @@ class AuthProvider extends BaseViewModel {
 
   loginUser(RequestLoginVO request) async {
     try {
-      if (await handleConnectionView(isReplaceView : false)) {
+      if (await handleConnectionView()) {
         return;
       }
       setState(ViewState.LOADING);
@@ -56,7 +56,7 @@ class AuthProvider extends BaseViewModel {
         setState(ViewState.ERROR);
       });
     } catch (_) {
-      await handleConnectionView(isReplaceView : false);
+      await handleConnectionView();
     }
   }
 

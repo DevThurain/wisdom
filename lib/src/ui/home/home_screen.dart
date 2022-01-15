@@ -34,8 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
     checkAppUpdateVersion();
   }
 
-  void checkAppUpdateVersion() async {
-    await homeProvider.checkAppVersion().then((value) {
+  void checkAppUpdateVersion() {
+     homeProvider.checkAppVersion().then((value) {
       if (!homeProvider.isAlreadyUpdated) {
         showDialog(
             context: context,

@@ -79,7 +79,7 @@ class _FunDetailScreenState extends State<FunDetailScreen> {
                                     (comment) => CommentItemWidget(
                                       name: comment.creator!.nickname ?? "",
                                       profileUrl:
-                                          comment.creator!.profileAssetsUrl ?? "",
+                                          comment.creator?.profileAssetsUrl ?? "",
                                       commentText: comment.comment ?? "",
                                       duration: comment.date ?? "",
                                     ),
