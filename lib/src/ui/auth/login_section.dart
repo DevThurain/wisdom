@@ -3,6 +3,7 @@ import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/widgets/based_designed_card.dart';
+import 'package:wisdom/src/ui/widgets/custom_password_field.dart';
 import 'package:wisdom/src/ui/widgets/custom_text_field.dart';
 import 'package:wisdom/src/ui/widgets/wisdom_logo.dart';
 
@@ -70,7 +71,7 @@ class LoginSection extends StatelessWidget {
                 SizedBox(height: AppDimen.MARGIN_CARD_MEDIUM_2),
                 TextFieldTitle(text: "password"),
                 SizedBox(height: AppDimen.MARGIN_CARD_MEDIUM),
-                CustomTextField(
+                CustomPasswordField(
                   controller: loginPasswordController,
                   onChanged: (value) {},
                   hint: 'password',

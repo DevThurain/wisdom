@@ -48,7 +48,7 @@ class ReferCodeSection extends StatelessWidget {
                 controller: referCodeController,
                 onChanged: (value) {},
                 hint: 'code',
-                textInputAction: TextInputAction.next,
+                textInputAction: TextInputAction.done,
               ),
             ],
           ),

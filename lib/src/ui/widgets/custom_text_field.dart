@@ -9,6 +9,7 @@ class CustomTextField extends StatelessWidget {
     required this.onChanged,
     required this.hint,
     required this.controller,
+    this.isPassword = false,
     this.textInputType = TextInputType.text,
     this.textInputAction = TextInputAction.done,
   }) : super(key: key);
@@ -16,6 +17,7 @@ class CustomTextField extends StatelessWidget {
   final double width;
   final Function(String) onChanged;
   final String hint;
+  final bool isPassword;
   final TextInputType textInputType;
   final TextInputAction textInputAction;
   final TextEditingController controller;
@@ -31,6 +33,7 @@ class CustomTextField extends StatelessWidget {
       child: TextField(
         controller: controller,
         textInputAction: textInputAction,
+        obscureText: isPassword,
         keyboardType: textInputType,
         onChanged: (value) {
           onChanged(value);

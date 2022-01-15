@@ -25,6 +25,14 @@ class AuthProvider extends BaseViewModel {
       if (await handleConnectionView()) {
         return;
       }
+      if (request.code.isEmpty) {
+        setNotifyMessage('refer code required.');
+        return;
+      }
+      if (request.nickname.isEmpty || request.password.isEmpty) {
+        setNotifyMessage('nickname & passsword required.');
+        return;
+      }
       setState(ViewState.LOADING);
       _repository.registerUser(request).then((response) {
         setState(ViewState.COMPLETE);
@@ -36,13 +44,17 @@ class AuthProvider extends BaseViewModel {
         setState(ViewState.ERROR);
       });
     } catch (_) {
-      await handleConnectionView(isReplaceView : false);
+      await handleConnectionView(isReplaceView: false);
     }
   }
 
   loginUser(RequestLoginVO request) async {
     try {
       if (await handleConnectionView()) {
+        return;
+      }
+      if (request.nickname.isEmpty || request.password.isEmpty) {
+        setNotifyMessage('nickname & passsword required.');
         return;
       }
       setState(ViewState.LOADING);
