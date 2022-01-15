@@ -7,7 +7,8 @@ import 'package:wisdom/src/data_models/response/response_success_vo.dart';
 import 'package:wisdom/src/data_models/vos/app_version_vo.dart';
 import 'package:wisdom/src/data_models/vos/comment_response_vo.dart';
 import 'package:wisdom/src/data_models/vos/fun_detail_vo.dart';
-import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
+import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
+import 'package:wisdom/src/data_models/vos/knowledge_list_vo.dart';
 
 part 'wisdom_api.g.dart';
 
@@ -35,7 +36,7 @@ abstract class WisdomAPI {
   Future<ResponseSuccessVO> logoutUser();
 
   @GET("/wisdom/posts")
-  Future<PostListVo> getFunList();
+  Future<FunListVo> getFunList();
 
   @GET("/wisdom/post/{postId}")
   Future<FunDetailVo> getFunDetail(
@@ -48,4 +49,7 @@ abstract class WisdomAPI {
       @Path("postId") int postId,
       @Query("comment") String commentText,
       );
+
+  @GET("/wisdom/notes")
+  Future<KnowledgeListVo> getKnowledgeList();
 }

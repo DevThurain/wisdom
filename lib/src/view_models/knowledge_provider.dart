@@ -1,27 +1,35 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:wisdom/src/app_utils/base_view_model.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
-import 'package:wisdom/src/data_models/daos/fact_list_dao.dart';
+import 'package:wisdom/src/data_models/vos/knowledge_list_vo.dart';
 import 'package:wisdom/src/data_source/repository_impl.dart';
 
-class KnowlegeProvider extends ChangeNotifier {
-  int page = 1;
-  List<Datum> facts = [];
-  bool paginateLock = false;
+class KnowledgeProvider extends BaseViewModel {
+  final _repository = locator<RepositoryImpl>();
+  final List<KnowledgeItem> _knowledgeList = <KnowledgeItem>[];
 
-  var repository = locator<RepositoryImpl>();
+  List<KnowledgeItem>? get knowledgeList => _knowledgeList;
 
-  KnowlegeProvider() {
-    fetchPaginatedList();
+  Future<void> getKnowledgeList({int? currentPage = 1}) async {
+    try {
+      if (await handleConnectionView(isReplaceView: _knowledgeList.isEmpty)) {
+        return;
+      }
+      if (currentPage == 1) {
+        if (_knowledgeList.isEmpty) {
+          setState(ViewState.LOADING);
+        }
+        _knowledgeList.clear();
+      }
+
+      _knowledgeList.addAll(
+        await _repository.getKnowledgeList().then((value) => value.knowledgeList!),
+      );
+      setState(ViewState.COMPLETE);
+    } catch (_) {
+      await handleErrorView(_knowledgeList.isEmpty);
+      rethrow;
+    }
   }
 
-  fetchPaginatedList() {
-    repository.fetchListPaginated(5, page).then((value) {
-      facts += value.data!;
 
-      if (page < value.lastPage!.toInt()) page++;
-      paginateLock = false;
-      notifyListeners();
-    });
-  }
 }

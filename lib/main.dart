@@ -16,12 +16,5 @@ void main() async {
   final settingsController = SettingsController(SettingsService());
   await settingsController.loadSettings();
 
-  var knowledgeProvider = locator<KnowlegeProvider>();
-  var homeProvider = locator<HomeProvider>();
-
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (context) => knowledgeProvider),
-    ],
-    child: MyApp(settingsController: settingsController)));
+  runApp(MyApp(settingsController: settingsController));
 }

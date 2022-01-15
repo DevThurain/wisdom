@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisdom/src/app_constants/screen_arguments.dart';
-import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
+import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
 import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
 import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_detail_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_list_screen.dart';
 import 'package:wisdom/src/ui/home/home_screen.dart';
 import 'package:wisdom/src/ui/intro/intro_screen.dart';
-import 'package:wisdom/src/ui/knowledge/knowledge_screen.dart';
+import 'package:wisdom/src/ui/knowledge/knowledge_list_screen.dart';
 import 'package:wisdom/src/ui/profile/profile_screen.dart';
 
 class AppRoute {
@@ -22,8 +22,8 @@ class AppRoute {
           case HomeScreen.routeName:
             return const HomeScreen();
 
-          case KnowledgeScreen.routeName:
-            return const KnowledgeScreen();
+          case KnowledgeListScreen.routeName:
+            return const KnowledgeListScreen();
 
           case FunListScreen.routeName:
             return const FunListScreen();

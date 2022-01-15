@@ -14,7 +14,7 @@ Future setupLocator() async {
       locator.registerLazySingleton(() => SharedPreferenceHelper(value)));
   locator.registerLazySingleton(() => RepositoryImpl());
   locator.registerFactory(() => HomeProvider());
-  locator.registerLazySingleton(() => KnowlegeProvider());
+  locator.registerLazySingleton(() => KnowledgeProvider());
   locator.registerFactory(() => FunProvider());
   locator.registerFactory(() => AuthProvider());
 }

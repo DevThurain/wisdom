@@ -1,4 +1,4 @@
-import 'package:wisdom/src/data_models/vos/post_list_vo.dart';
+import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
 
 class FunDetailScreenArguments {
   final FunItem funItem;

@@ -120,15 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppTheme.dark_purple,
-        onPressed: () {},
-        child: SvgPicture.asset(
-          'assets/svgs/quil.svg',
-          width: 28,
-          color: AppTheme.white,
-        ),
-      ),    );
+    );
   }
 }
 
