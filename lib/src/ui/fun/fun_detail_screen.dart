@@ -24,6 +24,7 @@ class FunDetailScreen extends StatefulWidget {
 class _FunDetailScreenState extends State<FunDetailScreen> {
   var funProvider = locator<FunProvider>();
   TextEditingController commentBoxController = TextEditingController();
+  late ScrollController _nestedScrollController;
 
   double get _statusBarHeight {
     return MediaQuery.of(context).padding.top;
@@ -33,18 +34,17 @@ class _FunDetailScreenState extends State<FunDetailScreen> {
     return widget.funItem;
   }
 
-
-
   @override
   void initState() {
     funProvider.getFunCommentListByPostId(postId: _postItem.id);
+    _nestedScrollController = ScrollController();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         Navigator.pop(context, funProvider.commentList!.length);
         return true;
       },
@@ -55,6 +55,7 @@ class _FunDetailScreenState extends State<FunDetailScreen> {
             body: Stack(
               children: [
                 NestedScrollView(
+                  controller: _nestedScrollController,
                   headerSliverBuilder: (context, innerBoxIsScrolled) {
                     return <Widget>[
                       PostDetailHeader(_postItem),
@@ -78,8 +79,7 @@ class _FunDetailScreenState extends State<FunDetailScreen> {
                                   .map(
                                     (comment) => CommentItemWidget(
                                       name: comment.creator!.nickname ?? "",
-                                      profileUrl:
-                                          comment.creator?.profileAssetsUrl ?? "",
+                                      profileUrl: comment.creator?.profileAssetsUrl ?? "",
                                       commentText: comment.comment ?? "",
                                       duration: comment.date ?? "",
                                     ),
@@ -111,8 +111,7 @@ class _FunDetailScreenState extends State<FunDetailScreen> {
                           color: AppTheme.dark_purple.withOpacity(0.5),
                           blurRadius: 2.0,
                           spreadRadius: 0.0,
-                          offset:
-                              Offset(0, 1.0), // shadow direction: bottom right
+                          offset: Offset(0, 1.0), // shadow direction: bottom right
                         )
                       ],
                     ),
@@ -120,40 +119,49 @@ class _FunDetailScreenState extends State<FunDetailScreen> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Flexible(
-                          child: TextField(
-                            controller: commentBoxController,
-                            keyboardType: TextInputType.multiline,
-                            maxLines: 3,
-                            minLines: 1,
-                            autofocus: false,
-                            style: TextStyle(
-                              fontSize: AppDimen.TEXT_REGULAR_2X,
-                              fontFamily: 'MyanUni',
-                              letterSpacing: 0.5,
-                            ),
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(0.0)),
-                                borderSide: BorderSide(color: Colors.transparent),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(0.0)),
-                                borderSide: BorderSide(color: Colors.transparent),
-                              ),
-                              filled: true,
-                              hintStyle: TextStyle(
+                          child: Focus(
+                            onFocusChange: (hasFocus) {
+                              if (hasFocus) {
+                                 _nestedScrollController.animateTo(
+                                  _nestedScrollController.position.maxScrollExtent,
+                                  duration: Duration(microseconds: 400),
+                                  curve: Curves.easeOut);
+                              
+                              }
+                            },
+                            child: TextField(
+                              controller: commentBoxController,
+                              keyboardType: TextInputType.multiline,
+                              maxLines: 3,
+                              minLines: 1,
+                              autofocus: false,
+                              style: TextStyle(
                                 fontSize: AppDimen.TEXT_REGULAR_2X,
                                 fontFamily: 'MyanUni',
                                 letterSpacing: 0.5,
-                                color: AppTheme.black.withOpacity(0.5),
                               ),
-                              hintText: "Add a comment ...",
-                              contentPadding: EdgeInsets.all(
-                                AppDimen.MARGIN_CARD_MEDIUM_2,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(0.0)),
+                                  borderSide: BorderSide(color: Colors.transparent),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(0.0)),
+                                  borderSide: BorderSide(color: Colors.transparent),
+                                ),
+                                filled: true,
+                                hintStyle: TextStyle(
+                                  fontSize: AppDimen.TEXT_REGULAR_2X,
+                                  fontFamily: 'MyanUni',
+                                  letterSpacing: 0.5,
+                                  color: AppTheme.black.withOpacity(0.5),
+                                ),
+                                hintText: "Add a comment ...",
+                                contentPadding: EdgeInsets.all(
+                                  AppDimen.MARGIN_CARD_MEDIUM_2,
+                                ),
+                                fillColor: Colors.transparent,
                               ),
-                              fillColor: Colors.transparent,
                             ),
                           ),
                         ),
@@ -231,8 +239,7 @@ class PostDetailHeader extends StatelessWidget {
               AppTheme.white,
             ])),
         child: Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: AppDimen.MARGIN_LARGE),
+          padding: const EdgeInsets.symmetric(horizontal: AppDimen.MARGIN_LARGE),
           child: PostProfileUI(
             profileUrl: postItem.creator!.profileAssetsUrl,
             color: AppTheme.dark_purple,

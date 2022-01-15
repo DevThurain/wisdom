@@ -87,23 +87,27 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                   height: 22,
                 ),
                 ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
                   child: Column(
                     children: [
                       GestureDetector(
-                        onTap: ()=> Fluttertoast.showToast(msg: "Store Link"),
+                        onTap: () => Fluttertoast.showToast(msg: "Store Link"),
                         child: Container(
                           height: 48,
                           color: Color(0xffb7b7f5).withOpacity(0.5),
                           child: Row(
-                            children:  [
-                              SizedBox(width: AppDimen.MARGIN_MEDIUM,),
+                            children: [
+                              SizedBox(
+                                width: AppDimen.MARGIN_MEDIUM,
+                              ),
                               Image.asset(
                                 'assets/images/download.png',
                                 width: 24,
                                 height: 24,
                               ),
-                              SizedBox(width: AppDimen.MARGIN_MEDIUM,),
+                              SizedBox(
+                                width: AppDimen.MARGIN_MEDIUM,
+                              ),
                               Text(
                                 "Store link",
                                 textAlign: TextAlign.center,
@@ -118,22 +122,29 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                           ),
                         ),
                       ),
-                      Container(color: Colors.white, height: 1,),
+                      Container(
+                        color: Colors.white,
+                        height: 1,
+                      ),
                       GestureDetector(
-                        onTap: ()=> Fluttertoast.showToast(msg: "Direct Link"),
+                        onTap: () => Fluttertoast.showToast(msg: "Direct Link"),
                         child: Container(
                           height: 48,
                           width: double.infinity,
                           color: Color(0xffb7b7f5).withOpacity(0.5),
                           child: Row(
                             children: [
-                              SizedBox(width: AppDimen.MARGIN_MEDIUM,),
+                              SizedBox(
+                                width: AppDimen.MARGIN_MEDIUM,
+                              ),
                               Image.asset(
                                 'assets/images/download.png',
                                 width: 24,
                                 height: 24,
                               ),
-                              SizedBox(width: AppDimen.MARGIN_MEDIUM,),
+                              SizedBox(
+                                width: AppDimen.MARGIN_MEDIUM,
+                              ),
                               Text(
                                 "Direct link",
                                 textAlign: TextAlign.center,
@@ -151,7 +162,6 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                     ],
                   ),
                 ),
-
               ],
             ),
           ),
@@ -218,35 +228,57 @@ class ErrorDialogBox extends StatelessWidget {
         children: <Widget>[
           Column(
             children: [
-              Container(
-                width: double.infinity,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: AppTheme.fresh_purple,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(AppDimen.MARGIN_MEDIUM_2),
-                    topRight: Radius.circular(AppDimen.MARGIN_MEDIUM_2),
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      color: AppTheme.white,
-                      fontSize: AppDimen.TEXT_REGULAR_2X,
+              Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: AppTheme.fresh_purple,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(AppDimen.MARGIN_MEDIUM_2),
+                        topRight: Radius.circular(AppDimen.MARGIN_MEDIUM_2),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        title,
+                        style: TextStyle(
+                          color: AppTheme.white,
+                          fontSize: AppDimen.TEXT_REGULAR_2X,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Icon(
+                          Icons.close,
+                          color: AppTheme.white,
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  )
+                ],
               ),
               SizedBox(
                 height: AppDimen.MARGIN_MEDIUM_2,
               ),
-              Text(
-                message,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: AppTheme.black,
-                  fontSize: AppDimen.TEXT_REGULAR,
+              Center(
+                child: Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: AppTheme.black,
+                    fontSize: AppDimen.TEXT_REGULAR,
+                  ),
                 ),
               ),
             ],
@@ -258,7 +290,7 @@ class ErrorDialogBox extends StatelessWidget {
 }
 
 class DialogUtils {
-    void showErrorDialog(BuildContext ctx, String title, String message) {
+  void showErrorDialog(BuildContext ctx, String title, String message) {
     showDialog(
         context: ctx,
         barrierDismissible: true,
@@ -274,5 +306,4 @@ class DialogUtils {
           );
         });
   }
-
 }
