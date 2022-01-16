@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -8,12 +9,14 @@ import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/base_view_model.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
 import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_detail_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
 import 'package:wisdom/src/ui/widgets/top_gradient.dart';
 import 'package:wisdom/src/ui/widgets/widget_footer_text.dart';
+import 'package:wisdom/src/view_models/ad_state.dart';
 import 'package:wisdom/src/view_models/fun_provider.dart';
 
 class FunListScreen extends StatefulWidget {
@@ -32,10 +35,50 @@ class _FunListScreenState extends State<FunListScreen> {
   bool expanded = false;
   var funProvider = locator<FunProvider>();
 
+  InterstitialAd? _interstitialAd;
+  bool _isInterstitialAdReady = false;
+
   @override
   void initState() {
     funProvider.getFunList();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final AdState adState = Provider.of<AdState>(context);
+
+    adState.initialization.then((status) {
+      InterstitialAd.load(
+        adUnitId: adState.interstitialAdUnitId(),
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (ad) {
+            setState(() {
+              _interstitialAd = ad;
+              _isInterstitialAdReady = true;
+            });
+          },
+          onAdFailedToLoad: (err) {
+            print('Failed to load an interstitial ad: ${err.message}');
+            setState(() {
+              _isInterstitialAdReady = false;
+            });
+          },
+        ),
+      );
+    });
+  }
+
+  _moveToDetailScreen(FunProvider provider, FunItem item) async {
+    int updatedCommentCount = await Navigator.pushNamed(
+      context,
+      FunDetailScreen.routeName,
+      arguments: item,
+    ) as int;
+
+    funProvider.updateCommentCount(updatedCommentCount);
   }
 
   @override
@@ -199,7 +242,8 @@ class _FunListScreenState extends State<FunListScreen> {
                     delegate: SliverChildListDelegate(
                       provider.funList!
                           .asMap()
-                          .map((index, item) => MapEntry(
+                          .map(
+                            (index, item) => MapEntry(
                               index,
                               DesignedPostCard(
                                 title: item.post.toString(),
@@ -210,19 +254,28 @@ class _FunListScreenState extends State<FunListScreen> {
                                     ? "No comment"
                                     : item.commentCount.toString(),
                                 color: AppTheme.dark_purple,
-                                onTap: () async {
+                                onTap: () {
                                   funProvider.currentSelectedFanId = index;
+                                  if (_isInterstitialAdReady) {
+                                    _interstitialAd?.fullScreenContentCallback =
+                                        FullScreenContentCallback(
+                                      onAdDismissedFullScreenContent: (ad) {
+                                        _moveToDetailScreen(provider, item);
+                                      },
+                                    );
+                                    _interstitialAd?.show();
+                                  } else {
+                                    print('ads not loaded');
+                                    _moveToDetailScreen(provider, item);
+                                  }
 
-                                  int updatedCommentCount =
-                                      await Navigator.pushNamed(
-                                    context,
-                                    FunDetailScreen.routeName,
-                                    arguments: item,
-                                  ) as int;
+                                  // int updatedCommentCount = await Navigator.pushNamed(
+                                  //   context,
+                                  //   FunDetailScreen.routeName,
+                                  //   arguments: item,
+                                  // ) as int;
 
-
-                                  funProvider
-                                      .updateCommentCount(updatedCommentCount);
+                                  // funProvider.updateCommentCount(updatedCommentCount);
                                 },
                               ),
                             ),
@@ -245,7 +298,10 @@ class _FunListScreenState extends State<FunListScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Lottie.asset('assets/jsons/line_loading.json', width: 110),
-          Text('Loading Posts',style: TextStyle(color: AppTheme.dark_purple,fontFamily: 'Poppins'),)
+          Text(
+            'Loading Posts',
+            style: TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+          )
         ],
       );
     } else if (funProvider.state == ViewState.NO_INTERNET) {
@@ -253,15 +309,21 @@ class _FunListScreenState extends State<FunListScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Lottie.asset('assets/jsons/no_internet.json', width: 110),
-          Text('No Internet Connection!',style: TextStyle(color: AppTheme.dark_purple,fontFamily: 'Poppins'),)
+          Text(
+            'No Internet Connection!',
+            style: TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+          )
         ],
       );
     } else {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Lottie.asset('assets/jsons/app_error.json',width: 110),
-          Text('Unknown Error',style: TextStyle(color: AppTheme.dark_purple,fontFamily: 'Poppins'),)
+          Lottie.asset('assets/jsons/app_error.json', width: 110),
+          Text(
+            'Unknown Error',
+            style: TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+          )
         ],
       );
     }

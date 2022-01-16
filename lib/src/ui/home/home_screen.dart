@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
@@ -16,6 +17,7 @@ import 'package:wisdom/src/ui/knowledge/knowledge_list_screen.dart';
 import 'package:wisdom/src/ui/profile/profile_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/top_gradient.dart';
+import 'package:wisdom/src/view_models/ad_state.dart';
 import 'package:wisdom/src/view_models/home_provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -30,6 +32,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   var homeProvider = locator<HomeProvider>();
   var sharePreference = locator<SharedPreferenceHelper>();
+  late BannerAd banner;
+  bool _bannerLoaded = false;
 
   @override
   void initState() {
@@ -38,8 +42,33 @@ class _HomeScreenState extends State<HomeScreen> {
     homeProvider.getUserProfile();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final AdState adState = Provider.of<AdState>(context);
+    adState.initialization.then((status) {
+      banner = BannerAd(
+          adUnitId: adState.bannerAdUnitId(),
+          size: AdSize.banner,
+          listener: BannerAdListener(
+            onAdOpened: (ad) => print('Ad open: ${ad.adUnitId}.'),
+            onAdLoaded: (ad) {
+              setState(() {
+                _bannerLoaded = true;
+              });
+              print('Ad loaded: ${ad.adUnitId}.');
+            },
+            onAdClosed: (ad) => print('Ad closed: ${ad.adUnitId}.'),
+            onAdFailedToLoad: (ad, error) =>
+                print('Ad fail to load: ${ad.adUnitId}. $error'),
+          ),
+          request: AdRequest())
+        ..load();
+    });
+  }
+
   void checkAppUpdateVersion() {
-     homeProvider.checkAppVersion().then((value) {
+    homeProvider.checkAppVersion().then((value) {
       if (!homeProvider.isAlreadyUpdated) {
         showDialog(
             context: context,
@@ -51,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: CustomDialogBox(
                     title: "Update Available!",
                     descriptions:
-                    "A new version is available for this app. You can update it from store or direct link.",
+                        "A new version is available for this app. You can update it from store or direct link.",
                     isForceUpdate: homeProvider.isForceUpdate,
                     onClickButton: () => print("update")),
               );
@@ -76,57 +105,73 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return Scaffold(
           backgroundColor: AppTheme.white,
-          body: Stack(
+          body: Column(
             children: [
-              TopGradient(),
-              CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: AppDimen.MARGIN_MEDIUM_2,
-                            right: AppDimen.MARGIN_MEDIUM_2,
-                            top: MediaQuery.of(context).padding.top +
-                                AppDimen.MARGIN_MEDIUM_2,
-                            bottom: AppDimen.MARGIN_MEDIUM_2,
-                          ),
-                          child: ProfileSectionView(
-                            onTap: () {
-                              _logoutUser();
-                            },
+              SizedBox(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height - 50,
+                child: Stack(
+                  children: [
+                    //#gradient
+                    TopGradient(),
+                    //#endgradient
+                    CustomScrollView(
+                      slivers: [
+                        SliverToBoxAdapter(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: AppDimen.MARGIN_MEDIUM_2,
+                                  right: AppDimen.MARGIN_MEDIUM_2,
+                                  top: MediaQuery.of(context).padding.top +
+                                      AppDimen.MARGIN_MEDIUM_2,
+                                  bottom: AppDimen.MARGIN_MEDIUM_2,
+                                ),
+                                child: ProfileSectionView(
+                                  onTap: () {
+                                    _logoutUser();
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: AppDimen.MARGIN_MEDIUM_2,
+                                  vertical: AppDimen.MARGIN_MEDIUM_2,
+                                ),
+                                child: TitleText(),
+                              ),
+                              SizedBox(height: 20),
+                              DesignedCard(
+                                title: 'Knowledge',
+                                color: AppTheme.dark_purple,
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, KnowledgeListScreen.routeName);
+                                },
+                              ),
+                              SizedBox(height: 20),
+                              DesignedCard(
+                                title: 'Fun',
+                                color: AppTheme.dark_purple,
+                                onTap: () {
+                                  Navigator.pushNamed(context, FunListScreen.routeName);
+                                },
+                              ),
+                            ],
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: AppDimen.MARGIN_MEDIUM_2,
-                            vertical: AppDimen.MARGIN_MEDIUM_2,
-                          ),
-                          child: TitleText(),
-                        ),
-                        SizedBox(height: 20),
-                        DesignedCard(
-                          title: 'Knowledge',
-                          color: AppTheme.dark_purple,
-                          onTap: () {
-                            Navigator.pushNamed(context, KnowledgeListScreen.routeName);
-                          },
-                        ),
-                        SizedBox(height: 20),
-                        DesignedCard(
-                          title: 'Fun',
-                          color: AppTheme.dark_purple,
-                          onTap: () {
-                            Navigator.pushNamed(context, FunListScreen.routeName);
-                          },
-                        )
                       ],
                     ),
-                  )
-                ],
+                  ],
+                ),
               ),
+              _bannerLoaded
+                  ? Container(
+                      width: double.infinity, height: 50, child: AdWidget(ad: banner))
+                  : Container(
+                      width: double.infinity, height: 50, color: AppTheme.dark_purple),
             ],
           ),
         );
@@ -134,7 +179,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
 
 class ProfileSectionView extends StatelessWidget {
   const ProfileSectionView({
@@ -147,7 +191,7 @@ class ProfileSectionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeProvider>(builder: (context, provider, child) {
-       return Row(
+      return Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           GestureDetector(
@@ -168,18 +212,15 @@ class ProfileSectionView extends StatelessWidget {
           SizedBox(width: AppDimen.MARGIN_MEDIUM_3),
           InkWell(
             onTap: () => Navigator.pushNamed(context, ProfileScreen.routeName),
-            child: CircularPersonFace(
-              width: 20,
-              imgPath: provider.userProfile
-            ),
+            child: CircularPersonFace(width: 20, imgPath: provider.userProfile),
           )
         ],
       );
-  });
+    });
   }
 
   Future<String> getUserProfile() async {
-  int userId =  await SharedPreferences.getInstance()
+    int userId = await SharedPreferences.getInstance()
         .then((_pref) => _pref.getInt('PREF_USER_ID')!);
 
     return TempProfileGenerator.getTempProfileUrl(userId);
