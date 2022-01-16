@@ -26,10 +26,6 @@ class _FunDetailScreenState extends State<FunDetailScreen> {
   TextEditingController commentBoxController = TextEditingController();
   late ScrollController _nestedScrollController;
 
-  double get _statusBarHeight {
-    return MediaQuery.of(context).padding.top;
-  }
-
   FunItem get _postItem {
     return widget.funItem;
   }
