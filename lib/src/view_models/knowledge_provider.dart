@@ -6,10 +6,11 @@ import 'package:wisdom/src/data_source/repository_impl.dart';
 class KnowledgeProvider extends BaseViewModel {
   final _repository = locator<RepositoryImpl>();
   final List<KnowledgeItem> _knowledgeList = <KnowledgeItem>[];
+  int currentPage = 1;
 
   List<KnowledgeItem>? get knowledgeList => _knowledgeList;
 
-  Future<void> getKnowledgeList({int? currentPage = 1}) async {
+  Future<void> getKnowledgeList() async {
     try {
       if (await handleConnectionView(isReplaceView: _knowledgeList.isEmpty)) {
         return;
@@ -22,7 +23,12 @@ class KnowledgeProvider extends BaseViewModel {
       }
 
       _knowledgeList.addAll(
-        await _repository.getKnowledgeList().then((value) => value.knowledgeList!),
+        await _repository.getKnowledgeList(currentPage).then(
+          (value) {
+            currentPage += 1;
+            return value.knowledgeList!;
+          },
+        ),
       );
       setState(ViewState.COMPLETE);
     } catch (_) {
@@ -36,7 +42,8 @@ class KnowledgeProvider extends BaseViewModel {
     setState(ViewState.COMPLETE);
   }
 
-
-
-
+  void refreshList() {
+    currentPage = 1;
+    getKnowledgeList();
+  }
 }

@@ -38,7 +38,7 @@ class ProfileProvider extends BaseViewModel {
       }
 
       _funList.addAll(
-        await _repository.getFunList().then((value) => value.funList!),
+        await _repository.getFunList(currentPage!).then((value) => value.funList!),
       );
       setState(ViewState.COMPLETE);
     } catch (_) {

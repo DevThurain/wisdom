@@ -152,10 +152,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
         ),
         onRefresh: () => {
-          funProvider.getFunList(currentPage: 1),
+          funProvider.refreshList(),
         },
         onLoading: () => {
-          funProvider.getFunList(currentPage: 2),
+          funProvider.getFunList(),
         },
         child: provider.funList!.isNotEmpty
             ? CustomScrollView(

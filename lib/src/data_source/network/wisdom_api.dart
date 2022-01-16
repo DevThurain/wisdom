@@ -39,7 +39,7 @@ abstract class WisdomAPI {
   Future<ResponseSuccessVO> logoutUser();
 
   @GET("/wisdom/posts")
-  Future<FunListVo> getFunList();
+  Future<FunListVo> getFunList(@Query("page") int page);
 
   @GET("/wisdom/post/{postId}")
   Future<FunDetailVo> getFunDetail(
@@ -54,7 +54,7 @@ abstract class WisdomAPI {
   );
 
   @GET("/wisdom/notes")
-  Future<KnowledgeListVo> getKnowledgeList();
+  Future<KnowledgeListVo> getKnowledgeList(@Query("page") int page);
 
   @POST("/wisdom/post")
   Future<FunUploadResponse> createFunPost(@Query("post") String content);

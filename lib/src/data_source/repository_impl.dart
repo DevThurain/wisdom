@@ -93,9 +93,9 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Future<FunListVo> getFunList() {
+  Future<FunListVo> getFunList(int page) {
     String token = _pref.getToken();
-    return _mSource.privateApi(token).getFunList();
+    return _mSource.privateApi(token).getFunList(page);
   }
 
   @override
@@ -117,9 +117,9 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Future<KnowledgeListVo> getKnowledgeList() {
+  Future<KnowledgeListVo> getKnowledgeList(int page) {
     String token = _pref.getToken();
-    return _mSource.privateApi(token).getKnowledgeList();
+    return _mSource.privateApi(token).getKnowledgeList(page);
   }
 
   @override

@@ -171,10 +171,10 @@ class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
           },
         ),
         onRefresh: () => {
-          knowledgeProvider.getKnowledgeList(currentPage: 1),
+          knowledgeProvider.refreshList(),
         },
         onLoading: () => {
-          knowledgeProvider.getKnowledgeList(currentPage: 2),
+          knowledgeProvider.getKnowledgeList(),
         },
         child: knowledgeProvider.knowledgeList!.isNotEmpty
             ? CustomScrollView(

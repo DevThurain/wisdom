@@ -168,10 +168,10 @@ class _FunListScreenState extends State<FunListScreen> {
           },
         ),
         onRefresh: () => {
-          funProvider.getFunList(currentPage: 1),
+          funProvider.getFunList(),
         },
         onLoading: () => {
-          funProvider.getFunList(currentPage: 2),
+          funProvider.getFunList(),
         },
         child: provider.funList!.isNotEmpty
             ? CustomScrollView(

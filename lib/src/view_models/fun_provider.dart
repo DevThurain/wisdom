@@ -11,18 +11,18 @@ class FunProvider extends BaseViewModel {
   final _repository = locator<RepositoryImpl>();
   final List<FunItem> _funList = <FunItem>[];
   final List<Comments> _commentList = <Comments>[];
-   int? _currentSelectedFanId;
+  int? _currentSelectedFanId;
+  int currentPage = 1;
 
   List<FunItem>? get funList => _funList;
 
   List<Comments>? get commentList => _commentList;
 
-
   set currentSelectedFanId(int value) {
     _currentSelectedFanId = value;
   }
 
-  Future<void> getFunList({int? currentPage = 1}) async {
+  Future<void> getFunList() async {
     try {
       if (await handleConnectionView(isReplaceView: _funList.isEmpty)) {
         return;
@@ -35,7 +35,10 @@ class FunProvider extends BaseViewModel {
       }
 
       _funList.addAll(
-        await _repository.getFunList().then((value) => value.funList!),
+        await _repository.getFunList(currentPage).then((value) {
+          currentPage += 1;
+          return value.funList!;
+        }),
       );
       setState(ViewState.COMPLETE);
     } catch (_) {
@@ -95,14 +98,18 @@ class FunProvider extends BaseViewModel {
     setState(ViewState.NONE);
   }
 
-  updateCommentCount(int updatedCommentCount){
+  void updateCommentCount(int updatedCommentCount) {
     _funList[_currentSelectedFanId!].setCommentCount = updatedCommentCount;
     setState(ViewState.COMPLETE);
   }
 
-  updateFunList(FunItem funItem){
+  void updateFunList(FunItem funItem) {
     _funList.insert(0, funItem);
     setState(ViewState.COMPLETE);
   }
 
+  void refreshList() {
+    currentPage = 1;
+    getFunList();
+  }
 }

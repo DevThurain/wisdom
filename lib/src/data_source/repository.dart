@@ -28,10 +28,10 @@ abstract class Repository {
   Future<ResponseRegisterVO> registerUser(RequestRegisterVO request);
   Future<ResponseLoginVO> loginUser(RequestLoginVO request);
   Future<ResponseSuccessVO> logoutUser();
-  Future<FunListVo> getFunList();
+  Future<FunListVo> getFunList(int page);
   Future<FunDetailVo> getCommentListById(int postId);
   Future<CommentResponseVo> sendComment(int postId, String commentData);
-  Future<KnowledgeListVo> getKnowledgeList();
+  Future<KnowledgeListVo> getKnowledgeList(int page);
   Future<FunUploadResponse> funPostUpload(String content);
   Future<KnowledgeUploadResponse> knowledgePostUpload(String content, {String link = ""});
   Future<ResponseUserProfileVO> getUserProfile();
