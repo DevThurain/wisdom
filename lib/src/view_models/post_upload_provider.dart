@@ -16,7 +16,7 @@ import 'package:wisdom/src/data_source/repository_impl.dart';
 class PostUploadProvider extends BaseViewModel {
   final _repository = locator<RepositoryImpl>();
 
-  String _userProfile = TempProfileGenerator.getTempProfileUrl(8);
+  String _userProfile = "";
   String _userName = "";
 
   String get userProfile => _userProfile;

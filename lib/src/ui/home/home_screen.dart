@@ -170,19 +170,12 @@ class ProfileSectionView extends StatelessWidget {
             onTap: () => Navigator.pushNamed(context, ProfileScreen.routeName),
             child: CircularPersonFace(
               width: 20,
-              imgPath: provider.userProfile
+              imgPath: provider.userProfile??""
             ),
           )
         ],
       );
   });
-  }
-
-  Future<String> getUserProfile() async {
-  int userId =  await SharedPreferences.getInstance()
-        .then((_pref) => _pref.getInt('PREF_USER_ID')!);
-
-    return TempProfileGenerator.getTempProfileUrl(userId);
   }
 }
 

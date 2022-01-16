@@ -7,6 +7,8 @@ import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/base_view_model.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/app_utils/user_profile_generator.dart';
+import 'package:wisdom/src/data_models/response/response_user_profile_vo.dart';
 import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
 import 'package:wisdom/src/ui/add_post/fun_post_upload_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_detail_screen.dart';
@@ -14,6 +16,7 @@ import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
 import 'package:wisdom/src/ui/widgets/square_person_face.dart';
 import 'package:wisdom/src/ui/widgets/widget_footer_text.dart';
 import 'package:wisdom/src/view_models/fun_provider.dart';
+import 'package:wisdom/src/view_models/profile_provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   static const routeName = '/profile_screen';
@@ -30,10 +33,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   bool expanded = false;
   var funProvider = locator<FunProvider>();
+  var profileProvider = locator<ProfileProvider>();
 
   @override
   void initState() {
-    funProvider.getFunList();
+    profileProvider.getUserProfile();
+    profileProvider.getFunList();
     super.initState();
   }
 
@@ -41,23 +46,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppTheme.dark_purple,
-        onPressed: () async {
-          FunItem funItem =
-              await Navigator.pushNamed(context, FunPostUploadScreen.routeName)
-                  as FunItem;
-          funProvider.updateFunList(funItem);
-        },
-        child: SvgPicture.asset(
-          'assets/svgs/quil.svg',
-          width: 28,
-          color: AppTheme.white,
-        ),
-      ),
       body: ChangeNotifierProvider(
-        create: (context) => funProvider,
-        child: Consumer<FunProvider>(builder: (context, provider, child) {
+        create: (context) => profileProvider,
+        child: Consumer<ProfileProvider>(builder: (context, provider, child) {
           if (_refreshController.isLoading) _refreshController.loadComplete();
           if (_refreshController.isRefresh) {
             _refreshController.refreshCompleted();
@@ -66,7 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
-                _buildSliverAppBar(),
+                _buildSliverAppBar(profileProvider.responseUserProfileVO),
               ];
             },
             // controller: _scrollController,
@@ -77,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  SliverAppBar _buildSliverAppBar() {
+  SliverAppBar _buildSliverAppBar(ResponseUserProfileVO? responseUserProfileVO) {
     return SliverAppBar(
       expandedHeight: 120,
       collapsedHeight: 65,
@@ -100,16 +91,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         child: ProfileHeaderSectionView(
           color: AppTheme.dark_purple,
-          name: "Han Gyi",
-          profileUrl: "assets/images/purple_minion.png",
+          name: responseUserProfileVO?.data?.nickname,
+          profileUrl: responseUserProfileVO?.data?.profileUrl,
+          userType: responseUserProfileVO?.data?.type,
         ),
       ),
       backgroundColor: AppTheme.white,
     );
   }
 
-  handlingWidget(FunProvider provider) {
-    if (funProvider.state == ViewState.COMPLETE) {
+  handlingWidget(ProfileProvider provider) {
+    if (provider.state == ViewState.COMPLETE) {
       return SmartRefresher(
         controller: _refreshController,
         enablePullUp: true,
@@ -212,12 +204,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
       );
-    } else if (funProvider.state == ViewState.LOADING) {
+    } else if (provider.state == ViewState.LOADING) {
       return Container(
         color: Colors.amber,
         child: Text("Loading"),
       );
-    } else if (funProvider.state == ViewState.NO_INTERNET) {
+    } else if (provider.state == ViewState.NO_INTERNET) {
       return Container(
         color: Colors.brown,
         child: Text("No Internet"),
@@ -232,15 +224,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
 }
 
 class ProfileHeaderSectionView extends StatelessWidget {
-  final Color color;
-  final String name;
-  final String profileUrl;
+  final Color? color;
+  final String? name;
+  final String? profileUrl;
+  final String? userType;
 
   const ProfileHeaderSectionView({
     Key? key,
-    required this.color,
-    required this.name,
-    required this.profileUrl,
+     this.color,
+     this.name = "-",
+     this.profileUrl,
+     this.userType = "-",
   }) : super(key: key);
 
   @override
@@ -251,14 +245,14 @@ class ProfileHeaderSectionView extends StatelessWidget {
           alignment: Alignment.center,
           child: Row(
             children: [
-              SquarePersonFace(width: 40, imgPath: profileUrl),
+              SquarePersonFace(width: 40, imgPath: profileUrl??""),
               SizedBox(width: AppDimen.MARGIN_MEDIUM),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    name,
+                    name??"-",
                     textAlign: TextAlign.start,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
@@ -270,7 +264,7 @@ class ProfileHeaderSectionView extends StatelessWidget {
                         fontWeight: FontWeight.normal),
                   ),
                   Text(
-                    "Nick Name",
+                    userType??"-",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Color(0xffAFAFBD),

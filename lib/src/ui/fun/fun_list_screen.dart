@@ -81,7 +81,7 @@ class _FunListScreenState extends State<FunListScreen> {
 
   SliverAppBar _buildSliverAppBar() {
     return SliverAppBar(
-      expandedHeight: 160,
+      expandedHeight: 120,
       collapsedHeight: 65,
       automaticallyImplyLeading: false,
       elevation: 0,

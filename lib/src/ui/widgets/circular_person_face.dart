@@ -14,6 +14,7 @@ class CircularPersonFace extends StatelessWidget {
           shape: BoxShape.circle, border: Border.all(color: AppTheme.white)),
       child: CircleAvatar(
         backgroundImage: AssetImage(imgPath),
+        backgroundColor: Colors.transparent,
         radius: width,
       ),
     );

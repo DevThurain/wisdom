@@ -1,10 +1,7 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisdom/src/app_utils/device_detail.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/data_models/daos/comment_list_dao.dart';
@@ -16,6 +13,7 @@ import 'package:wisdom/src/data_models/request/request_register_vo.dart';
 import 'package:wisdom/src/data_models/response/response_login_vo.dart';
 import 'package:wisdom/src/data_models/response/response_register_vo.dart';
 import 'package:wisdom/src/data_models/response/response_success_vo.dart';
+import 'package:wisdom/src/data_models/response/response_user_profile_vo.dart';
 import 'package:wisdom/src/data_models/vos/app_version_vo.dart';
 import 'package:wisdom/src/data_models/vos/comment_response_vo.dart';
 import 'package:wisdom/src/data_models/vos/fun_detail_vo.dart';
@@ -131,12 +129,17 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Future<KnowledgeUploadResponse> knowledgePostUpload(String content, {String link = ""}) {
+  Future<KnowledgeUploadResponse> knowledgePostUpload(String content,
+      {String link = ""}) {
     String token = _pref.getToken();
     return _mSource.privateApi(token).createKnowledgePost(content, link);
   }
 
-
+  @override
+  Future<ResponseUserProfileVO> getUserProfile() {
+    String token = _pref.getToken();
+    return _mSource.privateApi(token).getUserProfile();
+  }
 }
 
 // Future<bool> checkTokenStored() async {

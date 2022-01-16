@@ -16,7 +16,7 @@ class HomeProvider extends BaseViewModel {
   bool logout = false;
   String errorCode = '';
   String errorMessage = '';
-  String _userProfile = TempProfileGenerator.getTempProfileUrl(8);
+  String? _userProfile;
   var repository = locator<RepositoryImpl>();
 
   ForceUpdateDao? get forceUpdateDao => _forceUpdateDao;
@@ -25,7 +25,7 @@ class HomeProvider extends BaseViewModel {
 
   bool get isForceUpdate => _isForceUpdate;
 
-  String get userProfile => _userProfile;
+  String? get userProfile => _userProfile;
 
   // methods
 

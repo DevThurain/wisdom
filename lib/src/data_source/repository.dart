@@ -7,6 +7,7 @@ import 'package:wisdom/src/data_models/request/request_register_vo.dart';
 import 'package:wisdom/src/data_models/response/response_login_vo.dart';
 import 'package:wisdom/src/data_models/response/response_register_vo.dart';
 import 'package:wisdom/src/data_models/response/response_success_vo.dart';
+import 'package:wisdom/src/data_models/response/response_user_profile_vo.dart';
 import 'package:wisdom/src/data_models/vos/app_version_vo.dart';
 import 'package:wisdom/src/data_models/vos/comment_response_vo.dart';
 import 'package:wisdom/src/data_models/vos/fun_detail_vo.dart';
@@ -33,4 +34,5 @@ abstract class Repository {
   Future<KnowledgeListVo> getKnowledgeList();
   Future<FunUploadResponse> funPostUpload(String content);
   Future<KnowledgeUploadResponse> knowledgePostUpload(String content, {String link = ""});
+  Future<ResponseUserProfileVO> getUserProfile();
 }
