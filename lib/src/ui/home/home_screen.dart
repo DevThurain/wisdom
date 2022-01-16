@@ -15,6 +15,7 @@ import 'package:wisdom/src/ui/fun/fun_list_screen.dart';
 import 'package:wisdom/src/ui/knowledge/knowledge_list_screen.dart';
 import 'package:wisdom/src/ui/profile/profile_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
+import 'package:wisdom/src/ui/widgets/top_gradient.dart';
 import 'package:wisdom/src/view_models/home_provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -134,30 +135,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class TopGradient extends StatelessWidget {
-  const TopGradient({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: Container(
-        height: 120,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: const [
-              Color(0xffb7b7f5),
-              Color(0xffe7e7f8),
-              AppTheme.white,
-            ])),
-      ),
-    );
-  }
-}
 
 class ProfileSectionView extends StatelessWidget {
   const ProfileSectionView({

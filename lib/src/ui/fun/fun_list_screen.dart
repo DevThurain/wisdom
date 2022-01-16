@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
@@ -12,6 +13,7 @@ import 'package:wisdom/src/ui/add_post/fun_post_upload_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_detail_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
+import 'package:wisdom/src/ui/widgets/top_gradient.dart';
 import 'package:wisdom/src/ui/widgets/widget_footer_text.dart';
 import 'package:wisdom/src/view_models/fun_provider.dart';
 
@@ -26,10 +28,9 @@ class FunListScreen extends StatefulWidget {
 
 class _FunListScreenState extends State<FunListScreen> {
   //late ScrollController _scrollController;
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
-   bool expanded = false;
+  bool expanded = false;
   var funProvider = locator<FunProvider>();
 
   @override
@@ -37,7 +38,6 @@ class _FunListScreenState extends State<FunListScreen> {
     funProvider.getFunList();
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -86,50 +86,55 @@ class _FunListScreenState extends State<FunListScreen> {
       automaticallyImplyLeading: false,
       elevation: 0,
       pinned: true,
-      flexibleSpace: SafeArea(
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          padding:
-              EdgeInsets.symmetric(horizontal: AppDimen.MARGIN_CARD_MEDIUM_2),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Visibility(
-                    //visible: !_isAppBarExpanded,
-                    child: Text(
-                      'Friday, January 16th',
+      flexibleSpace: Stack(
+        children: [
+          TopGradient(),
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            padding: EdgeInsets.only(
+                right: AppDimen.MARGIN_CARD_MEDIUM_2,
+                left: AppDimen.MARGIN_CARD_MEDIUM_2,
+                top: MediaQuery.of(context).padding.top),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    // Visibility(
+                    //   //visible: !_isAppBarExpanded,
+                    //   child: Text(
+                    //     'Friday, January 16th',
+                    //     textAlign: TextAlign.center,
+                    //     style: TextStyle(
+                    //         color: Color(0xffAFAFBD),
+                    //         fontSize: AppDimen.TEXT_REGULAR,
+                    //         fontFamily: 'Poppins',
+                    //         fontWeight: FontWeight.normal),
+                    //   ),
+                    // ),
+                    Text(
+                      'Fun feed',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Color(0xffAFAFBD),
-                          fontSize: AppDimen.TEXT_REGULAR,
+                          color: AppTheme.dark_purple,
+                          fontSize: AppDimen.TEXT_REGULAR_3X,
                           fontFamily: 'Poppins',
-                          fontWeight: FontWeight.normal),
+                          letterSpacing: 1,
+                          fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  Text(
-                    'Fun feed',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: AppTheme.dark_purple,
-                        fontSize: AppDimen.TEXT_REGULAR_3X,
-                        fontFamily: 'Poppins',
-                        letterSpacing: 1,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              CircularPersonFace(
-                width: 20,
-                imgPath: 'assets/images/girl_light.png',
-              ),
-            ],
+                  ],
+                ),
+                CircularPersonFace(
+                  width: 20,
+                  imgPath: 'assets/images/girl_light.png',
+                ),
+              ],
+            ),
           ),
-        ),
+        ],
       ),
       backgroundColor: AppTheme.white,
     );
@@ -189,8 +194,7 @@ class _FunListScreenState extends State<FunListScreen> {
         onRefresh: () => {
           funProvider.getFunList(currentPage: 1),
         },
-        onLoading: () =>
-        {
+        onLoading: () => {
           funProvider.getFunList(currentPage: 2),
         },
         child: provider.funList!.isNotEmpty
@@ -213,12 +217,14 @@ class _FunListScreenState extends State<FunListScreen> {
                                 color: AppTheme.dark_purple,
                                 onTap: () async {
                                   funProvider.currentSelectedFanId = index;
+
                                   int updatedCommentCount =
                                       await Navigator.pushNamed(
                                     context,
                                     FunDetailScreen.routeName,
                                     arguments: item,
                                   ) as int;
+
 
                                   funProvider
                                       .updateCommentCount(updatedCommentCount);
@@ -240,19 +246,28 @@ class _FunListScreenState extends State<FunListScreen> {
               ),
       );
     } else if (funProvider.state == ViewState.LOADING) {
-      return Container(
-        color: Colors.amber,
-        child: Text("Loading"),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/jsons/line_loading.json', width: 110),
+          Text('Loading Posts',style: TextStyle(color: AppTheme.dark_purple,fontFamily: 'Poppins'),)
+        ],
       );
     } else if (funProvider.state == ViewState.NO_INTERNET) {
-      return Container(
-        color: Colors.brown,
-        child: Text("No Internet"),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/jsons/no_internet.json', width: 110),
+          Text('No Internet Connection!',style: TextStyle(color: AppTheme.dark_purple,fontFamily: 'Poppins'),)
+        ],
       );
     } else {
-      return Container(
-        color: Colors.red,
-        child: Text("Error"),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/jsons/app_error.json',width: 110),
+          Text('Unknown Error',style: TextStyle(color: AppTheme.dark_purple,fontFamily: 'Poppins'),)
+        ],
       );
     }
   }
