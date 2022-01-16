@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/base_view_model.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
+import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
+import 'package:wisdom/src/data_models/vos/knowledge_list_vo.dart';
 import 'package:wisdom/src/ui/add_post/fun_post_upload_screen.dart';
 import 'package:wisdom/src/ui/add_post/knowledge_post_upload_screen.dart';
-import 'package:wisdom/src/ui/knowledge/knowledge_detail_screen.dart';
+import 'package:wisdom/src/ui/fun/fun_detail_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
+import 'package:wisdom/src/ui/widgets/top_gradient.dart';
 import 'package:wisdom/src/ui/widgets/widget_footer_text.dart';
+import 'package:wisdom/src/view_models/fun_provider.dart';
 import 'package:wisdom/src/view_models/knowledge_provider.dart';
+
+import 'knowledge_detail_screen.dart';
 
 class KnowledgeListScreen extends StatefulWidget {
   static const routeName = '/knowledge_list_screen';
@@ -42,8 +49,10 @@ class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppTheme.dark_purple,
-        onPressed: () {
-          Navigator.pushNamed(context, KnowledgePostUploadScreen.routeName);
+        onPressed: () async {
+          KnowledgeItem knowledgeItem = await Navigator.pushNamed(
+              context, KnowledgePostUploadScreen.routeName) as KnowledgeItem;
+          knowledgeProvider.updateKnowledgeList(knowledgeItem);
         },
         child: SvgPicture.asset(
           'assets/svgs/quil.svg',
@@ -75,61 +84,42 @@ class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
 
   SliverAppBar _buildSliverAppBar() {
     return SliverAppBar(
-      expandedHeight: 160,
+      expandedHeight: 120,
       collapsedHeight: 65,
       automaticallyImplyLeading: false,
       elevation: 0,
       pinned: true,
-      flexibleSpace: SafeArea(
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          padding:
-              EdgeInsets.symmetric(horizontal: AppDimen.MARGIN_CARD_MEDIUM_2),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Visibility(
-                    //visible: !_isAppBarExpanded,
-                    child: Text(
-                      'Friday, January 16th',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Color(0xffAFAFBD),
-                          fontSize: AppDimen.TEXT_REGULAR,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.normal),
-                    ),
-                  ),
-                  Text(
-                    'Knowledge feed',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: AppTheme.dark_purple,
-                        fontSize: AppDimen.TEXT_REGULAR_3X,
-                        fontFamily: 'Poppins',
-                        letterSpacing: 1,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
+      flexibleSpace: Stack(
+        children: [
+          TopGradient(),
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            padding: EdgeInsets.only(
+                right: AppDimen.MARGIN_CARD_MEDIUM_2,
+                left: AppDimen.MARGIN_CARD_MEDIUM_2,
+                top: MediaQuery.of(context).padding.top),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Knowledge feed',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: AppTheme.dark_purple,
+                    fontSize: AppDimen.TEXT_REGULAR_3X,
+                    fontFamily: 'Poppins',
+                    letterSpacing: 1,
+                    fontWeight: FontWeight.bold),
               ),
-              CircularPersonFace(
-                width: 20,
-                imgPath: 'assets/images/girl_light.png',
-              ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
       backgroundColor: AppTheme.white,
     );
   }
 
-  handlingWidget(KnowledgeProvider provider) {
+  handlingWidget(KnowledgeProvider knowledgeProvider) {
     if (knowledgeProvider.state == ViewState.COMPLETE) {
       return SmartRefresher(
         controller: _refreshController,
@@ -186,30 +176,33 @@ class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
         onLoading: () => {
           knowledgeProvider.getKnowledgeList(currentPage: 2),
         },
-        child: provider.knowledgeList!.isNotEmpty
+        child: knowledgeProvider.knowledgeList!.isNotEmpty
             ? CustomScrollView(
                 slivers: [
                   SliverList(
                     delegate: SliverChildListDelegate(
-                      provider.knowledgeList!
+                      knowledgeProvider.knowledgeList!
                           .asMap()
-                          .map((index, item) => MapEntry(
+                          .map(
+                            (index, item) => MapEntry(
                               index,
                               DesignedPostCard(
                                 title: item.note.toString(),
                                 profileUrl: item.creator!.profileAssetsUrl,
                                 name: item.creator!.nickname ?? "",
                                 duration: item.date ?? "",
+                                commentCount: "No",
                                 color: AppTheme.dark_purple,
-                                onTap: () {
-                                  Navigator.pushNamed(
+                                onTap: ()  {
+                                   Navigator.pushNamed(
                                     context,
                                     KnowledgeDetailScreen.routeName,
                                     arguments: item,
-                                  );
+                                  ) as int;
                                 },
-                                commentCount: 'remove',
-                              )))
+                              ),
+                            ),
+                          )
                           .values
                           .toList(),
                     ),
@@ -224,19 +217,40 @@ class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
               ),
       );
     } else if (knowledgeProvider.state == ViewState.LOADING) {
-      return Container(
-        color: Colors.amber,
-        child: Text("Loading"),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/jsons/line_loading.json', width: 110),
+          Text(
+            'Loading Posts',
+            style:
+                TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+          )
+        ],
       );
     } else if (knowledgeProvider.state == ViewState.NO_INTERNET) {
-      return Container(
-        color: Colors.brown,
-        child: Text("No Internet"),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/jsons/no_internet.json', width: 110),
+          Text(
+            'No Internet Connection!',
+            style:
+                TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+          )
+        ],
       );
     } else {
-      return Container(
-        color: Colors.red,
-        child: Text("Error"),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/jsons/app_error.json', width: 110),
+          Text(
+            'Unknown Error',
+            style:
+                TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+          )
+        ],
       );
     }
   }

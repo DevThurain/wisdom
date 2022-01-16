@@ -96,42 +96,18 @@ class _FunListScreenState extends State<FunListScreen> {
                 right: AppDimen.MARGIN_CARD_MEDIUM_2,
                 left: AppDimen.MARGIN_CARD_MEDIUM_2,
                 top: MediaQuery.of(context).padding.top),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    // Visibility(
-                    //   //visible: !_isAppBarExpanded,
-                    //   child: Text(
-                    //     'Friday, January 16th',
-                    //     textAlign: TextAlign.center,
-                    //     style: TextStyle(
-                    //         color: Color(0xffAFAFBD),
-                    //         fontSize: AppDimen.TEXT_REGULAR,
-                    //         fontFamily: 'Poppins',
-                    //         fontWeight: FontWeight.normal),
-                    //   ),
-                    // ),
-                    Text(
-                      'Fun feed',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: AppTheme.dark_purple,
-                          fontSize: AppDimen.TEXT_REGULAR_3X,
-                          fontFamily: 'Poppins',
-                          letterSpacing: 1,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                CircularPersonFace(
-                  width: 20,
-                  imgPath: 'assets/images/girl_light.png',
-                ),
-              ],
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Fun feed',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: AppTheme.dark_purple,
+                    fontSize: AppDimen.TEXT_REGULAR_3X,
+                    fontFamily: 'Poppins',
+                    letterSpacing: 1,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ],

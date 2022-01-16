@@ -68,7 +68,9 @@ class _KnowledgeDetailScreenState extends State<KnowledgeDetailScreen> {
                     ),
                   ];
                 },
-                body: Container(),
+                body: Container(
+                  color: Colors.white,
+                ),
               ),
             ],
           ),

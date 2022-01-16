@@ -31,5 +31,12 @@ class KnowledgeProvider extends BaseViewModel {
     }
   }
 
+  void updateKnowledgeList(KnowledgeItem knowledgeItem) {
+    _knowledgeList.insert(0, knowledgeItem);
+    setState(ViewState.COMPLETE);
+  }
+
+
+
 
 }
