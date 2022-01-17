@@ -198,7 +198,7 @@ class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
                                     context,
                                     KnowledgeDetailScreen.routeName,
                                     arguments: item,
-                                  ) as int;
+                                  );
                                 },
                               ),
                             ),
