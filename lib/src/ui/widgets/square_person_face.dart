@@ -13,7 +13,9 @@ class SquarePersonFace extends StatelessWidget {
       width: width,
       height: width,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          color: Color(0xffb7b7f5),
+          borderRadius: BorderRadius.all(Radius.circular(10),
+          ),
           image: DecorationImage(image: AssetImage(imgPath), fit: BoxFit.cover)),
     );
   }

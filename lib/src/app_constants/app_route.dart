@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wisdom/src/app_constants/screen_arguments.dart';
 import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
-import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
+import 'package:wisdom/src/data_models/vos/knowledge_list_vo.dart';
+import 'package:wisdom/src/ui/add_post/fun_post_upload_screen.dart';
+import 'package:wisdom/src/ui/add_post/knowledge_post_upload_screen.dart';
 import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_detail_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_list_screen.dart';
 import 'package:wisdom/src/ui/home/home_screen.dart';
 import 'package:wisdom/src/ui/intro/intro_screen.dart';
+import 'package:wisdom/src/ui/knowledge/knowledge_detail_screen.dart';
 import 'package:wisdom/src/ui/knowledge/knowledge_list_screen.dart';
 import 'package:wisdom/src/ui/profile/profile_screen.dart';
 
@@ -35,11 +37,17 @@ class AppRoute {
             return const IntroScreen();
 
           case FunDetailScreen.routeName:
-            {
-              return FunDetailScreen(routeSettings.arguments as FunItem);
-            }
-          case AddPostScreen.routeName:
-            return const AddPostScreen();
+            return FunDetailScreen(routeSettings.arguments as FunItem);
+
+          case KnowledgeDetailScreen.routeName:
+            return KnowledgeDetailScreen(
+                routeSettings.arguments as KnowledgeItem);
+
+          case FunPostUploadScreen.routeName:
+            return const FunPostUploadScreen();
+
+          case KnowledgePostUploadScreen.routeName:
+            return const KnowledgePostUploadScreen();
 
           case AuthScreen.routeName:
             return const AuthScreen();

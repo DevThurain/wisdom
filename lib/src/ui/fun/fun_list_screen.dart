@@ -11,6 +11,7 @@ import 'package:wisdom/src/app_utils/base_view_model.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
 import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
+import 'package:wisdom/src/ui/add_post/fun_post_upload_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_detail_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
@@ -86,8 +87,12 @@ class _FunListScreenState extends State<FunListScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppTheme.dark_purple,
-        onPressed: () {
-          Navigator.pushNamed(context, AddPostScreen.routeName);
+        onPressed: () async {
+          FunItem funItem =
+              await Navigator.pushNamed(context, FunPostUploadScreen.routeName)
+                  as FunItem;
+          funProvider
+              .updateFunList(funItem);
         },
         child: SvgPicture.asset(
           'assets/svgs/quil.svg',
@@ -119,7 +124,7 @@ class _FunListScreenState extends State<FunListScreen> {
 
   SliverAppBar _buildSliverAppBar() {
     return SliverAppBar(
-      expandedHeight: 160,
+      expandedHeight: 120,
       collapsedHeight: 65,
       automaticallyImplyLeading: false,
       elevation: 0,
@@ -134,42 +139,18 @@ class _FunListScreenState extends State<FunListScreen> {
                 right: AppDimen.MARGIN_CARD_MEDIUM_2,
                 left: AppDimen.MARGIN_CARD_MEDIUM_2,
                 top: MediaQuery.of(context).padding.top),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    // Visibility(
-                    //   //visible: !_isAppBarExpanded,
-                    //   child: Text(
-                    //     'Friday, January 16th',
-                    //     textAlign: TextAlign.center,
-                    //     style: TextStyle(
-                    //         color: Color(0xffAFAFBD),
-                    //         fontSize: AppDimen.TEXT_REGULAR,
-                    //         fontFamily: 'Poppins',
-                    //         fontWeight: FontWeight.normal),
-                    //   ),
-                    // ),
-                    Text(
-                      'Fun feed',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: AppTheme.dark_purple,
-                          fontSize: AppDimen.TEXT_REGULAR_3X,
-                          fontFamily: 'Poppins',
-                          letterSpacing: 1,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                CircularPersonFace(
-                  width: 20,
-                  imgPath: 'assets/images/girl_light.png',
-                ),
-              ],
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Fun feed',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: AppTheme.dark_purple,
+                    fontSize: AppDimen.TEXT_REGULAR_3X,
+                    fontFamily: 'Poppins',
+                    letterSpacing: 1,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ],
@@ -230,10 +211,10 @@ class _FunListScreenState extends State<FunListScreen> {
           },
         ),
         onRefresh: () => {
-          funProvider.getFunList(currentPage: 1),
+          funProvider.getFunList(),
         },
         onLoading: () => {
-          funProvider.getFunList(currentPage: 2),
+          funProvider.getFunList(),
         },
         child: provider.funList!.isNotEmpty
             ? CustomScrollView(

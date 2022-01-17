@@ -10,7 +10,7 @@ import 'package:wisdom/src/app_utils/dialog_utils.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/app_utils/user_profile_generator.dart';
 import 'package:wisdom/src/data_source/shared_pref/share_pref_helper.dart';
-import 'package:wisdom/src/ui/add_post/add_post_screen.dart';
+import 'package:wisdom/src/ui/add_post/fun_post_upload_screen.dart';
 import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_list_screen.dart';
 import 'package:wisdom/src/ui/knowledge/knowledge_list_screen.dart';
@@ -212,7 +212,11 @@ class ProfileSectionView extends StatelessWidget {
           SizedBox(width: AppDimen.MARGIN_MEDIUM_3),
           InkWell(
             onTap: () => Navigator.pushNamed(context, ProfileScreen.routeName),
-            child: CircularPersonFace(width: 20, imgPath: provider.userProfile),
+
+            child: CircularPersonFace(
+              width: 20,
+              imgPath: provider.userProfile??""
+            ),
           )
         ],
       );

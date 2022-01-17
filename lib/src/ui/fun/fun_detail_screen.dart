@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
+import 'package:wisdom/src/app_utils/hyper_text_view_util.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
@@ -25,10 +26,6 @@ class _FunDetailScreenState extends State<FunDetailScreen> {
   var funProvider = locator<FunProvider>();
   TextEditingController commentBoxController = TextEditingController();
   late ScrollController _nestedScrollController;
-
-  double get _statusBarHeight {
-    return MediaQuery.of(context).padding.top;
-  }
 
   FunItem get _postItem {
     return widget.funItem;
@@ -277,13 +274,14 @@ class PostDetailSectionView extends StatelessWidget {
             SizedBox(
               height: AppDimen.MARGIN_MEDIUM_2,
             ),
-            Text(
-              postItem.post ?? "",
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: AppDimen.TEXT_REGULAR_2X,
-                fontFamily: 'MyanUni',
-                letterSpacing: 0.5,
+            SelectableText.rich(
+              TextSpan(
+                children: HyperTextViewUtil.extractText(postItem.post ?? ""),
+                style: TextStyle(
+                  fontSize: AppDimen.TEXT_REGULAR_2X,
+                  fontFamily: 'MyanUni',
+                  letterSpacing: 0.5,
+                ),
               ),
             ),
             SizedBox(

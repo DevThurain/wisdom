@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
+import 'package:wisdom/src/app_utils/hyper_text_view_util.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/data_models/vos/knowledge_list_vo.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
@@ -52,13 +53,14 @@ class _KnowledgeDetailScreenState extends State<KnowledgeDetailScreen> {
                           padding: const EdgeInsets.symmetric(
                             horizontal: AppDimen.MARGIN_LARGE,
                           ),
-                          child: Text(
-                            _postItem.note ?? "",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              fontSize: AppDimen.TEXT_REGULAR_2X,
-                              fontFamily: 'MyanUni',
-                              letterSpacing: 0.5,
+                          child:  SelectableText.rich(
+                            TextSpan(
+                              children: HyperTextViewUtil.extractText(_postItem.note ?? ""),
+                              style: TextStyle(
+                                fontSize: AppDimen.TEXT_REGULAR_2X,
+                                fontFamily: 'MyanUni',
+                                letterSpacing: 0.5,
+                              ),
                             ),
                           ),
                         ),
@@ -66,7 +68,9 @@ class _KnowledgeDetailScreenState extends State<KnowledgeDetailScreen> {
                     ),
                   ];
                 },
-                body: Container(),
+                body: Container(
+                  color: Colors.white,
+                ),
               ),
             ],
           ),
