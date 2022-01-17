@@ -44,9 +44,7 @@ class _FunListScreenState extends State<FunListScreen> {
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void _loadInterstitialAd() {
     final AdState adState = Provider.of<AdState>(context);
 
     adState.initialization.then((status) {
@@ -71,6 +69,16 @@ class _FunListScreenState extends State<FunListScreen> {
     });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
   _moveToDetailScreen(FunProvider provider, FunItem item) async {
     int updatedCommentCount = await Navigator.pushNamed(
       context,
@@ -90,8 +98,7 @@ class _FunListScreenState extends State<FunListScreen> {
           FunItem funItem =
               await Navigator.pushNamed(context, FunPostUploadScreen.routeName)
                   as FunItem;
-          funProvider
-              .updateFunList(funItem);
+          funProvider.updateFunList(funItem);
         },
         child: SvgPicture.asset(
           'assets/svgs/quil.svg',
@@ -106,6 +113,9 @@ class _FunListScreenState extends State<FunListScreen> {
           if (_refreshController.isRefresh) {
             _refreshController.refreshCompleted();
           }
+
+          if(!_isInterstitialAdReady)
+          _loadInterstitialAd();
 
           return NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -239,11 +249,27 @@ class _FunListScreenState extends State<FunListScreen> {
                                   if (_isInterstitialAdReady) {
                                     _interstitialAd?.fullScreenContentCallback =
                                         FullScreenContentCallback(
-                                      onAdDismissedFullScreenContent: (ad) {
+                    
+                                      onAdShowedFullScreenContent: (InterstitialAd ad) {
+                                        setState(() {
+                                          _isInterstitialAdReady = false;
+                                        });
+                                      },
+                                      onAdDismissedFullScreenContent:
+                                          (InterstitialAd ad) {
                                         _moveToDetailScreen(provider, item);
+                                        ad.dispose();
+                                      },
+                                      onAdFailedToShowFullScreenContent:
+                                          (InterstitialAd ad, AdError error) {
+                                        print(
+                                            '$ad onAdFailedToShowFullScreenContent: $error');
+                                        ad.dispose();
                                       },
                                     );
                                     _interstitialAd?.show();
+
+                                    //_moveToDetailScreen(provider, item);
                                   } else {
                                     print('ads not loaded');
                                     _moveToDetailScreen(provider, item);
