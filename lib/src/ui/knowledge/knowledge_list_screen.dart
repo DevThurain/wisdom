@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
 import 'package:wisdom/src/ui/widgets/top_gradient.dart';
 import 'package:wisdom/src/ui/widgets/widget_footer_text.dart';
+import 'package:wisdom/src/view_models/ad_state.dart';
 import 'package:wisdom/src/view_models/fun_provider.dart';
 import 'package:wisdom/src/view_models/knowledge_provider.dart';
 
@@ -32,16 +34,42 @@ class KnowledgeListScreen extends StatefulWidget {
 }
 
 class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   bool expanded = false;
   var knowledgeProvider = locator<KnowledgeProvider>();
+  InterstitialAd? _interstitialAd;
+  bool _isInterstitialAdReady = false;
 
   @override
   void initState() {
     knowledgeProvider.getKnowledgeList();
     super.initState();
+  }
+
+  void _loadInterstitialAd() {
+    final AdState adState = Provider.of<AdState>(context);
+
+    adState.initialization.then((status) {
+      InterstitialAd.load(
+        adUnitId: adState.interstitialAdUnitId(),
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (ad) {
+            setState(() {
+              _interstitialAd = ad;
+              _isInterstitialAdReady = true;
+            });
+          },
+          onAdFailedToLoad: (err) {
+            print('Failed to load an interstitial ad: ${err.message}');
+            setState(() {
+              _isInterstitialAdReady = false;
+            });
+          },
+        ),
+      );
+    });
   }
 
   @override
@@ -50,8 +78,9 @@ class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppTheme.dark_purple,
         onPressed: () async {
-          KnowledgeItem knowledgeItem = await Navigator.pushNamed(
-              context, KnowledgePostUploadScreen.routeName) as KnowledgeItem;
+          KnowledgeItem knowledgeItem =
+              await Navigator.pushNamed(context, KnowledgePostUploadScreen.routeName)
+                  as KnowledgeItem;
           knowledgeProvider.updateKnowledgeList(knowledgeItem);
         },
         child: SvgPicture.asset(
@@ -67,6 +96,8 @@ class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
           if (_refreshController.isRefresh) {
             _refreshController.refreshCompleted();
           }
+
+          if (!_isInterstitialAdReady) _loadInterstitialAd();
 
           return NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -116,6 +147,14 @@ class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
         ],
       ),
       backgroundColor: AppTheme.white,
+    );
+  }
+
+  _moveToDetailScreen(Object? item) async {
+    Navigator.pushNamed(
+      context,
+      KnowledgeDetailScreen.routeName,
+      arguments: item,
     );
   }
 
@@ -193,12 +232,34 @@ class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
                                 duration: item.date ?? "",
                                 commentCount: "No",
                                 color: AppTheme.dark_purple,
-                                onTap: ()  {
-                                   Navigator.pushNamed(
-                                    context,
-                                    KnowledgeDetailScreen.routeName,
-                                    arguments: item,
-                                  );
+                                onTap: () {
+                                  if (_isInterstitialAdReady) {
+                                    _interstitialAd?.fullScreenContentCallback =
+                                        FullScreenContentCallback(
+                                      onAdShowedFullScreenContent: (InterstitialAd ad) {
+                                        setState(() {
+                                          _isInterstitialAdReady = false;
+                                        });
+                                      },
+                                      onAdDismissedFullScreenContent:
+                                          (InterstitialAd ad) {
+                                        _moveToDetailScreen(item);
+                                        ad.dispose();
+                                      },
+                                      onAdFailedToShowFullScreenContent:
+                                          (InterstitialAd ad, AdError error) {
+                                        print(
+                                            '$ad onAdFailedToShowFullScreenContent: $error');
+                                        ad.dispose();
+                                      },
+                                    );
+                                    _interstitialAd?.show();
+
+                                    //_moveToDetailScreen(provider, item);
+                                  } else {
+                                    print('ads not loaded');
+                                    _moveToDetailScreen(item);
+                                  }
                                 },
                               ),
                             ),
@@ -223,8 +284,7 @@ class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
           Lottie.asset('assets/jsons/line_loading.json', width: 110),
           Text(
             'Loading Posts',
-            style:
-                TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+            style: TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
           )
         ],
       );
@@ -235,8 +295,7 @@ class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
           Lottie.asset('assets/jsons/no_internet.json', width: 110),
           Text(
             'No Internet Connection!',
-            style:
-                TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+            style: TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
           )
         ],
       );
@@ -247,8 +306,7 @@ class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
           Lottie.asset('assets/jsons/app_error.json', width: 110),
           Text(
             'Unknown Error',
-            style:
-                TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+            style: TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
           )
         ],
       );

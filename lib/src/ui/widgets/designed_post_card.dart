@@ -59,9 +59,9 @@ class DesignedPostCard extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: AppDimen.MARGIN_MEDIUM_2,
-                    vertical: AppDimen.MARGIN_MEDIUM_2),
+                    vertical: AppDimen.MARGIN_MEDIUM_2 + AppDimen.MARGIN_MEDIUM),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     PostProfileUI(profileUrl: profileUrl, color: color, name: name,duration: duration,),
