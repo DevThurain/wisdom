@@ -168,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               _bannerLoaded
-                  ? Container(
+                  ? SizedBox(
                       width: double.infinity, height: 50, child: AdWidget(ad: banner))
                   : SizedBox(),
             ],
