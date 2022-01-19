@@ -150,7 +150,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                           return Container();
                         },
                         child:
-                            Lottie.asset('assets/jsons/white_loading.json', width: 80)),
+                            Lottie.asset('assets/jsons/white_line_loading.json', width: 80)),
+
                   ),
                 )
               ],
