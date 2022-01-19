@@ -6,6 +6,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/base_view_model.dart';
+import 'package:wisdom/src/app_utils/dialog_utils.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/app_utils/user_profile_generator.dart';
 import 'package:wisdom/src/data_models/response/response_user_profile_vo.dart';
@@ -68,7 +69,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  SliverAppBar _buildSliverAppBar(ResponseUserProfileVO? responseUserProfileVO) {
+  SliverAppBar _buildSliverAppBar(
+      ResponseUserProfileVO? responseUserProfileVO) {
     return SliverAppBar(
       expandedHeight: 120,
       collapsedHeight: 65,
@@ -231,10 +233,10 @@ class ProfileHeaderSectionView extends StatelessWidget {
 
   const ProfileHeaderSectionView({
     Key? key,
-     this.color,
-     this.name = "-",
-     this.profileUrl,
-     this.userType = "-",
+    this.color,
+    this.name = "-",
+    this.profileUrl,
+    this.userType = "-",
   }) : super(key: key);
 
   @override
@@ -245,14 +247,14 @@ class ProfileHeaderSectionView extends StatelessWidget {
           alignment: Alignment.center,
           child: Row(
             children: [
-              SquarePersonFace(width: 40, imgPath: profileUrl??""),
+              SquarePersonFace(width: 40, imgPath: profileUrl ?? ""),
               SizedBox(width: AppDimen.MARGIN_MEDIUM),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    name??"-",
+                    name ?? "-",
                     textAlign: TextAlign.start,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
@@ -264,7 +266,7 @@ class ProfileHeaderSectionView extends StatelessWidget {
                         fontWeight: FontWeight.normal),
                   ),
                   Text(
-                    userType??"-",
+                    userType ?? "-",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Color(0xffAFAFBD),
@@ -273,45 +275,26 @@ class ProfileHeaderSectionView extends StatelessWidget {
                         fontWeight: FontWeight.normal),
                   ),
                 ],
-              )
+              ),
+              Text("     Work In Progress", style: TextStyle(color: Colors.red.withOpacity(0.5)),)
             ],
           ),
         ),
         Align(
-           alignment: Alignment.topRight,
-            child: IconButton(
-              padding: EdgeInsets.all(0.0),
-              color: color,
-              icon: Icon(Icons.edit_rounded, size: 18.0),
-              onPressed: () => showGeneralDialog(
-                barrierDismissible: false,
+          alignment: Alignment.topRight,
+          child: IconButton(
+            padding: EdgeInsets.all(0.0),
+            color: color,
+            icon: Icon(Icons.edit_rounded, size: 18.0),
+            onPressed: () => showDialog(
                 context: context,
-                barrierColor: Colors.black54,
-                transitionDuration: Duration(milliseconds: 600),
-                transitionBuilder: (context, a1, a2, child) {
-                  return ScaleTransition(
-                    scale: CurvedAnimation(
-                      parent: a1,
-                      curve: Curves.elasticOut,
-                      reverseCurve: Curves.linearToEaseOut,
-                    ),
-                    child: CustomDialog(
-                      // our custom dialog
-                      title: "Chrono",
-                      positiveBtnText: "Save",
-                      negativeBtnText: "Close",
-                      positiveBtnPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
+                builder: (_) {
+                  return ProfileUpdateDialog(
+                      title: "Update Profile",
                   );
-                },
-                pageBuilder: (BuildContext context, Animation animation,
-                    Animation secondaryAnimation) {
-                  return SizedBox();
-                },
-              ),
-            ))
+                }),
+          ),
+        )
       ],
     );
   }

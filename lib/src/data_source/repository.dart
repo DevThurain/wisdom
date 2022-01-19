@@ -5,6 +5,7 @@ import 'package:wisdom/src/data_models/daos/fun_list_dao.dart';
 import 'package:wisdom/src/data_models/request/request_login_vo.dart';
 import 'package:wisdom/src/data_models/request/request_register_vo.dart';
 import 'package:wisdom/src/data_models/response/response_login_vo.dart';
+import 'package:wisdom/src/data_models/response/response_profile_edit.dart';
 import 'package:wisdom/src/data_models/response/response_register_vo.dart';
 import 'package:wisdom/src/data_models/response/response_success_vo.dart';
 import 'package:wisdom/src/data_models/response/response_user_profile_vo.dart';
@@ -35,4 +36,5 @@ abstract class Repository {
   Future<FunUploadResponse> funPostUpload(String content);
   Future<KnowledgeUploadResponse> knowledgePostUpload(String content, {String link = ""});
   Future<ResponseUserProfileVO> getUserProfile();
+  Future<EditProfileResponse> updateNickName(String nickName);
 }

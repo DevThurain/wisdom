@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:wisdom/src/app_constants/app_api_route.dart';
 import 'package:wisdom/src/data_models/response/response_login_vo.dart';
+import 'package:wisdom/src/data_models/response/response_profile_edit.dart';
 import 'package:wisdom/src/data_models/response/response_register_vo.dart';
 import 'package:wisdom/src/data_models/response/response_success_vo.dart';
 import 'package:wisdom/src/data_models/response/response_user_profile_vo.dart';
@@ -68,4 +69,7 @@ abstract class WisdomAPI {
   @GET("/wisdom/user")
   Future<ResponseUserProfileVO> getUserProfile();
 
+  @POST("/wisdom/user")
+  Future<EditProfileResponse> updateUserProfile(
+      @Query("nickname") String nickName);
 }

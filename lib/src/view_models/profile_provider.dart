@@ -48,4 +48,17 @@ class ProfileProvider extends BaseViewModel {
   }
 
 
+  Future<void> saveNickName(String nickName) async{
+    if (nickName.isEmpty) {
+      setNotifyMessage("Your nick name is empty.");
+      return;
+    }
+    await _repository.updateNickName(nickName).then((value)  {
+    setNotifyMessage("success");
+    }).onError((error, stackTrace) {
+      final res = (error as DioError).response;
+      setNotifyMessage(res?.data['message']);
+    });
+  }
+
 }

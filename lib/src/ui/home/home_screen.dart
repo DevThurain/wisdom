@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
               homeProvider.show = false;
               return WillPopScope(
                 onWillPop: () async => homeProvider.isAlreadyUpdated,
-                child: CustomDialogBox(
+                child: ForceUpdateDialog(
                     title: "Update Available!",
                     descriptions:
                         "A new version is available for this app. You can update it from store or direct link.",

@@ -11,6 +11,7 @@ import 'package:wisdom/src/data_models/daos/fun_list_dao.dart';
 import 'package:wisdom/src/data_models/request/request_login_vo.dart';
 import 'package:wisdom/src/data_models/request/request_register_vo.dart';
 import 'package:wisdom/src/data_models/response/response_login_vo.dart';
+import 'package:wisdom/src/data_models/response/response_profile_edit.dart';
 import 'package:wisdom/src/data_models/response/response_register_vo.dart';
 import 'package:wisdom/src/data_models/response/response_success_vo.dart';
 import 'package:wisdom/src/data_models/response/response_user_profile_vo.dart';
@@ -139,6 +140,12 @@ class RepositoryImpl implements Repository {
   Future<ResponseUserProfileVO> getUserProfile() {
     String token = _pref.getToken();
     return _mSource.privateApi(token).getUserProfile();
+  }
+
+  @override
+  Future<EditProfileResponse> updateNickName(String nickName) {
+    String token = _pref.getToken();
+    return _mSource.privateApi(token).updateUserProfile(nickName);
   }
 }
 
