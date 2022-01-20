@@ -38,5 +38,5 @@ abstract class Repository {
   Future<ResponseUserProfileVO> getUserProfile();
   Future<EditProfileResponse> updateNickName(String nickName);
   Future<FunListVo> getMyFunList(int page);
-
+  Future<ResponseSuccessVO> deletePostById(int postId);
 }

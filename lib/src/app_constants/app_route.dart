@@ -61,8 +61,3 @@ class AppRoute {
   }
 }
 
-Future<bool> checkTokenStored() async {
-  var _pref = await SharedPreferences.getInstance();
-  String token = _pref.getString(PREF_AUTH_TOKEN) ?? '';
-  return token.isNotEmpty;
-}

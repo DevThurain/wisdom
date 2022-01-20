@@ -9,6 +9,8 @@ import 'package:wisdom/src/app_utils/base_view_model.dart';
 import 'package:wisdom/src/app_utils/dialog_utils/profile_update_dialog.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/data_models/response/response_user_profile_vo.dart';
+import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
+import 'package:wisdom/src/ui/add_post/fun_post_upload_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_detail_screen.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
 import 'package:wisdom/src/ui/widgets/square_person_face.dart';
@@ -25,8 +27,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   bool expanded = false;
   var profileProvider = locator<ProfileProvider>();
@@ -64,8 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  SliverAppBar _buildSliverAppBar(
-      ResponseUserProfileVO? responseUserProfileVO) {
+  SliverAppBar _buildSliverAppBar(ResponseUserProfileVO? responseUserProfileVO) {
     return SliverAppBar(
       expandedHeight: 120,
       collapsedHeight: 65,
@@ -175,18 +175,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: AppTheme.dark_purple,
                                 onTap: () async {
                                   profileProvider.currentSelectedFanId = index;
-                                  int updatedCommentCount =
-                                      await Navigator.pushNamed(
+                                  int updatedCommentCount = await Navigator.pushNamed(
                                     context,
                                     FunDetailScreen.routeName,
                                     arguments: item,
                                   ) as int;
 
-                                  profileProvider
-                                      .updateCommentCount(updatedCommentCount);
+                                  profileProvider.updateCommentCount(updatedCommentCount);
                                 },
                                 deletePost: () => profileProvider.deletePost(
-                                    postId: item.id!, position: index),
+                                    postId: item.id!, position: index, context: context),
                               ),
                             ),
                           )
@@ -197,9 +195,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               )
             : Center(
-                child: Container(
-                  color: Colors.green,
-                  child: Text("There is No Fun Feeds"),
+                child: GestureDetector(
+                  onTap: () async {
+                    await Navigator.pushNamed(context, FunPostUploadScreen.routeName);
+                    provider.getMyFunList();
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Upload your first post now.",
+                        style: TextStyle(
+                          color: AppTheme.black.withOpacity(0.5),
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                      SizedBox(height: AppDimen.MARGIN_MEDIUM),
+                      Text(
+                        "Add Post",
+                        style: TextStyle(
+                          color: AppTheme.dark_purple,
+                          fontFamily: 'Poppins',
+                          fontSize: AppDimen.TEXT_REGULAR_2X,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
       );
@@ -210,8 +231,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Lottie.asset('assets/jsons/line_loading.json', width: 110),
           Text(
             'Loading Posts',
-            style:
-                TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+            style: TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
           )
         ],
       );
@@ -222,8 +242,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Lottie.asset('assets/jsons/no_internet.json', width: 110),
           Text(
             'No Internet Connection!',
-            style:
-                TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+            style: TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
           )
         ],
       );
@@ -234,8 +253,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Lottie.asset('assets/jsons/app_error.json', width: 110),
           Text(
             'Unknown Error',
-            style:
-                TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+            style: TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
           )
         ],
       );

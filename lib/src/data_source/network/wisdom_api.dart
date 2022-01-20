@@ -75,4 +75,9 @@ abstract class WisdomAPI {
 
   @GET("/wisdom/my-posts")
   Future<FunListVo> getMyFunList(@Query("page") int page);
+
+    @DELETE("/wisdom/post/{postId}")
+  Future<ResponseSuccessVO> deletePostById(
+    @Path("postId") int postId,
+  );
 }

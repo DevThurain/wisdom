@@ -144,6 +144,10 @@ class RepositoryImpl implements Repository {
     return _mSource.privateApi().getMyFunList(page);
   }
 
+  @override
+  Future<ResponseSuccessVO> deletePostById(int postId) {
+    return _mSource.privateApi().deletePostById(postId);
+  }
 }
 
 

@@ -68,10 +68,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                 slivers: [
                   SliverToBoxAdapter(
                     child: SizedBox(
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.2,
+                      height: MediaQuery.of(context).size.height * 0.2,
                     ),
                   ),
                   SliverToBoxAdapter(
@@ -81,8 +78,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          TitleSection(
-                              animationController: _animationController),
+                          TitleSection(animationController: _animationController),
                           SizedBox(height: AppDimen.MARGIN_MEDIUM_3),
                           Stack(
                             children: [
@@ -90,32 +86,29 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                                 children: [
                                   Builder(builder: (context) {
                                     return LoginSection(
-                                      loginNickNameController:
-                                      _loginNickNameController,
-                                      loginPasswordController:
-                                      _loginPasswordController,
+                                      loginNickNameController: _loginNickNameController,
+                                      loginPasswordController: _loginPasswordController,
                                       animationController: _animationController,
                                       onPressRegister: () {
                                         _animationController.animateTo(0.4);
                                       },
                                       onPressLogin: () {
-                                        _loginUser(Provider.of<AuthProvider>(
-                                            context,
-                                            listen: false),);
+                                        _loginUser(
+                                          Provider.of<AuthProvider>(context,
+                                              listen: false),
+                                        );
                                       },
                                     );
                                   }),
                                   ReferCodeSection(
                                       referCodeController: _referCodeController,
-                                      animationController:
-                                      _animationController),
+                                      animationController: _animationController),
                                   RegisterSection(
                                       registerNickNameController:
-                                      _registerNickNameController,
+                                          _registerNickNameController,
                                       registerPasswordController:
-                                      _registerPasswordController,
-                                      animationController:
-                                      _animationController),
+                                          _registerPasswordController,
+                                      animationController: _animationController),
                                 ],
                               ),
                               Align(
@@ -128,24 +121,21 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                               ),
                             ],
                           ),
-                          Consumer<AuthProvider>(
-                              builder: (context, provider, child) {
-                                if (provider.state == ViewState.LOADING) {} else
-                                if (provider.state == ViewState.COMPLETE) {
-                                  WidgetsBinding.instance!
-                                      .addPostFrameCallback((_) {
-                                    Navigator.pushReplacementNamed(
-                                        context, HomeScreen.routeName);
-                                  });
-                                } else if (provider.state == ViewState.ERROR) {
-                                  WidgetsBinding.instance!
-                                      .addPostFrameCallback((_) {
-                                    showErrorDialog(
-                                        context, 'Error', provider.errorMessage, provider);
-                                  });
-                                }
-                                return Container();
-                              }),
+                          Consumer<AuthProvider>(builder: (context, provider, child) {
+                            if (provider.state == ViewState.LOADING) {
+                            } else if (provider.state == ViewState.COMPLETE) {
+                              WidgetsBinding.instance!.addPostFrameCallback((_) {
+                                Navigator.pushReplacementNamed(
+                                    context, HomeScreen.routeName);
+                              });
+                            } else if (provider.state == ViewState.ERROR) {
+                              WidgetsBinding.instance!.addPostFrameCallback((_) {
+                                showErrorDialog(
+                                    context, 'Error', provider.errorMessage, provider);
+                              });
+                            }
+                            return Container();
+                          }),
                         ],
                       ),
                     ),
@@ -155,8 +145,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
-                  padding:
-                  const EdgeInsets.only(bottom: AppDimen.MARGIN_MEDIUM_2),
+                  padding: const EdgeInsets.only(bottom: AppDimen.MARGIN_MEDIUM_2),
                   child: Consumer<AuthProvider>(
                     builder: (context, provider, child) {
                       if (provider.state == ViewState.LOADING) {
@@ -178,8 +167,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     );
   }
 
-  void showErrorDialog(BuildContext ctx, String title, String message,
-      AuthProvider provider) {
+  void showErrorDialog(
+      BuildContext ctx, String title, String message, AuthProvider provider) {
     provider.setState(ViewState.NONE);
     showDialog(
       context: ctx,
@@ -202,11 +191,9 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   _onNext(AuthProvider provider) {
     if (_animationController.value >= 0.0 && _animationController.value < 0.4) {
       _animationController.animateTo(0.4);
-    } else if (_animationController.value >= 0.4 &&
-        _animationController.value < 0.6) {
+    } else if (_animationController.value >= 0.4 && _animationController.value < 0.6) {
       _animationController.animateTo(0.6);
-    } else if (_animationController.value >= 0.6 &&
-        _animationController.value < 0.8) {
+    } else if (_animationController.value >= 0.6 && _animationController.value < 0.8) {
       _registerUser(provider);
     }
   }
@@ -214,8 +201,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   _onExit() {
     if (_animationController.value >= 0.4 && _animationController.value < 0.6) {
       _animationController.animateTo(0.2);
-    } else if (_animationController.value >= 0.6 &&
-        _animationController.value < 0.8) {
+    } else if (_animationController.value >= 0.6 && _animationController.value < 0.8) {
       _animationController.animateTo(0.4);
     } else {
       if (Platform.isAndroid) {
@@ -245,50 +231,50 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   }
 }
 
-  class ButtonSectionView extends StatelessWidget {
+class ButtonSectionView extends StatelessWidget {
   const ButtonSectionView({
-  Key? key,
+    Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-  return Container(
-  width: MediaQuery.of(context).size.width * 0.4,
-  height: 55,
-  decoration: BoxDecoration(
-  borderRadius: BorderRadius.all(Radius.circular(20)),
-  color: AppTheme.fresh_purple,
-  ),
-  child: InkWell(
-  child: Center(
-  child: Text(
-  'Register',
-  style: TextStyle(
-  fontFamily: 'Poppins',
-  color: AppTheme.white,
-  ),
-  ),
-  ),
-  ),
-  );
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.4,
+      height: 55,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        color: AppTheme.fresh_purple,
+      ),
+      child: InkWell(
+        child: Center(
+          child: Text(
+            'Register',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              color: AppTheme.white,
+            ),
+          ),
+        ),
+      ),
+    );
   }
-  }
+}
 
-  class TextFieldTitle extends StatelessWidget {
+class TextFieldTitle extends StatelessWidget {
   final String text;
 
   TextFieldTitle({Key? key, required this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-  return Text(
-  text,
-  textAlign: TextAlign.center,
-  style: const TextStyle(
-  color: AppTheme.white,
-  fontSize: AppDimen.TEXT_REGULAR_2X,
-  fontFamily: 'Poppins',
-  fontWeight: FontWeight.normal),
-  );
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+          color: AppTheme.white,
+          fontSize: AppDimen.TEXT_REGULAR_2X,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.normal),
+    );
   }
-  }
+}

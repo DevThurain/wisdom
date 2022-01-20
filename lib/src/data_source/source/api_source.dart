@@ -45,6 +45,7 @@ class ApiSource {
   WisdomAPI privateApi() {
     late final SharedPreferenceHelper _pref = locator<SharedPreferenceHelper>();
     String token = _pref.getString(PREF_AUTH_TOKEN);
+    print("token =>" + token);
 
     dio.options.headers = {
       "Content-Type": Headers.jsonContentType,

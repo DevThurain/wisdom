@@ -1,4 +1,4 @@
-package com.example.wisdom
+package com.wisdom.knowledgebox
 
 import io.flutter.embedding.android.FlutterActivity
 

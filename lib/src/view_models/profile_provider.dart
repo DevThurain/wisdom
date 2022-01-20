@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/base_view_model.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/data_models/response/response_user_profile_vo.dart';
@@ -71,7 +73,7 @@ class ProfileProvider extends BaseViewModel {
     }
     await _repository.updateNickName(nickName).then((value) {
       _responseUserProfileVO!.data!.setNickname = value.data!.nickname ?? "";
-      _pref.setString(PREF_USER_NAME, value.data!.nickname??"");
+      _pref.setString(PREF_USER_NAME, value.data!.nickname ?? "");
       setNotifyMessage("Nick name successfully changed");
     }).onError((error, stackTrace) {
       final res = (error as DioError).response;
@@ -84,14 +86,26 @@ class ProfileProvider extends BaseViewModel {
     getMyFunList();
   }
 
-  Future<void> deletePost({required int postId,required int position}) async {
-    setNotifyMessage("Deleting...");
-    // await _repository.deletePostById(postId).then((value) {
-    //   _responseUserProfileVO!.data!.setNickname = value.data!.nickname ?? "";
-    //   setNotifyMessage("Nick name successfully changed");
-    // }).onError((error, stackTrace) {
-    //   final res = (error as DioError).response;
-    //   setNotifyMessage(res?.data['message']);
-    // });
+  Future<void> deletePost(
+      {required int postId, required int position, required BuildContext context}) async {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        backgroundColor: AppTheme.dark_purple,
+        content: const Text('Removing..'),
+      ),
+    );
+    await _repository.deletePostById(postId).then((value) {
+      
+      _funList.removeWhere((element) => element.id == postId);
+      scaffold.hideCurrentSnackBar();
+      notifyListeners();
+
+    }).onError((error, stackTrace) {
+      scaffold.hideCurrentSnackBar();
+
+      final res = (error as DioError).response;
+      setNotifyMessage(res?.data['message']);
+    });
   }
 }

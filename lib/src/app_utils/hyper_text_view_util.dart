@@ -1,10 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 
 class HyperTextViewUtil {
- static List<TextSpan> extractText(String rawString) {
+  static List<TextSpan> extractText(String rawString) {
     List<TextSpan> textSpan = [];
 
     final urlRegExp = RegExp(
@@ -17,6 +18,7 @@ class HyperTextViewUtil {
           style: TextStyle(color: Colors.blue),
           recognizer: TapGestureRecognizer()
             ..onTap = () {
+              _launchURL(linkString);
               Fluttertoast.showToast(msg: linkString);
             },
         ),
@@ -46,4 +48,9 @@ class HyperTextViewUtil {
 
     return textSpan;
   }
+}
+
+void _launchURL(String _url) async {
+  var fullUrl = _url.startsWith("https:") || _url.startsWith("http:") ? _url : "https:" + _url;
+  if (!await launch(fullUrl)) throw 'Could not launch $_url';
 }
