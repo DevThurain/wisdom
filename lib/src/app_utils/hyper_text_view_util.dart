@@ -18,7 +18,7 @@ class HyperTextViewUtil {
           style: TextStyle(color: Colors.blue),
           recognizer: TapGestureRecognizer()
             ..onTap = () {
-              _launchURL(linkString);
+              launchURL(linkString);
               Fluttertoast.showToast(msg: linkString);
             },
         ),
@@ -48,9 +48,10 @@ class HyperTextViewUtil {
 
     return textSpan;
   }
-}
-
-void _launchURL(String _url) async {
+  static void launchURL(String _url) async {
   var fullUrl = _url.startsWith("https:") || _url.startsWith("http:") ? _url : "https:" + _url;
   if (!await launch(fullUrl)) throw 'Could not launch $_url';
 }
+}
+
+

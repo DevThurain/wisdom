@@ -49,7 +49,10 @@
 	<array>
   		<string>https</string>
   		<string>http</string>
+		<string>itms-beta</string>
+        <string>itms</string>
 	</array>
+	
 </dict>
 
 

@@ -24,6 +24,8 @@ class HomeProvider extends BaseViewModel {
 
   bool get isAlreadyUpdated => _isAlreadyUpdated;
 
+  AppVersionVo? get appVersionVo => _appVersionVo;
+
   bool get isForceUpdate => _isForceUpdate;
 
   String? get userProfile => _userProfile;
@@ -31,10 +33,8 @@ class HomeProvider extends BaseViewModel {
   // methods
 
   Future<void> checkAppVersion() async {
-    await repository.checkAppVersion().then((value) => {
-          _appVersionVo = value,
-          _isForceUpdate = _appVersionVo!.forceUpdate ?? false
-        });
+    await repository.checkAppVersion().then((value) =>
+        {_appVersionVo = value, _isForceUpdate = _appVersionVo!.forceUpdate ?? false});
 
     if (_appVersionVo != null) {
       await CheckUpdateUtil.getIsAlreadyUpdated(_appVersionVo!.version!)

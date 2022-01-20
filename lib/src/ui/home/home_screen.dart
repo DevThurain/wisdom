@@ -80,11 +80,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   descriptions:
                       "A new version is available for this app. You can update it from store or direct link.",
                   isForceUpdate: _homeProvider.isForceUpdate,
+                  appVersionVo: _homeProvider.appVersionVo!,
                 ),
               );
             });
       }
     });
+    
   }
 
   _logoutUser() async {

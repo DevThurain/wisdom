@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
+import 'package:wisdom/src/app_utils/hyper_text_view_util.dart';
+import 'package:wisdom/src/data_models/vos/app_version_vo.dart';
 
 class ForceUpdateDialog extends StatefulWidget {
   final String? title, descriptions;
   final bool? isForceUpdate;
+  final AppVersionVo appVersionVo;
 
   const ForceUpdateDialog({
     Key? key,
     this.title,
     this.descriptions,
+    required this.appVersionVo,
     this.isForceUpdate = false,
   }) : super(key: key);
 
@@ -29,11 +33,11 @@ class _ForceUpdateDialogState extends State<ForceUpdateDialog> {
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
-      child: contentBox(context),
+      child: contentBox(context, widget.appVersionVo),
     );
   }
 
-  contentBox(context) {
+  contentBox(context, AppVersionVo appVersionVo) {
     return Container(
       constraints: BoxConstraints(
         minHeight: MediaQuery.of(context).size.height * 0.3,
@@ -88,7 +92,9 @@ class _ForceUpdateDialogState extends State<ForceUpdateDialog> {
                   child: Column(
                     children: [
                       GestureDetector(
-                        onTap: () => Fluttertoast.showToast(msg: "Store Link"),
+                        onTap: () {
+                          HyperTextViewUtil.launchURL(appVersionVo.storeURL.toString());
+                        },
                         child: Container(
                           height: 48,
                           color: Color(0xffb7b7f5).withOpacity(0.5),
@@ -124,7 +130,9 @@ class _ForceUpdateDialogState extends State<ForceUpdateDialog> {
                         height: 1,
                       ),
                       GestureDetector(
-                        onTap: () => Fluttertoast.showToast(msg: "Direct Link"),
+                        onTap: () {
+                          HyperTextViewUtil.launchURL(appVersionVo.directURL.toString());
+                        },
                         child: Container(
                           height: 48,
                           width: double.infinity,
@@ -180,13 +188,11 @@ class _ForceUpdateDialogState extends State<ForceUpdateDialog> {
                       )),
                 ),
           SizedBox(
-            height: widget.isForceUpdate!
-                ? AppDimen.MARGIN_MEDIUM_3
-                : AppDimen.MARGIN_MEDIUM,
+            height:
+                widget.isForceUpdate! ? AppDimen.MARGIN_MEDIUM_3 : AppDimen.MARGIN_MEDIUM,
           ),
         ],
       ),
     );
   }
 }
-
