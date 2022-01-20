@@ -37,8 +37,7 @@ class MyApp extends StatelessWidget {
           ],
 
           locale: const Locale('en',''),
-          onGenerateTitle: (BuildContext context) =>
-              AppLocalizations.of(context)!.greeting,
+          onGenerateTitle: (BuildContext context) => "Wisdom",
           theme: ThemeData(),
           darkTheme: ThemeData.dark(),
           themeMode: settingsController.themeMode,
