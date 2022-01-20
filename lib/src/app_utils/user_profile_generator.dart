@@ -6,7 +6,7 @@ const List<String> profileAssetsUrlList = [
   "assets/images/larva_red.png",
   "assets/images/minion.png",
   "assets/images/slooth.png",
-  "assets/images/purple_minion.png",
+  "assets/images/ht_dragon.png",
   "assets/images/tom.png",
   "assets/images/snow_man.png",
 ];

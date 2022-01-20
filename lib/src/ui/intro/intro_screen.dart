@@ -145,7 +145,7 @@ class PersonCardSection extends StatelessWidget {
             bottom: 90,
             child: CircularPersonFace(
               width: 14,
-              imgPath: 'assets/images/ice_age_sid.png',
+              imgPath: 'assets/images/ht_dragon.png',
             ),
           ),
           const Positioned(
