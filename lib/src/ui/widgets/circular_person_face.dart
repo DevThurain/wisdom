@@ -11,7 +11,10 @@ class CircularPersonFace extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          shape: BoxShape.circle, border: Border.all(color: AppTheme.white)),
+        shape: BoxShape.circle,
+        border: Border.all(color: AppTheme.white),
+        color: Color(0xffb7b7f5),
+      ),
       child: CircleAvatar(
         backgroundImage: AssetImage(imgPath),
         backgroundColor: Colors.transparent,

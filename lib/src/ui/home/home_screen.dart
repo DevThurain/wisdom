@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
-import 'package:wisdom/src/app_utils/dialog_utils.dart';
+import 'package:wisdom/src/app_utils/dialog_utils/force_update_dialog.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/app_utils/user_profile_generator.dart';
 import 'package:wisdom/src/data_source/shared_pref/share_pref_helper.dart';
-import 'package:wisdom/src/ui/add_post/fun_post_upload_screen.dart';
 import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_list_screen.dart';
 import 'package:wisdom/src/ui/knowledge/knowledge_list_screen.dart';
 import 'package:wisdom/src/ui/profile/profile_screen.dart';
-import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
+import 'package:wisdom/src/ui/widgets/square_person_face.dart';
 import 'package:wisdom/src/ui/widgets/top_gradient.dart';
 import 'package:wisdom/src/view_models/ad_state.dart';
 import 'package:wisdom/src/view_models/home_provider.dart';
@@ -30,16 +28,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  var homeProvider = locator<HomeProvider>();
-  var sharePreference = locator<SharedPreferenceHelper>();
-  late BannerAd banner;
+  final _homeProvider = locator<HomeProvider>();
+  final _pref = locator<SharedPreferenceHelper>();
   bool _bannerLoaded = false;
+  late BannerAd banner;
 
   @override
   void initState() {
     super.initState();
     checkAppUpdateVersion();
-    homeProvider.getUserProfile();
+    _homeProvider.getUserProfile();
   }
 
   @override
@@ -68,21 +66,21 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void checkAppUpdateVersion() {
-    homeProvider.checkAppVersion().then((value) {
-      if (!homeProvider.isAlreadyUpdated) {
+    _homeProvider.checkAppVersion().then((value) {
+      if (!_homeProvider.isAlreadyUpdated) {
         showDialog(
             context: context,
-            barrierDismissible: !homeProvider.isAlreadyUpdated,
+            barrierDismissible: !_homeProvider.isAlreadyUpdated,
             builder: (_) {
-              homeProvider.show = false;
+              _homeProvider.show = false;
               return WillPopScope(
-                onWillPop: () async => homeProvider.isAlreadyUpdated,
+                onWillPop: () async => _homeProvider.isAlreadyUpdated,
                 child: ForceUpdateDialog(
-                    title: "Update Available!",
-                    descriptions:
-                        "A new version is available for this app. You can update it from store or direct link.",
-                    isForceUpdate: homeProvider.isForceUpdate,
-                    onClickButton: () => print("update")),
+                  title: "Update Available!",
+                  descriptions:
+                      "A new version is available for this app. You can update it from store or direct link.",
+                  isForceUpdate: _homeProvider.isForceUpdate,
+                ),
               );
             });
       }
@@ -90,14 +88,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _logoutUser() async {
-    await sharePreference.clear();
+    await _pref.clear();
     Navigator.pushReplacementNamed(context, AuthScreen.routeName);
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => homeProvider,
+      create: (context) => _homeProvider,
       child: Consumer<HomeProvider>(builder: (context, provider, child) {
         if (provider.logout) {
           _logoutUser();
@@ -156,7 +154,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 title: 'Fun',
                                 color: AppTheme.dark_purple,
                                 onTap: () {
-                                  Navigator.pushNamed(context, FunListScreen.routeName);
+                                  Navigator.pushNamed(
+                                      context, FunListScreen.routeName);
                                 },
                               ),
                             ],
@@ -169,7 +168,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               _bannerLoaded
                   ? SizedBox(
-                      width: double.infinity, height: 50, child: AdWidget(ad: banner))
+                      width: double.infinity,
+                      height: 50,
+                      child: AdWidget(ad: banner))
                   : SizedBox(),
             ],
           ),
@@ -211,11 +212,7 @@ class ProfileSectionView extends StatelessWidget {
           SizedBox(width: AppDimen.MARGIN_MEDIUM_3),
           InkWell(
             onTap: () => Navigator.pushNamed(context, ProfileScreen.routeName),
-
-            child: CircularPersonFace(
-              width: 20,
-              imgPath: provider.userProfile??""
-            ),
+            child: SquarePersonFace(imgPath: provider.userProfile ?? ""),
           )
         ],
       );
@@ -224,7 +221,7 @@ class ProfileSectionView extends StatelessWidget {
 
   Future<String> getUserProfile() async {
     int userId = await SharedPreferences.getInstance()
-        .then((_pref) => _pref.getInt('PREF_USER_ID')!);
+        .then((_pref) => _pref.getInt(PREF_USER_ID)!);
 
     return TempProfileGenerator.getTempProfileUrl(userId);
   }

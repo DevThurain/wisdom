@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/app_utils/base_view_model.dart';
-import 'package:wisdom/src/app_utils/dialog_utils.dart';
+import 'package:wisdom/src/app_utils/dialog_utils/profile_update_dialog.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
-import 'package:wisdom/src/app_utils/user_profile_generator.dart';
 import 'package:wisdom/src/data_models/response/response_user_profile_vo.dart';
-import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
-import 'package:wisdom/src/ui/add_post/fun_post_upload_screen.dart';
 import 'package:wisdom/src/ui/fun/fun_detail_screen.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
 import 'package:wisdom/src/ui/widgets/square_person_face.dart';
 import 'package:wisdom/src/ui/widgets/widget_footer_text.dart';
-import 'package:wisdom/src/view_models/fun_provider.dart';
 import 'package:wisdom/src/view_models/profile_provider.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -33,13 +29,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       RefreshController(initialRefresh: false);
 
   bool expanded = false;
-  var funProvider = locator<FunProvider>();
   var profileProvider = locator<ProfileProvider>();
 
   @override
   void initState() {
     profileProvider.getUserProfile();
-    profileProvider.getFunList();
+    profileProvider.getMyFunList();
     super.initState();
   }
 
@@ -92,11 +87,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           left: AppDimen.MARGIN_CARD_MEDIUM_2,
         ),
         child: ProfileHeaderSectionView(
-          color: AppTheme.dark_purple,
-          name: responseUserProfileVO?.data?.nickname,
-          profileUrl: responseUserProfileVO?.data?.profileUrl,
-          userType: responseUserProfileVO?.data?.type,
-        ),
+            color: AppTheme.dark_purple,
+            name: responseUserProfileVO?.data?.nickname,
+            profileUrl: responseUserProfileVO?.data?.profileUrl,
+            userType: responseUserProfileVO?.data?.type,
+            provider: profileProvider),
       ),
       backgroundColor: AppTheme.white,
     );
@@ -154,10 +149,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
         ),
         onRefresh: () => {
-          funProvider.refreshList(),
+          profileProvider.refreshList(),
         },
         onLoading: () => {
-          funProvider.getFunList(),
+          profileProvider.getMyFunList(),
         },
         child: provider.funList!.isNotEmpty
             ? CustomScrollView(
@@ -179,7 +174,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     : item.commentCount.toString(),
                                 color: AppTheme.dark_purple,
                                 onTap: () async {
-                                  funProvider.currentSelectedFanId = index;
+                                  profileProvider.currentSelectedFanId = index;
                                   int updatedCommentCount =
                                       await Navigator.pushNamed(
                                     context,
@@ -187,9 +182,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     arguments: item,
                                   ) as int;
 
-                                  funProvider
+                                  profileProvider
                                       .updateCommentCount(updatedCommentCount);
                                 },
+                                deletePost: () => profileProvider.deletePost(
+                                    postId: item.id!, position: index),
                               ),
                             ),
                           )
@@ -207,21 +204,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
       );
     } else if (provider.state == ViewState.LOADING) {
-      return Container(
-        color: Colors.amber,
-        child: Text("Loading"),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/jsons/line_loading.json', width: 110),
+          Text(
+            'Loading Posts',
+            style:
+                TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+          )
+        ],
       );
     } else if (provider.state == ViewState.NO_INTERNET) {
-      return Container(
-        color: Colors.brown,
-        child: Text("No Internet"),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/jsons/no_internet.json', width: 110),
+          Text(
+            'No Internet Connection!',
+            style:
+                TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+          )
+        ],
       );
     } else {
-      return Container(
-        color: Colors.red,
-        child: Text("Error"),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/jsons/app_error.json', width: 110),
+          Text(
+            'Unknown Error',
+            style:
+                TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+          )
+        ],
       );
     }
+  }
+
+  Function? onTap() {
+    print("AAA");
   }
 }
 
@@ -230,6 +252,7 @@ class ProfileHeaderSectionView extends StatelessWidget {
   final String? name;
   final String? profileUrl;
   final String? userType;
+  final ProfileProvider? provider;
 
   const ProfileHeaderSectionView({
     Key? key,
@@ -237,6 +260,7 @@ class ProfileHeaderSectionView extends StatelessWidget {
     this.name = "-",
     this.profileUrl,
     this.userType = "-",
+    this.provider,
   }) : super(key: key);
 
   @override
@@ -276,7 +300,6 @@ class ProfileHeaderSectionView extends StatelessWidget {
                   ),
                 ],
               ),
-              Text("     Work In Progress", style: TextStyle(color: Colors.red.withOpacity(0.5)),)
             ],
           ),
         ),
@@ -287,129 +310,16 @@ class ProfileHeaderSectionView extends StatelessWidget {
             color: color,
             icon: Icon(Icons.edit_rounded, size: 18.0),
             onPressed: () => showDialog(
-                context: context,
-                builder: (_) {
-                  return ProfileUpdateDialog(
-                      title: "Update Profile",
-                  );
-                }),
+              context: context,
+              builder: (_) {
+                return ProfileUpdateDialog(
+                  title: "Update Profile",
+                  profileProvider: provider,
+                );
+              },
+            ),
           ),
         )
-      ],
-    );
-  }
-}
-
-class CustomDialog extends StatelessWidget {
-  final String title, positiveBtnText, negativeBtnText;
-  final GestureTapCallback positiveBtnPressed;
-
-  CustomDialog({
-    Key? key,
-    required this.title,
-    required this.positiveBtnText,
-    required this.negativeBtnText,
-    required this.positiveBtnPressed,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      child: _buildDialogContent(context),
-    );
-  }
-
-  Widget _buildDialogContent(BuildContext context) {
-    return Stack(
-      alignment: Alignment.topCenter,
-      children: <Widget>[
-        Container(
-          // Bottom rectangular box
-          margin: EdgeInsets.only(top: 40),
-          // to push the box half way below circle
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: EdgeInsets.only(top: 60, left: 20, right: 20),
-          // spacing inside the box
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                title,
-                textAlign: TextAlign.start,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    color: AppTheme.dark_purple,
-                    fontSize: AppDimen.TEXT_HEADING_1X,
-                    fontFamily: 'MyanUni',
-                    height: 1,
-                    fontWeight: FontWeight.normal),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              TextField(
-                autofocus: false,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(AppDimen.MARGIN_MEDIUM),
-                    ),
-                    borderSide: BorderSide(
-                        color: AppTheme.dark_purple.withOpacity(0.2)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(AppDimen.MARGIN_MEDIUM),
-                    ),
-                    borderSide: BorderSide(
-                        color: AppTheme.dark_purple.withOpacity(0.3)),
-                  ),
-                  filled: true,
-                  hintStyle: TextStyle(
-                    color: Color(0xffAFAFBD).withOpacity(
-                      0.5,
-                    ),
-                    height: 1,
-                  ),
-                  hintText: "Enter Nick Name Here",
-                  contentPadding: EdgeInsets.all(
-                    AppDimen.MARGIN_CARD_MEDIUM_2,
-                  ),
-                  fillColor: AppTheme.white.withOpacity(0.2),
-                ),
-              ),
-              ButtonBar(
-                buttonMinWidth: 100,
-                alignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  FlatButton(
-                    child: Text(negativeBtnText),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                  FlatButton(
-                    child: Text(positiveBtnText),
-                    onPressed: positiveBtnPressed,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        CircleAvatar(
-          // Top Circle with icon
-          maxRadius: 40.0,
-          child: Icon(Icons.message),
-        ),
-        SquarePersonFace(
-          width: 80,
-          imgPath: 'assets/images/girl_light.png',
-        ),
       ],
     );
   }

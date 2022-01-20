@@ -21,4 +21,5 @@ Future setupLocator() async {
   locator.registerFactory(() => AuthProvider());
   locator.registerFactory(() => PostUploadProvider());
   locator.registerFactory(() => ProfileProvider());
+
 }

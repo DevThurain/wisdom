@@ -11,7 +11,9 @@ class DesignedPostCard extends StatelessWidget {
   final String profileUrl;
   final String duration;
   final String commentCount;
-  const DesignedPostCard({
+  final Function? deletePost;
+  const DesignedPostCard(
+  {
     Key? key,
     required this.title,
     required this.color,
@@ -20,6 +22,7 @@ class DesignedPostCard extends StatelessWidget {
     required this.duration,
     required this.profileUrl,
     required this.commentCount,
+    this.deletePost,
   }) : super(key: key);
 
   @override
@@ -83,7 +86,17 @@ class DesignedPostCard extends StatelessWidget {
                   ],
                 ),
               ),
-            )
+            ),
+          (deletePost !=null)?   Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                splashRadius: 20,
+                padding: EdgeInsets.all(0.0),
+                color: color,
+                icon: Icon(Icons.delete, size: 18.0),
+                onPressed: () => deletePost!(),
+              ),
+            ): SizedBox()
           ],
         ),
       ),

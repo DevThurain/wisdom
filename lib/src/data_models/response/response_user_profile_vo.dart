@@ -65,6 +65,8 @@ class Data {
     _deletedAt = json['deleted_at'];
     _profileUrl = TempProfileGenerator.getTempProfileUrl(_id);
   }
+
+
   int? _id;
   String? _nickname;
   String? _deviceId;
@@ -75,6 +77,10 @@ class Data {
   dynamic _deletedAt;
   String? _profileUrl;
 
+  set setNickname(String value) {
+    _nickname = value;
+  }
+
   int? get id => _id;
   String? get nickname => _nickname;
   String? get deviceId => _deviceId;
@@ -84,6 +90,8 @@ class Data {
   String? get updatedAt => _updatedAt;
   String? get profileUrl => _profileUrl;
   dynamic get deletedAt => _deletedAt;
+
+
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

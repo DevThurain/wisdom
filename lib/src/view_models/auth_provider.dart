@@ -7,6 +7,7 @@ import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/data_models/request/request_login_vo.dart';
 import 'package:wisdom/src/data_models/request/request_register_vo.dart';
 import 'package:wisdom/src/data_source/repository_impl.dart';
+import 'package:wisdom/src/data_source/shared_pref/share_pref_helper.dart';
 
 class AuthProvider extends BaseViewModel {
   final _repository = locator<RepositoryImpl>();
@@ -18,7 +19,6 @@ class AuthProvider extends BaseViewModel {
   }
 
   registerUser(RequestRegisterVO request) async {
-    //request.deviceId = await DeviceDetail.generateDeviceId();
     request.deviceId = DateTime.now().millisecondsSinceEpoch.toString();
 
     try {
@@ -30,7 +30,7 @@ class AuthProvider extends BaseViewModel {
         return;
       }
       if (request.nickname.isEmpty || request.password.isEmpty) {
-        setNotifyMessage('nickname & passsword required.');
+        setNotifyMessage('nickname & password required.');
         return;
       }
       setState(ViewState.LOADING);
@@ -54,7 +54,7 @@ class AuthProvider extends BaseViewModel {
         return;
       }
       if (request.nickname.isEmpty || request.password.isEmpty) {
-        setNotifyMessage('nickname & passsword required.');
+        setNotifyMessage('nickname & password required.');
         return;
       }
       setState(ViewState.LOADING);
@@ -74,8 +74,8 @@ class AuthProvider extends BaseViewModel {
 
   void saveUser(int userId, String token, String nickName) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setInt('PREF_USER_ID', userId);
-    pref.setString('PREF_TOKEN', token);
-    pref.setString('PREF_NAME', nickName);
+    pref.setInt(PREF_USER_ID, userId);
+    pref.setString(PREF_AUTH_TOKEN, token);
+    pref.setString(PREF_USER_NAME, nickName);
   }
 }

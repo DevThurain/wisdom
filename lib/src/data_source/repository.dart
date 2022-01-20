@@ -37,4 +37,6 @@ abstract class Repository {
   Future<KnowledgeUploadResponse> knowledgePostUpload(String content, {String link = ""});
   Future<ResponseUserProfileVO> getUserProfile();
   Future<EditProfileResponse> updateNickName(String nickName);
+  Future<FunListVo> getMyFunList(int page);
+
 }

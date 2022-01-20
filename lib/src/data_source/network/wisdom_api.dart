@@ -72,4 +72,7 @@ abstract class WisdomAPI {
   @POST("/wisdom/user")
   Future<EditProfileResponse> updateUserProfile(
       @Query("nickname") String nickName);
+
+  @GET("/wisdom/my-posts")
+  Future<FunListVo> getMyFunList(@Query("page") int page);
 }

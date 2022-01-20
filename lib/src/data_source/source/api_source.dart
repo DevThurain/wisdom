@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/data_source/network/wisdom_api.dart';
+import 'package:wisdom/src/data_source/shared_pref/share_pref_helper.dart';
 
 class ApiSource {
   late Dio dio;
@@ -40,7 +42,10 @@ class ApiSource {
     return mApi;
   }
 
-  WisdomAPI privateApi(String token) {
+  WisdomAPI privateApi() {
+    late final SharedPreferenceHelper _pref = locator<SharedPreferenceHelper>();
+    String token = _pref.getString("PREF_TOKEN");
+
     dio.options.headers = {
       "Content-Type": Headers.jsonContentType,
       "Accept": Headers.jsonContentType,

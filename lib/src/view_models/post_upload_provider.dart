@@ -12,6 +12,7 @@ import 'package:wisdom/src/data_models/vos/fun_upload_response.dart';
 import 'package:wisdom/src/data_models/vos/knowledge_list_vo.dart';
 import 'package:wisdom/src/data_models/vos/knowledge_upload_response.dart';
 import 'package:wisdom/src/data_source/repository_impl.dart';
+import 'package:wisdom/src/data_source/shared_pref/share_pref_helper.dart';
 
 class PostUploadProvider extends BaseViewModel {
   final _repository = locator<RepositoryImpl>();
@@ -27,8 +28,8 @@ class PostUploadProvider extends BaseViewModel {
   Future<void> getUserProfile() async {
     await SharedPreferences.getInstance().then((_pref) {
       _userProfile =
-          TempProfileGenerator.getTempProfileUrl(_pref.getInt('PREF_USER_ID'));
-      _userName = _pref.getString('PREF_NAME') ?? "";
+          TempProfileGenerator.getTempProfileUrl(_pref.getInt(PREF_USER_ID));
+      _userName = _pref.getString(PREF_USER_NAME) ?? "";
     });
     notifyListeners();
   }

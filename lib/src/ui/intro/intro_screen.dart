@@ -1,19 +1,19 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/data_source/shared_pref/share_pref_helper.dart';
 import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/home/home_screen.dart';
-import 'package:wisdom/src/ui/auth/auth_screen.dart';
 import 'package:wisdom/src/ui/widgets/circular_person_face.dart';
 import 'package:wisdom/src/ui/widgets/gradient_background.dart';
 
 class IntroScreen extends StatefulWidget {
   static const routeName = '/intro_screen';
+
   const IntroScreen({Key? key}) : super(key: key);
 
   @override
@@ -31,12 +31,10 @@ class _IntroScreenState extends State<IntroScreen> {
 
   _goToRegisterScreen() async {
     await Future.delayed(Duration(seconds: 2));
-    String token = await sharePreference.getString('PREF_TOKEN');
+    String token = await sharePreference.getString(PREF_AUTH_TOKEN);
     if (token.isEmpty) {
-      print("token" + token);
       Navigator.pushReplacementNamed(context, AuthScreen.routeName);
     } else {
-      print("token" + token);
       Navigator.pushReplacementNamed(context, HomeScreen.routeName);
     }
   }
@@ -65,7 +63,7 @@ class _IntroScreenState extends State<IntroScreen> {
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                               color: AppTheme.white,
-                              fontSize: AppDimen.TEXT_REGULAR_3X,
+                              fontSize: AppDimen.TEXT_HEADING_1X,
                               fontFamily: 'Poppins',
                               letterSpacing: 5,
                               fontWeight: FontWeight.bold),
@@ -96,17 +94,18 @@ class PersonCardSection extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.7,
       height: MediaQuery.of(context).size.height * 0.5,
       decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(AppDimen.MARGIN_MEDIUM_3)),
+        borderRadius:
+            const BorderRadius.all(Radius.circular(AppDimen.MARGIN_MEDIUM_3)),
       ),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           Positioned(
             left: -15,
-            top: -15,
+            top: -60,
             child: CircularPersonFace(
               width: 35,
-              imgPath: 'assets/images/girl_light.png',
+              imgPath: 'assets/images/tom.png',
             ),
           ),
           Positioned(
@@ -114,7 +113,7 @@ class PersonCardSection extends StatelessWidget {
             top: -90,
             child: CircularPersonFace(
               width: 28,
-              imgPath: 'assets/images/girl_light_2.png',
+              imgPath: 'assets/images/larva_red.png',
             ),
           ),
           Positioned(
@@ -122,7 +121,7 @@ class PersonCardSection extends StatelessWidget {
             bottom: -10,
             child: CircularPersonFace(
               width: 32,
-              imgPath: 'assets/images/girl_light_3.png',
+              imgPath: 'assets/images/ant.png',
             ),
           ),
           Positioned(
@@ -130,7 +129,7 @@ class PersonCardSection extends StatelessWidget {
             bottom: -20,
             child: CircularPersonFace(
               width: 25,
-              imgPath: 'assets/images/boy_light.png',
+              imgPath: 'assets/images/snow_man.png',
             ),
           ),
           Positioned(
@@ -138,14 +137,22 @@ class PersonCardSection extends StatelessWidget {
             top: 50,
             child: CircularPersonFace(
               width: 27,
-              imgPath: 'assets/images/boy_light_2.png',
+              imgPath: 'assets/images/jerry.png',
             ),
           ),
-          const Align(
-            alignment: Alignment.centerLeft,
+          Positioned(
+            right: MediaQuery.of(context).size.width * 0.5,
+            bottom: 90,
+            child: CircularPersonFace(
+              width: 14,
+              imgPath: 'assets/images/ice_age_sid.png',
+            ),
+          ),
+          const Positioned(
+            left: 0,
+            top: 60,
             child: Padding(
-              padding: EdgeInsets.only(
-                  top: AppDimen.MARGIN_MEDIUM_3, left: AppDimen.MARGIN_LARGE),
+              padding: EdgeInsets.only(left: AppDimen.MARGIN_MEDIUM),
               child: Text(
                 'Let\'s\nFun\nTogether',
                 style: TextStyle(

@@ -1,7 +1,7 @@
 const List<String> profileAssetsUrlList = [
   "assets/images/ant.png",
-  "assets/images/ic_age_bulk.png",
-  "assets/images/ice_ace_sid.png",
+  "assets/images/ice_age_bulk.png",
+  "assets/images/ice_age_sid.png",
   "assets/images/jerry.png",
   "assets/images/larva_red.png",
   "assets/images/minion.png",

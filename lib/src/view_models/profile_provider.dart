@@ -5,19 +5,28 @@ import 'package:wisdom/src/app_utils/locator.dart';
 import 'package:wisdom/src/data_models/response/response_user_profile_vo.dart';
 import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
 import 'package:wisdom/src/data_source/repository_impl.dart';
+import 'package:wisdom/src/data_source/shared_pref/share_pref_helper.dart';
 
 class ProfileProvider extends BaseViewModel {
   final _repository = locator<RepositoryImpl>();
+  final _pref = locator<SharedPreferenceHelper>();
+
   ResponseUserProfileVO? _responseUserProfileVO;
   final List<FunItem> _funList = <FunItem>[];
+  int? _currentSelectedFanId;
+  int currentPage = 1;
 
   ResponseUserProfileVO? get responseUserProfileVO => _responseUserProfileVO;
+
   List<FunItem>? get funList => _funList;
+
+  set currentSelectedFanId(int value) {
+    _currentSelectedFanId = value;
+  }
 
   Future<void> getUserProfile() async {
     await _repository.getUserProfile().then((value) {
       _responseUserProfileVO = value;
-
     }).onError((error, stackTrace) {
       final res = (error as DioError).response;
       Fluttertoast.showToast(
@@ -25,7 +34,7 @@ class ProfileProvider extends BaseViewModel {
     });
   }
 
-  Future<void> getFunList({int? currentPage = 1}) async {
+  Future<void> getMyFunList() async {
     try {
       if (await handleConnectionView(isReplaceView: _funList.isEmpty)) {
         return;
@@ -38,7 +47,10 @@ class ProfileProvider extends BaseViewModel {
       }
 
       _funList.addAll(
-        await _repository.getFunList(currentPage!).then((value) => value.funList!),
+        await _repository.getMyFunList(currentPage).then((value) {
+          currentPage += 1;
+          return value.funList!;
+        }),
       );
       setState(ViewState.COMPLETE);
     } catch (_) {
@@ -47,18 +59,39 @@ class ProfileProvider extends BaseViewModel {
     }
   }
 
+  void updateCommentCount(int updatedCommentCount) {
+    _funList[_currentSelectedFanId!].setCommentCount = updatedCommentCount;
+    setState(ViewState.COMPLETE);
+  }
 
-  Future<void> saveNickName(String nickName) async{
+  Future<void> saveNickName(String nickName) async {
     if (nickName.isEmpty) {
       setNotifyMessage("Your nick name is empty.");
       return;
     }
-    await _repository.updateNickName(nickName).then((value)  {
-    setNotifyMessage("success");
+    await _repository.updateNickName(nickName).then((value) {
+      _responseUserProfileVO!.data!.setNickname = value.data!.nickname ?? "";
+      _pref.setString(PREF_USER_NAME, value.data!.nickname??"");
+      setNotifyMessage("Nick name successfully changed");
     }).onError((error, stackTrace) {
       final res = (error as DioError).response;
       setNotifyMessage(res?.data['message']);
     });
   }
 
+  void refreshList() {
+    currentPage = 1;
+    getMyFunList();
+  }
+
+  Future<void> deletePost({required int postId,required int position}) async {
+    setNotifyMessage("Deleting...");
+    // await _repository.deletePostById(postId).then((value) {
+    //   _responseUserProfileVO!.data!.setNickname = value.data!.nickname ?? "";
+    //   setNotifyMessage("Nick name successfully changed");
+    // }).onError((error, stackTrace) {
+    //   final res = (error as DioError).response;
+    //   setNotifyMessage(res?.data['message']);
+    // });
+  }
 }

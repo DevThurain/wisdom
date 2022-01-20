@@ -95,62 +95,60 @@ class RepositoryImpl implements Repository {
 
   @override
   Future<FunListVo> getFunList(int page) {
-    String token = _pref.getToken();
-    return _mSource.privateApi(token).getFunList(page);
+    return _mSource.privateApi().getFunList(page);
   }
 
   @override
   Future<FunDetailVo> getCommentListById(int postId) {
-    String token = _pref.getToken();
-    return _mSource.privateApi(token).getFunDetail(postId, true);
+    return _mSource.privateApi().getFunDetail(postId, true);
   }
 
   @override
   Future<ResponseSuccessVO> logoutUser() {
-    String token = _pref.getToken();
-    return _mSource.privateApi(token).logoutUser();
+    return _mSource.privateApi().logoutUser();
   }
 
   @override
   Future<CommentResponseVo> sendComment(int postId, String commentData) {
-    String token = _pref.getToken();
-    return _mSource.privateApi(token).commentFunDetail(postId, commentData);
+    return _mSource.privateApi().commentFunDetail(postId, commentData);
   }
 
   @override
   Future<KnowledgeListVo> getKnowledgeList(int page) {
-    String token = _pref.getToken();
-    return _mSource.privateApi(token).getKnowledgeList(page);
+    return _mSource.privateApi().getKnowledgeList(page);
   }
 
   @override
   Future<FunUploadResponse> funPostUpload(String content) {
-    String token = _pref.getToken();
-    return _mSource.privateApi(token).createFunPost(content);
+    return _mSource.privateApi().createFunPost(content);
   }
 
   @override
   Future<KnowledgeUploadResponse> knowledgePostUpload(String content,
       {String link = ""}) {
-    String token = _pref.getToken();
-    return _mSource.privateApi(token).createKnowledgePost(content, link);
+    return _mSource.privateApi().createKnowledgePost(content, link);
   }
 
   @override
   Future<ResponseUserProfileVO> getUserProfile() {
-    String token = _pref.getToken();
-    return _mSource.privateApi(token).getUserProfile();
+    return _mSource.privateApi().getUserProfile();
   }
 
   @override
   Future<EditProfileResponse> updateNickName(String nickName) {
-    String token = _pref.getToken();
-    return _mSource.privateApi(token).updateUserProfile(nickName);
+    return _mSource.privateApi().updateUserProfile(nickName);
   }
+
+  @override
+  Future<FunListVo> getMyFunList(int page) {
+    return _mSource.privateApi().getMyFunList(page);
+  }
+
 }
+
 
 // Future<bool> checkTokenStored() async {
 //   var _pref = await SharedPreferences.getInstance();
-//   String token = _pref.getString('PREF_TOKEN') ?? '';
+//   String token = _pref.getString(PREF_AUTH_TOKEN) ?? '';
 //   return token.isNotEmpty;
 // }

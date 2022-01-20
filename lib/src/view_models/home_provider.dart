@@ -6,6 +6,7 @@ import 'package:wisdom/src/app_utils/user_profile_generator.dart';
 import 'package:wisdom/src/data_models/daos/force_update_dao.dart';
 import 'package:wisdom/src/data_models/vos/app_version_vo.dart';
 import 'package:wisdom/src/data_source/repository_impl.dart';
+import 'package:wisdom/src/data_source/shared_pref/share_pref_helper.dart';
 
 class HomeProvider extends BaseViewModel {
   ForceUpdateDao? _forceUpdateDao;
@@ -43,7 +44,7 @@ class HomeProvider extends BaseViewModel {
 
   Future<void> getUserProfile() async {
     await SharedPreferences.getInstance().then((_pref) => _userProfile =
-        TempProfileGenerator.getTempProfileUrl(_pref.getInt('PREF_USER_ID')));
+        TempProfileGenerator.getTempProfileUrl(_pref.getInt(PREF_USER_ID)));
     notifyListeners();
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisdom/src/data_models/vos/fun_list_vo.dart';
 import 'package:wisdom/src/data_models/vos/knowledge_list_vo.dart';
+import 'package:wisdom/src/data_source/shared_pref/share_pref_helper.dart';
 import 'package:wisdom/src/ui/add_post/fun_post_upload_screen.dart';
 import 'package:wisdom/src/ui/add_post/knowledge_post_upload_screen.dart';
 import 'package:wisdom/src/ui/auth/auth_screen.dart';
@@ -62,6 +63,6 @@ class AppRoute {
 
 Future<bool> checkTokenStored() async {
   var _pref = await SharedPreferences.getInstance();
-  String token = _pref.getString('PREF_TOKEN') ?? '';
+  String token = _pref.getString(PREF_AUTH_TOKEN) ?? '';
   return token.isNotEmpty;
 }
