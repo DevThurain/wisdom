@@ -165,7 +165,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                       return Container();
                     },
                     child: Lottie.asset(
-                      'assets/jsons/white_loading.json',
+                      'assets/jsons/white_line_loading.json',
                       width: 80,
                     ),
                   ),
@@ -227,7 +227,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   }
 
   _registerUser(AuthProvider provider) {
-    // clearFocus();
     RequestRegisterVO request = RequestRegisterVO(
       nickname: _registerNickNameController.text,
       code: _referCodeController.text,
@@ -238,21 +237,13 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   }
 
   _loginUser(AuthProvider provider) {
-    // clearFocus();
     RequestLoginVO request = RequestLoginVO(
       nickname: _loginNickNameController.text,
       password: _loginPasswordController.text,
     );
     provider.loginUser(request);
   }
-
-//   void clearFocus() {
-//     _loginNickNameController.clear();
-//     _loginPasswordController.clear();
-//     _registerNickNameController.clear();
-//     _registerPasswordController.clear();
-//   }
- }
+}
 
   class ButtonSectionView extends StatelessWidget {
   const ButtonSectionView({
