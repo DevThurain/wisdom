@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,7 @@ import 'package:wisdom/src/ui/fun/fun_detail_screen.dart';
 import 'package:wisdom/src/ui/widgets/designed_post_card.dart';
 import 'package:wisdom/src/ui/widgets/square_person_face.dart';
 import 'package:wisdom/src/ui/widgets/widget_footer_text.dart';
+import 'package:wisdom/src/view_models/ad_state.dart';
 import 'package:wisdom/src/view_models/profile_provider.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -27,17 +29,52 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   bool expanded = false;
   var profileProvider = locator<ProfileProvider>();
+  InterstitialAd? _interstitialAd;
+  bool _isInterstitialAdReady = false;
 
   @override
   void initState() {
     profileProvider.getUserProfile();
     profileProvider.getMyFunList();
     super.initState();
+  }
+
+  void _loadInterstitialAd() {
+    final AdState adState = Provider.of<AdState>(context);
+
+    adState.initialization.then((status) {
+      InterstitialAd.load(
+        adUnitId: adState.interstitialAdUnitId(),
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (ad) {
+            setState(() {
+              _interstitialAd = ad;
+              _isInterstitialAdReady = true;
+            });
+          },
+          onAdFailedToLoad: (err) {
+            setState(() {
+              _isInterstitialAdReady = false;
+            });
+          },
+        ),
+      );
+    });
+  }
+
+  _moveToDetailScreen(ProfileProvider provider, FunItem item) async {
+    int updatedCommentCount = await Navigator.pushNamed(
+      context,
+      FunDetailScreen.routeName,
+      arguments: item,
+    ) as int;
+
+    provider.updateCommentCount(updatedCommentCount);
   }
 
   @override
@@ -47,6 +84,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: ChangeNotifierProvider(
         create: (context) => profileProvider,
         child: Consumer<ProfileProvider>(builder: (context, provider, child) {
+          if (!_isInterstitialAdReady) _loadInterstitialAd();
+
           if (_refreshController.isLoading) _refreshController.loadComplete();
           if (_refreshController.isRefresh) {
             _refreshController.refreshCompleted();
@@ -66,8 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  SliverAppBar _buildSliverAppBar(
-      ResponseUserProfileVO? responseUserProfileVO) {
+  SliverAppBar _buildSliverAppBar(ResponseUserProfileVO? responseUserProfileVO) {
     return SliverAppBar(
       expandedHeight: 120,
       collapsedHeight: 65,
@@ -178,20 +216,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: AppTheme.dark_purple,
                                 onTap: () async {
                                   profileProvider.currentSelectedFanId = index;
-                                  int updatedCommentCount =
-                                      await Navigator.pushNamed(
-                                    context,
-                                    FunDetailScreen.routeName,
-                                    arguments: item,
-                                  ) as int;
+                                  // int updatedCommentCount = await Navigator.pushNamed(
+                                  //   context,
+                                  //   FunDetailScreen.routeName,
+                                  //   arguments: item,
+                                  // ) as int;
 
-                                  profileProvider
-                                      .updateCommentCount(updatedCommentCount);
+                                  // profileProvider.updateCommentCount(updatedCommentCount);
+                                  if (_isInterstitialAdReady) {
+                                    _interstitialAd?.fullScreenContentCallback =
+                                        FullScreenContentCallback(
+                                      onAdShowedFullScreenContent: (InterstitialAd ad) {
+                                        setState(() {
+                                          _isInterstitialAdReady = false;
+                                        });
+                                      },
+                                      onAdDismissedFullScreenContent:
+                                          (InterstitialAd ad) {
+                                        _moveToDetailScreen(provider, item);
+                                        ad.dispose();
+                                      },
+                                      onAdFailedToShowFullScreenContent:
+                                          (InterstitialAd ad, AdError error) {
+                                        _moveToDetailScreen(provider, item);
+                                        ad.dispose();
+                                      },
+                                    );
+                                    _interstitialAd?.show();
+
+                                    //_moveToDetailScreen(provider, item);
+                                  } else {
+                                    print('ads not loaded');
+                                    _moveToDetailScreen(provider, item);
+                                  }
                                 },
                                 deletePost: () => profileProvider.deletePost(
-                                    postId: item.id!,
-                                    position: index,
-                                    context: context),
+                                    postId: item.id!, position: index, context: context),
                               ),
                             ),
                           )
@@ -204,8 +264,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             : Center(
                 child: GestureDetector(
                   onTap: () async {
-                    await Navigator.pushNamed(
-                            context, FunPostUploadScreen.routeName)
+                    await Navigator.pushNamed(context, FunPostUploadScreen.routeName)
                         .then((value) => profileProvider.refreshList());
                   },
                   child: Column(
@@ -239,8 +298,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Lottie.asset('assets/jsons/line_loading.json', width: 110),
           Text(
             'Loading Posts',
-            style:
-                TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+            style: TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
           )
         ],
       );
@@ -251,8 +309,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Lottie.asset('assets/jsons/no_internet.json', width: 110),
           Text(
             'No Internet Connection!',
-            style:
-                TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+            style: TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
           )
         ],
       );
@@ -263,8 +320,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Lottie.asset('assets/jsons/app_error.json', width: 110),
           Text(
             'Unknown Error',
-            style:
-                TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+            style: TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
           )
         ],
       );
@@ -307,7 +363,8 @@ class ProfileHeaderSectionView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
+                    constraints:
+                        BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
                     child: Text(
                       name ?? "",
                       textAlign: TextAlign.start,

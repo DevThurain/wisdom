@@ -247,8 +247,7 @@ class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
                                       },
                                       onAdFailedToShowFullScreenContent:
                                           (InterstitialAd ad, AdError error) {
-                                        print(
-                                            '$ad onAdFailedToShowFullScreenContent: $error');
+                                        _moveToDetailScreen(item);
                                         ad.dispose();
                                       },
                                     );

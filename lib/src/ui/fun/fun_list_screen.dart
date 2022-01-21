@@ -114,8 +114,7 @@ class _FunListScreenState extends State<FunListScreen> {
             _refreshController.refreshCompleted();
           }
 
-          if(!_isInterstitialAdReady)
-          _loadInterstitialAd();
+          if (!_isInterstitialAdReady) _loadInterstitialAd();
 
           return NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -249,7 +248,6 @@ class _FunListScreenState extends State<FunListScreen> {
                                   if (_isInterstitialAdReady) {
                                     _interstitialAd?.fullScreenContentCallback =
                                         FullScreenContentCallback(
-                    
                                       onAdShowedFullScreenContent: (InterstitialAd ad) {
                                         setState(() {
                                           _isInterstitialAdReady = false;
@@ -262,8 +260,7 @@ class _FunListScreenState extends State<FunListScreen> {
                                       },
                                       onAdFailedToShowFullScreenContent:
                                           (InterstitialAd ad, AdError error) {
-                                        print(
-                                            '$ad onAdFailedToShowFullScreenContent: $error');
+                                        _moveToDetailScreen(provider, item);
                                         ad.dispose();
                                       },
                                     );
