@@ -214,7 +214,7 @@ class ProfileSectionView extends StatelessWidget {
           SizedBox(width: AppDimen.MARGIN_MEDIUM_3),
           InkWell(
             onTap: () => Navigator.pushNamed(context, ProfileScreen.routeName),
-            child: SquarePersonFace(imgPath: provider.userProfile ?? ""),
+            child: SquarePersonFace(imgPath: provider.userProfile),
           )
         ],
       );

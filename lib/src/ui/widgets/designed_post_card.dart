@@ -12,8 +12,8 @@ class DesignedPostCard extends StatelessWidget {
   final String duration;
   final String commentCount;
   final Function? deletePost;
-  const DesignedPostCard(
-  {
+
+  const DesignedPostCard({
     Key? key,
     required this.title,
     required this.color,
@@ -29,7 +29,9 @@ class DesignedPostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: AppDimen.MARGIN_MEDIUM_2, vertical: AppDimen.MARGIN_MEDIUM),
+      margin: EdgeInsets.symmetric(
+          horizontal: AppDimen.MARGIN_MEDIUM_2,
+          vertical: AppDimen.MARGIN_MEDIUM),
       height: 280,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -62,23 +64,30 @@ class DesignedPostCard extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: AppDimen.MARGIN_MEDIUM_2,
-                    vertical: AppDimen.MARGIN_MEDIUM_2 + AppDimen.MARGIN_MEDIUM),
+                    vertical:
+                        AppDimen.MARGIN_MEDIUM_2 + AppDimen.MARGIN_MEDIUM),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    PostProfileUI(profileUrl: profileUrl, color: color, name: name,duration: duration,),
+                    PostProfileUI(
+                      profileUrl: profileUrl,
+                      color: color,
+                      name: name,
+                      duration: duration,
+                    ),
                     Text(
                       title,
                       textAlign: TextAlign.start,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                          color: color,
-                          fontSize: AppDimen.TEXT_REGULAR_3X,
-                          fontFamily: 'MyanUni',
-                          letterSpacing: 3,
-                          fontWeight: FontWeight.bold),
+                        color: color,
+                        fontSize: AppDimen.TEXT_REGULAR_3X,
+                        fontFamily: 'MyanUni',
+                        letterSpacing: 3,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     PostCommentUI(
                       commentCount: commentCount,
@@ -87,16 +96,18 @@ class DesignedPostCard extends StatelessWidget {
                 ),
               ),
             ),
-          (deletePost !=null)?   Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                splashRadius: 20,
-                padding: EdgeInsets.all(0.0),
-                color: color,
-                icon: Icon(Icons.delete, size: 18.0),
-                onPressed: () => deletePost!(),
-              ),
-            ): SizedBox()
+            (deletePost != null)
+                ? Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      splashRadius: 20,
+                      padding: EdgeInsets.all(0.0),
+                      color: color,
+                      icon: Icon(Icons.delete, size: 18.0),
+                      onPressed: () => deletePost!(),
+                    ),
+                  )
+                : SizedBox()
           ],
         ),
       ),
@@ -140,6 +151,7 @@ class PostProfileUI extends StatelessWidget {
   final String profileUrl;
   final String name;
   final String duration;
+
   const PostProfileUI({
     Key? key,
     required this.profileUrl,
@@ -161,17 +173,20 @@ class PostProfileUI extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              name,
-              textAlign: TextAlign.start,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  color: color,
-                  fontSize: AppDimen.TEXT_REGULAR_3X,
-                  fontFamily: 'MyanUni',
-                  height: 1,
-                  fontWeight: FontWeight.normal),
+            Container(
+              constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
+              child: Text(
+                name,
+                textAlign: TextAlign.start,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    color: color,
+                    fontSize: AppDimen.TEXT_REGULAR_3X,
+                    fontFamily: 'MyanUni',
+                    height: 1,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
             Text(
               duration,

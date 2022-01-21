@@ -27,7 +27,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   bool expanded = false;
   var profileProvider = locator<ProfileProvider>();
@@ -65,7 +66,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  SliverAppBar _buildSliverAppBar(ResponseUserProfileVO? responseUserProfileVO) {
+  SliverAppBar _buildSliverAppBar(
+      ResponseUserProfileVO? responseUserProfileVO) {
     return SliverAppBar(
       expandedHeight: 120,
       collapsedHeight: 65,
@@ -87,11 +89,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           left: AppDimen.MARGIN_CARD_MEDIUM_2,
         ),
         child: ProfileHeaderSectionView(
-            color: AppTheme.dark_purple,
-            name: responseUserProfileVO?.data?.nickname,
-            profileUrl: responseUserProfileVO?.data?.profileUrl,
-            userType: responseUserProfileVO?.data?.type,
-            provider: profileProvider),
+          color: AppTheme.dark_purple,
+          name: responseUserProfileVO?.data?.nickname,
+          profileUrl: responseUserProfileVO?.data?.profileUrl,
+          userType: responseUserProfileVO?.data?.type,
+          provider: profileProvider,
+        ),
       ),
       backgroundColor: AppTheme.white,
     );
@@ -175,16 +178,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: AppTheme.dark_purple,
                                 onTap: () async {
                                   profileProvider.currentSelectedFanId = index;
-                                  int updatedCommentCount = await Navigator.pushNamed(
+                                  int updatedCommentCount =
+                                      await Navigator.pushNamed(
                                     context,
                                     FunDetailScreen.routeName,
                                     arguments: item,
                                   ) as int;
 
-                                  profileProvider.updateCommentCount(updatedCommentCount);
+                                  profileProvider
+                                      .updateCommentCount(updatedCommentCount);
                                 },
                                 deletePost: () => profileProvider.deletePost(
-                                    postId: item.id!, position: index, context: context),
+                                    postId: item.id!,
+                                    position: index,
+                                    context: context),
                               ),
                             ),
                           )
@@ -197,8 +204,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             : Center(
                 child: GestureDetector(
                   onTap: () async {
-                    await Navigator.pushNamed(context, FunPostUploadScreen.routeName);
-                    provider.getMyFunList();
+                    await Navigator.pushNamed(
+                            context, FunPostUploadScreen.routeName)
+                        .then((value) => profileProvider.refreshList());
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -231,7 +239,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Lottie.asset('assets/jsons/line_loading.json', width: 110),
           Text(
             'Loading Posts',
-            style: TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+            style:
+                TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
           )
         ],
       );
@@ -242,7 +251,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Lottie.asset('assets/jsons/no_internet.json', width: 110),
           Text(
             'No Internet Connection!',
-            style: TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+            style:
+                TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
           )
         ],
       );
@@ -253,7 +263,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Lottie.asset('assets/jsons/app_error.json', width: 110),
           Text(
             'Unknown Error',
-            style: TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
+            style:
+                TextStyle(color: AppTheme.dark_purple, fontFamily: 'Poppins'),
           )
         ],
       );
@@ -275,9 +286,9 @@ class ProfileHeaderSectionView extends StatelessWidget {
   const ProfileHeaderSectionView({
     Key? key,
     this.color,
-    this.name = "-",
+    this.name = "",
     this.profileUrl,
-    this.userType = "-",
+    this.userType = "",
     this.provider,
   }) : super(key: key);
 
@@ -289,26 +300,30 @@ class ProfileHeaderSectionView extends StatelessWidget {
           alignment: Alignment.center,
           child: Row(
             children: [
-              SquarePersonFace(width: 40, imgPath: profileUrl ?? ""),
+              SquarePersonFace(width: 40, imgPath: profileUrl),
               SizedBox(width: AppDimen.MARGIN_MEDIUM),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    name ?? "-",
-                    textAlign: TextAlign.start,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                  Container(
+                    constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
+                    child: Text(
+                      name ?? "",
+                      textAlign: TextAlign.start,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
                         color: color,
                         fontSize: AppDimen.TEXT_REGULAR_3X,
                         fontFamily: 'MyanUni',
                         height: 1,
-                        fontWeight: FontWeight.normal),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                   Text(
-                    userType ?? "-",
+                    userType ?? "",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Color(0xffAFAFBD),

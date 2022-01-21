@@ -29,6 +29,7 @@ class ProfileProvider extends BaseViewModel {
   Future<void> getUserProfile() async {
     await _repository.getUserProfile().then((value) {
       _responseUserProfileVO = value;
+      notifyListeners();
     }).onError((error, stackTrace) {
       final res = (error as DioError).response;
       Fluttertoast.showToast(

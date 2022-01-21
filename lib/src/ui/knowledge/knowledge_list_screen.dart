@@ -62,7 +62,6 @@ class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
             });
           },
           onAdFailedToLoad: (err) {
-            print('Failed to load an interstitial ad: ${err.message}');
             setState(() {
               _isInterstitialAdReady = false;
             });

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 
@@ -28,13 +29,16 @@ class CustomTextField extends StatelessWidget {
       width: width,
       height: 50,
       decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        borderRadius: const BorderRadius.all(Radius.circular(28)),
       ),
       child: TextField(
         controller: controller,
         textInputAction: textInputAction,
         obscureText: isPassword,
         keyboardType: textInputType,
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(100),
+        ],
         onChanged: (value) {
           onChanged(value);
         },

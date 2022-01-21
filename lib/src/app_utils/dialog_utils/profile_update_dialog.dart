@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wisdom/src/app_constants/app_dimen.dart';
 import 'package:wisdom/src/app_constants/app_theme.dart';
 import 'package:wisdom/src/view_models/profile_provider.dart';
@@ -72,6 +73,9 @@ class _ProfileUpdateDialogState extends State<ProfileUpdateDialog> {
                   height: AppDimen.MARGIN_LARGE,
                 ),
                 TextField(
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(28),
+                  ],
                   controller: _nameEditingController,
                   autofocus: false,
                   decoration: InputDecoration(

@@ -116,7 +116,7 @@ class _PostUploadHeaderState extends State<PostUploadHeader> {
                     widget.postEditingController.text, context);
               },
               style: TextButton.styleFrom(
-                backgroundColor: Color(0xffb7b7f5),
+                backgroundColor: AppTheme.dark_purple,
                 minimumSize: Size.zero,
                 padding: EdgeInsets.symmetric(
                   horizontal: AppDimen.MARGIN_MEDIUM_2,
@@ -165,15 +165,20 @@ class AddPostSectionView extends StatelessWidget {
               SizedBox(
                 width: AppDimen.MARGIN_MEDIUM,
               ),
-              Text(
-                userName,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: AppTheme.dark_purple,
-                    fontSize: AppDimen.TEXT_REGULAR_2X,
-                    fontFamily: 'Poppins',
-                    letterSpacing: 1,
-                    fontWeight: FontWeight.bold),
+              Container(
+                constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
+                child: Text(
+                  userName,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color: AppTheme.dark_purple,
+                      fontSize: AppDimen.TEXT_REGULAR_2X,
+                      fontFamily: 'Poppins',
+                      letterSpacing: 1,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),
