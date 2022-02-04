@@ -19,7 +19,8 @@ class AuthProvider extends BaseViewModel {
   }
 
   registerUser(RequestRegisterVO request) async {
-    request.deviceId = DateTime.now().millisecondsSinceEpoch.toString();
+    //request.deviceId = DateTime.now().millisecondsSinceEpoch.toString();
+    request.deviceId = await DeviceDetail.generateDeviceId();
 
     try {
       if (await handleConnectionView()) {
@@ -36,7 +37,8 @@ class AuthProvider extends BaseViewModel {
       setState(ViewState.LOADING);
       _repository.registerUser(request).then((response) {
         setState(ViewState.COMPLETE);
-        saveUser(response.user!.id!,response.token.toString(), response.user?.nickname ?? '');
+        saveUser(
+            response.user!.id!, response.token.toString(), response.user?.nickname ?? '');
       }).onError((error, stackTrace) {
         final res = (error as DioError).response;
         errorCode = res?.statusCode.toString() ?? '';
@@ -60,12 +62,14 @@ class AuthProvider extends BaseViewModel {
       setState(ViewState.LOADING);
       _repository.loginUser(request).then((response) {
         setState(ViewState.COMPLETE);
-        saveUser(response.user!.id! ,response.token.toString(), response.user?.nickname ?? '');
+        saveUser(
+            response.user!.id!, response.token.toString(), response.user?.nickname ?? '');
       }).onError((error, stackTrace) {
         final res = (error as DioError).response;
         errorCode = res?.statusCode.toString() ?? '';
         errorMessage = res?.data['message'] ?? 'Unknown Error.\nPlease Try Later.';
         setState(ViewState.ERROR);
+        print(error.toString());
       });
     } catch (_) {
       await handleConnectionView();

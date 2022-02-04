@@ -7,7 +7,7 @@ class AdState {
   AdState(this.initialization);
 
 //ca-app-pub-3940256099942544/6300978111
- String bannerAdUnitId (){
+  String bannerAdUnitId() {
     if (Platform.isAndroid) {
       return 'ca-app-pub-5465614411199588/3355237171';
     } else if (Platform.isIOS) {
@@ -17,9 +17,8 @@ class AdState {
     }
   }
 
-
 //ca-app-pub-3940256099942544/1033173712
-   String interstitialAdUnitId() {
+  String interstitialAdUnitId() {
     if (Platform.isAndroid) {
       return "ca-app-pub-5465614411199588/5806657616";
     } else if (Platform.isIOS) {
