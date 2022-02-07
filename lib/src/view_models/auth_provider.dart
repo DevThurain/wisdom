@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,9 +42,24 @@ class AuthProvider extends BaseViewModel {
         saveUser(
             response.user!.id!, response.token.toString(), response.user?.nickname ?? '');
       }).onError((error, stackTrace) {
-        final res = (error as DioError).response;
-        errorCode = res?.statusCode.toString() ?? '';
-        errorMessage = res?.data['message'] ?? 'Unknown Error.\nPlease Try Later.';
+        print(error.toString());
+        switch (error.runtimeType) {
+          case DioError:
+            final res = (error as DioError).response;
+            errorCode = res?.statusCode.toString() ?? '';
+            errorMessage = res?.data['message'] ?? 'Unknown Error.\nPlease Try Later.';
+            break;
+
+          case TypeError:
+            errorCode = "Type Error";
+            errorMessage = 'Invalid Json Format';
+            break;
+
+          default:
+            errorCode = "Non";
+            errorMessage = 'Unknown Error';
+            break;
+        }
         setState(ViewState.ERROR);
       });
     } catch (_) {
@@ -65,11 +82,35 @@ class AuthProvider extends BaseViewModel {
         saveUser(
             response.user!.id!, response.token.toString(), response.user?.nickname ?? '');
       }).onError((error, stackTrace) {
-        final res = (error as DioError).response;
-        errorCode = res?.statusCode.toString() ?? '';
-        errorMessage = res?.data['message'] ?? 'Unknown Error.\nPlease Try Later.';
+        print(error.runtimeType.toString());
+        switch (error.runtimeType) {
+          case DioError:
+            final res = (error as DioError).response;
+            errorCode = res?.statusCode.toString() ?? '';
+            errorMessage = res?.data['message'] ?? 'Unknown Error.\nPlease Try Later.';
+            break;
+
+          case TypeError:
+            errorCode = "Type Error";
+            errorMessage = 'Invalid Json Format';
+            break;
+
+          case NoSuchMethodError:
+            errorCode = "Type Error";
+            errorMessage = 'Invalid Json Format';
+            break;
+
+          case JsonUnsupportedObjectError:
+            errorCode = "Type Error";
+            errorMessage = 'Invalid Json Format';
+            break;
+
+          // default:
+          //   errorCode = "Non";
+          //   errorMessage = 'Unknown Error';
+          //   break;
+        }
         setState(ViewState.ERROR);
-        print(error.toString());
       });
     } catch (_) {
       await handleConnectionView();

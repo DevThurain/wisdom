@@ -6,10 +6,12 @@ class AdState {
   Future<InitializationStatus> initialization;
   AdState(this.initialization);
 
+// testing
 //ca-app-pub-3940256099942544/6300978111
   String bannerAdUnitId() {
     if (Platform.isAndroid) {
       return 'ca-app-pub-5465614411199588/3355237171';
+      //return '';
     } else if (Platform.isIOS) {
       return 'ca-app-pub-3940256099942544/2934735716';
     } else {
@@ -17,10 +19,12 @@ class AdState {
     }
   }
 
+//testing
 //ca-app-pub-3940256099942544/1033173712
   String interstitialAdUnitId() {
     if (Platform.isAndroid) {
       return "ca-app-pub-5465614411199588/5806657616";
+      //return '';
     } else if (Platform.isIOS) {
       return "ca-app-pub-3940256099942544/4411468910";
     } else {
