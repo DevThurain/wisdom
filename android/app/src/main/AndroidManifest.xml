@@ -44,6 +44,11 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-5465614411199588~6172972203"/>
 
+
+    <meta-data
+    android:name="com.google.firebase.messaging.default_notification_icon"
+    android:resource="@mipmap/notification" />
+
       
     </application>
     <queries>
