@@ -17,46 +17,43 @@ late AndroidNotificationChannel channel;
 /// Initialize the [FlutterLocalNotificationsPlugin] package.
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // init ads
   final initFuture = MobileAds.instance.initialize();
   final adState = AdState(initFuture);
-  
+
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
   FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print('Message clicked!');
+    print('Message clicked!');
   });
 
-  channel =  AndroidNotificationChannel(
+  channel = AndroidNotificationChannel(
       'high_importance_channel', // id
       'High Importance Notifications', // title
-     description:  'This channel is used for important notifications.', // description
-      importance: Importance.high);
+      description: 'This channel is used for important notifications.', // description
+      playSound: true,
+      sound: RawResourceAndroidNotificationSound('pop'),
+      importance: Importance.max);
 
   flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-    /// Create an Android Notification Channel.
-    ///
-    /// We use this channel in the `AndroidManifest.xml` file to override the
-    /// default FCM channel to enable heads up notifications.
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
+  /// Create an Android Notification Channel.
+  ///
+  /// We use this channel in the `AndroidManifest.xml` file to override the
+  /// default FCM channel to enable heads up notifications.
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
 
-    /// Update the iOS foreground notification presentation options to allow
-    /// heads up notifications.
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-
-
+  /// Update the iOS foreground notification presentation options to allow
+  /// heads up notifications.
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
 
   await setupLocator();
   final settingsController = SettingsController(SettingsService());
