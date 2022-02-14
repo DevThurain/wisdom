@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -32,12 +33,14 @@ class _HomeScreenState extends State<HomeScreen> {
   final _pref = locator<SharedPreferenceHelper>();
   bool _bannerLoaded = false;
   late BannerAd banner;
+  late FirebaseMessaging messaging;
 
   @override
   void initState() {
     super.initState();
     checkAppUpdateVersion();
     _homeProvider.getUserProfile();
+    messaging = FirebaseMessaging.instance;
   }
 
   @override
@@ -86,10 +89,10 @@ class _HomeScreenState extends State<HomeScreen> {
             });
       }
     });
-    
   }
 
   _logoutUser() async {
+    await messaging.deleteToken();
     await _pref.clear();
     Navigator.pushReplacementNamed(context, AuthScreen.routeName);
   }
@@ -156,8 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 title: 'Fun',
                                 color: AppTheme.dark_purple,
                                 onTap: () {
-                                  Navigator.pushNamed(
-                                      context, FunListScreen.routeName);
+                                  Navigator.pushNamed(context, FunListScreen.routeName);
                                 },
                               ),
                             ],
@@ -170,9 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               _bannerLoaded
                   ? SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: AdWidget(ad: banner))
+                      width: double.infinity, height: 50, child: AdWidget(ad: banner))
                   : SizedBox(),
             ],
           ),

@@ -37,6 +37,7 @@ class User {
   String? _code;
   String? _updatedAt;
   String? _createdAt;
+  String? _firebaseToken;
   int? _id;
 
   User(
@@ -45,6 +46,7 @@ class User {
       String? code,
       String? updatedAt,
       String? createdAt,
+      String? firebaseToken,
       int? id}) {
     if (nickname != null) {
       this._nickname = nickname;
@@ -64,6 +66,10 @@ class User {
     if (id != null) {
       this._id = id;
     }
+
+    if (_firebaseToken != null) {
+      this._firebaseToken = firebaseToken;
+    }
   }
 
   String? get nickname => _nickname;
@@ -76,6 +82,8 @@ class User {
   set updatedAt(String? updatedAt) => _updatedAt = updatedAt;
   String? get createdAt => _createdAt;
   set createdAt(String? createdAt) => _createdAt = createdAt;
+  String? get firebaseToken => _firebaseToken;
+  set firebaseToken(String? firebaseToken) => _firebaseToken = firebaseToken;
   int? get id => _id;
   set id(int? id) => _id = id;
 
@@ -85,6 +93,7 @@ class User {
     _code = json['code'];
     _updatedAt = json['updated_at'];
     _createdAt = json['created_at'];
+    _firebaseToken = json['firebase_token'];
     _id = json['id'];
   }
 
@@ -95,8 +104,8 @@ class User {
     data['code'] = this._code;
     data['updated_at'] = this._updatedAt;
     data['created_at'] = this._createdAt;
+    data['firebase_token'] = this._firebaseToken;
     data['id'] = this._id;
     return data;
   }
 }
-

@@ -21,8 +21,8 @@ class AuthProvider extends BaseViewModel {
   }
 
   registerUser(RequestRegisterVO request) async {
-    //request.deviceId = DateTime.now().millisecondsSinceEpoch.toString();
-    request.deviceId = await DeviceDetail.generateDeviceId();
+    request.deviceId = DateTime.now().millisecondsSinceEpoch.toString();
+    //request.deviceId = await DeviceDetail.generateDeviceId();
 
     try {
       if (await handleConnectionView()) {

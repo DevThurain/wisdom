@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
@@ -38,6 +39,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   final _loginNickNameController = TextEditingController();
   final _loginPasswordController = TextEditingController();
   late AuthProvider _authProvider;
+  late FirebaseMessaging messaging;
+  String fireToken = '';
 
   @override
   void initState() {
@@ -47,6 +50,13 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     _animationController.animateTo(0.0);
     _animationController.animateTo(0.2);
 
+    messaging = FirebaseMessaging.instance;
+    messaging.getToken().then((value) {
+      setState(() {
+        fireToken = value.toString();
+        print(fireToken);
+      });
+    });
     super.initState();
   }
 
@@ -217,6 +227,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       nickname: _registerNickNameController.text,
       code: _referCodeController.text,
       deviceId: '',
+      firebaseToken: fireToken,
       password: _registerPasswordController.text,
     );
     provider.registerUser(request);
@@ -226,6 +237,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     RequestLoginVO request = RequestLoginVO(
       nickname: _loginNickNameController.text,
       password: _loginPasswordController.text,
+      firebaseToken: fireToken,
     );
     provider.loginUser(request);
   }

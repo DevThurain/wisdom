@@ -85,12 +85,12 @@ class RepositoryImpl implements Repository {
   Future<ResponseRegisterVO> registerUser(RequestRegisterVO request) {
     return _mSource
         .publicApi()
-        .registerUser(request.nickname, request.code, request.deviceId, request.password);
+        .registerUser(request.nickname, request.code, request.firebaseToken,request.deviceId, request.password);
   }
 
   @override
   Future<ResponseLoginVO> loginUser(RequestLoginVO request) {
-    return _mSource.publicApi().loginUser(request.nickname, request.password);
+    return _mSource.publicApi().loginUser(request.nickname, request.password, request.firebaseToken);
   }
 
   @override

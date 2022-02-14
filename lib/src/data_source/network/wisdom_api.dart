@@ -27,6 +27,7 @@ abstract class WisdomAPI {
   Future<ResponseRegisterVO> registerUser(
       @Query("nickname") String nickname,
       @Query("code") String code,
+      @Query("firebase_token") String firebaseToken,
       @Query("device_id") String deviceId,
       @Query("password") String password);
 
@@ -34,6 +35,7 @@ abstract class WisdomAPI {
   Future<ResponseLoginVO> loginUser(
     @Query("nickname") String nickname,
     @Query("password") String password,
+    @Query("firebase_token") String firebaseToken,
   );
 
   @POST("/wisdom-user/logout")
@@ -70,13 +72,12 @@ abstract class WisdomAPI {
   Future<ResponseUserProfileVO> getUserProfile();
 
   @POST("/wisdom/user")
-  Future<EditProfileResponse> updateUserProfile(
-      @Query("nickname") String nickName);
+  Future<EditProfileResponse> updateUserProfile(@Query("nickname") String nickName);
 
   @GET("/wisdom/my-posts")
   Future<FunListVo> getMyFunList(@Query("page") int page);
 
-    @DELETE("/wisdom/post/{postId}")
+  @DELETE("/wisdom/post/{postId}")
   Future<ResponseSuccessVO> deletePostById(
     @Path("postId") int postId,
   );

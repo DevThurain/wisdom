@@ -8,7 +8,7 @@ part of 'wisdom_api.dart';
 
 class _WisdomAPI implements WisdomAPI {
   _WisdomAPI(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://128.199.128.58/mobile';
+    baseUrl ??= 'http://backend.wisdom4u.site/mobile';
   }
 
   final Dio _dio;
@@ -33,11 +33,12 @@ class _WisdomAPI implements WisdomAPI {
 
   @override
   Future<ResponseRegisterVO> registerUser(
-      nickname, code, deviceId, password) async {
+      nickname, code, firebaseToken, deviceId, password) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'nickname': nickname,
       r'code': code,
+      r'firebase_token': firebaseToken,
       r'device_id': deviceId,
       r'password': password
     };
@@ -54,11 +55,12 @@ class _WisdomAPI implements WisdomAPI {
   }
 
   @override
-  Future<ResponseLoginVO> loginUser(nickname, password) async {
+  Future<ResponseLoginVO> loginUser(nickname, password, firebaseToken) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'nickname': nickname,
-      r'password': password
+      r'password': password,
+      r'firebase_token': firebaseToken
     };
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
