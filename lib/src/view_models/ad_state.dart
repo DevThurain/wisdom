@@ -11,7 +11,7 @@ class AdState {
   String bannerAdUnitId() {
     if (Platform.isAndroid) {
       return 'ca-app-pub-5465614411199588/3355237171';
-     // return '';
+      //return '';
     } else if (Platform.isIOS) {
       return 'ca-app-pub-3940256099942544/2934735716';
     } else {
